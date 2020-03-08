@@ -34,11 +34,11 @@ The API is RESTful. In every request, the header must include an `Authorization`
 **Endpoint:** `/post`
 
 **Params:**
-+ `platformId`: The post's ID in its original platform.
++ `platform_id`: The post's ID in its original platform.
 + `platform`: The post's original platform.
 
 **Data:**
-+ `id`: The newly created post's ID.
++ `post_id`: The newly created post's ID.
 
 ---
 
@@ -48,7 +48,7 @@ The API is RESTful. In every request, the header must include an `Authorization`
 
 **Params:**
 + `id`: The post's ID.
-+ `platformId`: The post's ID in its original platform.
++ `platform_id`: The post's ID in its original platform.
 + `platform`: The post's original platform.
 
 ---
