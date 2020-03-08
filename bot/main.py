@@ -1,9 +1,7 @@
 import apis.imgur as imgur
-import database.get as dbget
+import apis.based as based
 
-pos = open("test/postable.csv", "w")
 err = open("test/error.csv", "w")
-pos_count = 0
 err_count = 0
 
 top = imgur.topGalleries()
@@ -30,13 +28,14 @@ for g in top:
                     error_message = "Invalid ratio on one of the album images."
 
     if error_message is None:
-        dbget.insertPost("IMGUR", g.id)
-        pos_count = pos_count + 1
+        try:
+            print(based.insertPost(g.id, "IMGUR"))
+        except Exception as e:
+            print("ERROR", e)
     else:
         err.write(f"{g.id};{error_message}\n")
         err_count = err_count + 1
 
-pos.close()
 err.close()
 
 print(f"Analyzed {len(top)} galleries with {err_count} errors")

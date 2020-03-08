@@ -1,4 +1,4 @@
-from apis.config import CLIENT_ID
+from apis.config import IMGUR_ID
 import urllib3
 import json
 
@@ -117,7 +117,7 @@ class Gallery:
         return ret
 
 
-client = ImgurClient(CLIENT_ID)
+client = ImgurClient(IMGUR_ID)
 
 
 def topGalleries():
