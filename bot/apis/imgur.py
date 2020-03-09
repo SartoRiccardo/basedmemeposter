@@ -5,6 +5,10 @@ import json
 
 class ImgurClient:
     def __init__(self, client_id):
+        """
+        A class to make requests more easily.
+        :param client_id: str: The Imgur access token
+        """
         self.client_id = client_id
         self.http = urllib3.PoolManager()
 
@@ -22,6 +26,10 @@ class ImgurClient:
 
 class Image:
     def __init__(self, data):
+        """
+        A class to represent a reduced version of an Imgur Image.
+        :param data: dict: the original Image data.
+        """
         self.id = data["id"]
         self.type = data["type"]
         self.animated = data["animated"]
@@ -54,6 +62,10 @@ class Image:
 
 class Gallery:
     def __init__(self, data):
+        """
+        A class to represent a reduced version of an Imgur Gallery.
+        :param data: dict: the original Gallery data.
+        """
         self.id = data["id"]
         self.title = data["title"]
         self.description = data["description"]
@@ -121,6 +133,10 @@ client = ImgurClient(IMGUR_ID)
 
 
 def topGalleries():
+    """
+    Fetches the top imgur galleries.
+    :return: Gallery[]
+    """
     response = client.get("/gallery/top")
     galleries = json.loads(response.data)["data"]
 
@@ -129,6 +145,11 @@ def topGalleries():
 
 
 def getGallery(gallery_hash):
+    """
+    Fetches a gallery by its hash.
+    :param gallery_hash: str: The gallery hash.
+    :return: Gallery
+    """
     response = client.get(f"/gallery/{gallery_hash}")
     gallery = json.loads(response.data)["data"]
     ret = Gallery(gallery)
