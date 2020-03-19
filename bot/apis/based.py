@@ -1,12 +1,10 @@
-from apis.config import BASED_ID
+from apis.config import BASED_ID, BASED_URL
 from urllib.parse import urlencode
 import urllib3
 import json
 
 
 class BasedClient:
-    BASE_URL = "http://localhost/basedmemeposter/server"
-
     def __init__(self, client_id):
         """
         A class to make request to the Based API.
@@ -16,23 +14,23 @@ class BasedClient:
         self.http = urllib3.PoolManager()
 
     def get(self, endpoint):
-        url = f"{BasedClient.BASE_URL}{endpoint}"
+        url = f"{BASED_URL}{endpoint}"
         r = self.http.request(
             "GET",
             url,
             headers={
-                "Authorization": f"{self.client_id}"
+                "X-Authorization": f"{self.client_id}"
             }
         )
         return r
 
     def post(self, endpoint, params):
-        url = f"{BasedClient.BASE_URL}{endpoint}?{urlencode(params)}"
+        url = f"{BASED_URL}{endpoint}?{urlencode(params)}"
         r = self.http.request(
             "POST",
             url,
             headers={
-                "Authorization": f"{self.client_id}"
+                "X-Authorization": f"{self.client_id}"
             }
         )
 
