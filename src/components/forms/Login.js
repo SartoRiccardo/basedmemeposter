@@ -26,7 +26,7 @@ class Login extends React.Component {
     return (
       <form className="needs-validation"
           onSubmit={this.handleSubmit} noValidate>
-        <h2 className="text-center">Welcome back</h2>
+        <h2 className="text-center">WELCOME BACK</h2>
         <div className="grey-text">
           <MDBInput label="Username" icon="user" name="username"
               value={username} required onChange={this.handleChange}>
