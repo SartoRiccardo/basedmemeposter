@@ -1,72 +1,25 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard,
-          MDBCardBody } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdbreact";
 import "../../styles/Anonymous.css"
+// Custom components
+import Login from "../forms/Login"
 
-class Anonymous extends React.Component {
-  constructor(props) {
-    super(props);
+function Anonymous() {
+  return (
+    <MDBContainer className="h-100">
+      <MDBRow className="h-75">
+        <MDBCol className="m-auto" xs="12" md="8" lg="6">
 
-    this.state = {
-      "username": "",
-      "password": "",
-    };
-  }
+          <MDBCard>
+            <MDBCardBody>
+              <Login />
+            </MDBCardBody>
+          </MDBCard>
 
-  handleSubmit = (evt) => {
-    evt.preventDefault();
-    evt.target.className += " was-validated";
-  }
-
-  handleChange = (evt) => {
-    this.setState({ [evt.target.name]: evt.target.value });
-  }
-
-  render() {
-    const { username, password } = this.state;
-
-    const form = (
-      <form className="needs-validation"
-          onSubmit={this.handleSubmit} noValidate>
-        <h2 className="text-center">Welcome back</h2>
-        <div className="grey-text">
-          <MDBInput label="Username" icon="user" name="username"
-              value={username} required onChange={this.handleChange}>
-            <div className="invalid-feedback text-center">
-              Please state who you are
-            </div>
-          </MDBInput>
-
-          <MDBInput label="Password" icon="lock" type="password" name="password"
-              value={password} required onChange={this.handleChange}>
-            <div className="invalid-feedback text-center">
-              Please verify who you say you are
-            </div>
-          </MDBInput>
-        </div>
-
-        <div className="text-center">
-          <MDBBtn type="submit">Login</MDBBtn>
-        </div>
-      </form>
-    );
-
-    return (
-      <MDBContainer className="h-100">
-        <MDBRow className="h-75">
-          <MDBCol className="m-auto" xs="12" md="8" lg="6">
-
-            <MDBCard>
-              <MDBCardBody>
-                {form}
-              </MDBCardBody>
-            </MDBCard>
-
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-    );
-  }
+        </MDBCol>
+      </MDBRow>
+    </MDBContainer>
+  );
 }
 
 export default Anonymous;
