@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 // Custom components
+import Navbar from "./ui/Navbar";
 import AccountSchedule from "./pages/AccountSchedule";
 import AccountDetails from "./pages/AccountDetails";
 import Accounts from "./pages/Accounts";
@@ -29,9 +30,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Switch>
-        {routes}
-      </Switch>
+      <Navbar />
+
+        <Switch>
+          {routes}
+        </Switch>
     </BrowserRouter>
   );
 }
