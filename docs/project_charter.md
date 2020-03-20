@@ -1,3 +1,5 @@
+# Project Charter
+
 + **Project Title:** Based Meme Poster
 + **Project Manager:** Riccardo Sartori
 + **Project Start:** 08 Mar 2020
@@ -15,6 +17,16 @@ The each account will post a meme after a certain amount of time for approximate
 ## Identities of the main stakeholders
 
 + **Riccardo Sartori:** Project manager, developer and only stakeholder in this project.
+
+## Schedule Information
+
+| Date        | Deliverable        | Completed         |
+| ----------- | ------------------ | ----------------- |
+| Mar 08 2020 | Project Start      | Mar 08 2020       |
+| Mar 10 2020 | Database Structure | Mar 09 2020 (-1d) |
+| Mar 13 2020 | Backend            | Mar 20 2020 (+7d) |
+| Mar 20 2020 | Frontend           |                   |
+| Mar 26 2020 | Bot                |                   |
 
 ## Risks
 
