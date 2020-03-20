@@ -1,7 +1,7 @@
 import React from "react";
 
-function AccountDetails() {
+function AccountLogs() {
   return null;
 }
 
-export default AccountDetails;
+export default AccountLogs;
