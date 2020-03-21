@@ -19,3 +19,20 @@ code {
   left: 0;
   right: 0;
 }
+
+.expandthis {
+  font-size: 20vw;
+}
+
+.c-pointer {
+  cursor: pointer;
+}
+
+.img-disabled {
+  filter: brightness(40%);
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 100%;
+}
