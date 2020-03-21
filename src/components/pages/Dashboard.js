@@ -39,16 +39,16 @@ function Dashboard(props) {
         <MDBCol size="6" className="px-1 my-3">
           <LogCard
             onClick={() => history.push("/logs/warnings")}
-            className="c-pointer"
+            className="c-pointer hover-darken"
             level="warning"
             count={warnings}
           />
         </MDBCol>
 
-        <MDBCol size="6" className="grey lighten-3 px-1 my-3">
+        <MDBCol size="6" className="px-1 my-3">
           <LogCard
             onClick={() => history.push("/logs/errors")}
-            className="c-pointer"
+            className="c-pointer hover-darken"
             level="error"
             count={errors}
           />
