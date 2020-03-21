@@ -31,8 +31,3 @@ code {
 .img-disabled {
   filter: brightness(40%);
 }
-
-.avatar {
-  border-radius: 50%;
-  width: 100%;
-}

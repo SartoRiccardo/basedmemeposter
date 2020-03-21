@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
@@ -8,7 +7,7 @@ import LogCard from "../ui/LogCard";
 import AccountSummary from "../ui/AccountSummary";
 
 function Dashboard(props) {
-  const { account, log, status, history } = props;
+  const { account, log, history } = props;
 
   let warnings = 0;
   let errors = 0;
@@ -24,10 +23,10 @@ function Dashboard(props) {
   let accountsUi = [];
   for(const a of account.accounts) {
     accountsUi.push(
-      <MDBCol key={a.id} size="6" md="4" className="px-1">
+      <MDBCol key={a.id} size="6" sm="4" md="3" lg="2" className="px-1">
         <AccountSummary
           onClick={() => history.push(`/accounts/${a.id}`)}
-          className="white rounded-lg mx-1 my-2 p-2"
+          className="white rounded-lg mx-1 my-2 p-2 c-pointer"
           account={a}
         />
       </MDBCol>
@@ -59,11 +58,11 @@ function Dashboard(props) {
       <MDBRow className="mt-3">
         <MDBCol size="12">
           <h2 className="text-center mb-0">Accounts</h2>
-          <hr className="mt-0 w-75" />
+          <hr className="mt-0 w-50" />
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="account-summaries grey lighten-4 mx-0">
+      <MDBRow className="border account-summaries grey lighten-4 mx-0">
         {accountsUi}
       </MDBRow>
     </MDBContainer>
