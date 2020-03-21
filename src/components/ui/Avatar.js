@@ -5,7 +5,7 @@ import "../../styles/Avatar.css";
 function Avatar(props) {
   const { image, active, className } = props;
 
-  const disabledClass = !active ? "avatar-disabled" : null;
+  const disabledClass = active !== undefined && !active ? "avatar-disabled" : null;
   // const bedIcon = !active && (
   //   <MDBIcon icon="bed" className="overlay-avatar text-white" />
   // );
@@ -13,7 +13,7 @@ function Avatar(props) {
   return (
     <div className={`avatar-container ${className}`}>
       <img alt="" src={image}
-          className={`avatar p-3 p-md-3 ${disabledClass}`} />
+          className={`avatar p-2 p-md-3 ${disabledClass}`} />
       {/*bedIcon*/}
     </div>
   );
