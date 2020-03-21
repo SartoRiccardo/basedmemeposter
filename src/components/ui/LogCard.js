@@ -4,24 +4,18 @@ import { MDBCard, MDBCardBody, MDBIcon } from "mdbreact";
 function LogCard(props) {
   const { level, count, onClick, className } = props;
 
-  let icon;
+  let icon, color, text;
   switch(level.toUpperCase()) {
     case "WARNING":
-      icon = (
-        <MDBIcon
-          className="expandthis amber-text darken-2"
-          icon="exclamation-triangle"
-        />
-      );
+      icon = "exclamation-triangle";
+      color = "amber-text darken-2";
+      text = `You have ${count} warnings`;
       break;
 
     case "ERROR":
-      icon = (
-        <MDBIcon
-          className="expandthis deep-orange-text accent-4"
-          icon="exclamation-circle"
-        />
-      );
+      icon = "exclamation-circle";
+      color = "deep-orange-text accent-4";
+      text = `You have ${count} errors`;
       break;
 
     default:
@@ -31,8 +25,14 @@ function LogCard(props) {
   return (
     <MDBCard onClick={onClick} className={className}>
       <MDBCardBody>
-        {icon}<br />
-        <p className="mt-3 mb-0">You have {count} errors</p>
+        <div className="d-block d-md-none">
+          <MDBIcon className={`big-icon ${color}`} icon={icon} /><br />
+          <p className="mt-3 mb-0">{text}</p>
+        </div>
+        <div className="d-none d-md-block">
+          <MDBIcon className={`${color}`} icon={icon} pull="left" size="5x" fixed />
+          <h5 className="text-left">{text}</h5>
+        </div>
       </MDBCardBody>
     </MDBCard>
   );

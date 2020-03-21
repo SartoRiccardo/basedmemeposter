@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBIcon } from "mdbreact";
+// import { MDBIcon } from "mdbreact";
 import "../../styles/Avatar.css";
 
 function Avatar(props) {
