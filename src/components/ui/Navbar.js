@@ -43,7 +43,7 @@ class Navbar extends React.Component {
 
         <MDBNavbarToggler onClick={this.toggleCollapse} />
 
-        <MDBCollapse isOpen={open}>
+        <MDBCollapse isOpen={open} navbar>
           <MDBNavbarNav left>
             <MDBNavItem>
               <MDBNavLink to="/">Dashboard</MDBNavLink>
