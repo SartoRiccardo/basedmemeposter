@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBIcon } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 // Custom components
@@ -43,8 +43,12 @@ class AccountDetails extends React.Component {
 
           <MDBCol className="text-uppercase my-auto">
             <h3 className={`h3-responsive
-                  text-center text-${breakpoint}-left`}>
-              {username}
+                text-center text-${breakpoint}-left`}>
+              <a target="_blank" rel="noopener noreferrer"
+                  href={`https://www.instagram.com/${username}`}>
+                {username}
+                <MDBIcon className="mx-2" icon="external-link-alt" />
+              </a>
             </h3>
           </MDBCol>
         </MDBRow>
