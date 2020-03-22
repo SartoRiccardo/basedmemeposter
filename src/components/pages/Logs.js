@@ -7,35 +7,23 @@ import LogFilter from "../forms/LogFilter";
 import { connect } from "react-redux";
 
 class Logs extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { search } = this.props.location;
-    let params = this.parseQueryParams(search);
-
-    this.state = {
-      params: {
-        account: params.account || [],
-        level: params.level || [],
-      },
-    };
-  }
-
   parseQueryParams(url) {
     let params = querystring.parse(url.substring(1));
 
     for(const [ key, value ] of Object.entries(params)) {
-      if(typeof params[key] !== "array") {
+      if(typeof params[key] !== "object") {
         params[key] = [params[key]];
       }
+    }
+
+    if(params.account) {
+      params.account = params.account.map((id) => parseInt(id));
     }
 
     return params;
   }
 
-  encodeState = () => {
-    const { params } = this.state;
-
+  encodeState(params) {
     let urlParams = [];
     for(const [ key, values ] of Object.entries(params)) {
       for(const v of values) {
@@ -47,7 +35,6 @@ class Logs extends React.Component {
 
   updateUrl = (evt) => {
     const { history } = this.props;
-    const { params } = this.state;
     const { change } = evt;
 
     const groupKeyMatch = {
@@ -56,34 +43,31 @@ class Logs extends React.Component {
     };
     const keyMatch = groupKeyMatch[change.group];
 
-    let newParams;
+    let params = this.parseQueryParams(history.location.search);
+    if(!params[keyMatch]) {
+      params[keyMatch] = [];
+    }
+
     if(change.new) {
-      newParams = {
-        ...params,
-        [ keyMatch ]: [ ...params[keyMatch], change.value ]
-      };
+      params[keyMatch].push(change.value);
     }
     else {
-      newParams = {
-        ...params,
-        [ keyMatch ]: params[keyMatch].filter((param) => param !== change.value),
-      };
+      params[keyMatch] = params[keyMatch].filter((param) => param !== change.value);
     }
 
-    this.setState({
-      params: newParams,
-    }, this.updateUrlCallback);
-  }
-
-  updateUrlCallback = () => {
-    const { history } = this.props;
-    const params = this.encodeState();
-
-    history.push(`${history.location.pathname}${params}`);
+    const urlParams = this.encodeState(params);
+    history.push(`${history.location.pathname}${urlParams}`);
   }
 
   render() {
+    const { history } = this.props;
     const { logs } = this.props.log;
+    const params = this.parseQueryParams(history.location.search);
+
+    const filters = {
+      accounts: params.account || [],
+      levels: params.level || [],
+    };
 
     return (
       <MDBContainer>
@@ -95,7 +79,7 @@ class Logs extends React.Component {
 
         <MDBRow>
           <MDBCol>
-            <LogFilter onChange={this.updateUrl} />
+            <LogFilter value={filters} onChange={this.updateUrl} />
           </MDBCol>
         </MDBRow>
       </MDBContainer>

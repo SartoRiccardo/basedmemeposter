@@ -10,10 +10,12 @@ class LogFilter extends React.Component {
   constructor(props) {
     super(props);
 
-    const { defaultValue } = this.props;
+    const { defaultValue, value } = this.props;
     this.state = {
-      accounts: (defaultValue && defaultValue.accounts) || [],
-      levels: (defaultValue && defaultValue.levels) || [],
+      accounts: (defaultValue && defaultValue.accounts) ||
+          (value && value.accounts) || [],
+      levels: (defaultValue && defaultValue.levels) ||
+          (value && value.levels) || [],
       open: null,
     };
   }
@@ -51,28 +53,33 @@ class LogFilter extends React.Component {
   }
 
   render() {
+    const { value } = this.props;
     const { levels } = this.props.log;
     const { accounts } = this.props.account;
     const { open } = this.state;
 
     const accountCheckboxes = accounts.map((a) => {
+      const checked = (value.accounts && value.accounts.includes(a.id)) ||
+          (value.accounts === undefined && this.state.accounts.includes(a.id));
       return (
         <MDBCol size="12" md="4" key={a.id}>
           <CheckBox
             label={a.username}
             onChange={this.changeChecked("accounts", a.id)}
-            checked={this.state.accounts.includes(a.id)}
+            checked={checked}
           />
         </MDBCol>
       );
     });
     const logLevelCheckboxes = levels.map((l, i) => {
+      const checked = (value.levels && value.levels.includes(l)) ||
+          (value.levels === undefined && this.state.levels.includes(l));
       return (
-        <MDBCol key={i} size="6">
+        <MDBCol key={i} size="6" md="4">
           <CheckBox
             label={l}
             onChange={this.changeChecked("levels", l)}
-            checked={this.state.levels.includes(l)}
+            checked={checked}
           />
         </MDBCol>
       );
@@ -93,7 +100,7 @@ class LogFilter extends React.Component {
           <h3 className="mb-0">Levels</h3>
         </CollapseHeader>
         <MDBCollapse isOpen={open === 1}>
-          <MDBRow className="m-3 d-flex d-md-none text-uppercase">
+          <MDBRow className="m-3 text-uppercase">
             {logLevelCheckboxes}
           </MDBRow>
         </MDBCollapse>
