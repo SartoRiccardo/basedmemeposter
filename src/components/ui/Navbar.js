@@ -2,15 +2,29 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
     MDBNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
-    MDBDropdownItem, MDBNavLink } from "mdbreact";
+    MDBDropdownItem, MDBNavLink, MDBCollapse, MDBNavbarToggler } from "mdbreact";
+// HOCs and actions
+import { connect } from "react-redux";
 
 class Navbar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false,
+    };
+  }
+
+  toggleCollapse = () => {
+    const { open } = this.state;
+    this.setState({
+      open: !open,
+    });
+  }
+
   render() {
-    const accounts = [
-      {id:1, username: "basedmemeposter"},
-      {id:2, username: "siarnaq_rulez"},
-      {id:3, username: "yet_another_succcc_clone"},
-    ];
+    const { accounts } = this.props.account;
+    const { open } = this.state;
 
     const dropdownLinks = accounts.map((a) => {
       return (
@@ -27,26 +41,36 @@ class Navbar extends React.Component {
           Based Meme Poster
         </MDBNavbarBrand>
 
-        <MDBNavbarNav left>
-          <MDBNavItem>
-            <MDBNavLink to="/">Dashboard</MDBNavLink>
-          </MDBNavItem>
+        <MDBNavbarToggler onClick={this.toggleCollapse} />
 
-          <MDBNavItem>
-            <MDBDropdown>
-              <MDBDropdownToggle nav caret>
-                <span className="mr-2">Accounts</span>
-              </MDBDropdownToggle>
+        <MDBCollapse isOpen={open}>
+          <MDBNavbarNav left>
+            <MDBNavItem>
+              <MDBNavLink to="/">Dashboard</MDBNavLink>
+            </MDBNavItem>
 
-              <MDBDropdownMenu>
-                {dropdownLinks}
-              </MDBDropdownMenu>
-            </MDBDropdown>
-          </MDBNavItem>
-        </MDBNavbarNav>
+            <MDBNavItem>
+              <MDBDropdown>
+                <MDBDropdownToggle nav caret>
+                  <span className="mr-2">Accounts</span>
+                </MDBDropdownToggle>
+
+                <MDBDropdownMenu>
+                  {dropdownLinks}
+                </MDBDropdownMenu>
+              </MDBDropdown>
+            </MDBNavItem>
+          </MDBNavbarNav>
+        </MDBCollapse>
       </MDBNavbar>
     );
   }
 }
 
-export default Navbar
+function mapStateToProps(state) {
+  return {
+    account: { ...state.account },
+  };
+}
+
+export default connect(mapStateToProps)(Navbar);
