@@ -50,3 +50,25 @@ code {
   transition-duration: 0.5s;
   padding: 0 !important;
 }
+
+.pt-100, .p-100, .py-100 {
+  padding-top: 100% !important;
+}
+
+.pt-75, .p-75, .py-75 {
+  padding-top: 75% !important;
+}
+
+.pt-50, .p-50, .py-50 {
+  padding-top: 50% !important;
+}
+
+.pt-25, .p-25, .py-25 {
+  padding-top: 25% !important;
+}
+
+.bg-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

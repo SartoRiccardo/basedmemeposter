@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 // Custom components
 import Avatar from "../ui/Avatar";
 import AccountTimeOnline from "../ui/AccountTimeOnline";
+import AccountSchedule from "../ui/AccountSchedule";
 
 class AccountDetails extends React.Component {
   // constructor(props) {
@@ -14,6 +15,7 @@ class AccountDetails extends React.Component {
   render() {
     const { params } = this.props.match;
     const { accounts } = this.props.account;
+    const { schedule } = this.props.schedule;
 
     let matchingAccount = null;
     for(const a of accounts) {
@@ -58,6 +60,15 @@ class AccountDetails extends React.Component {
             endTime={endTime}
           />
         </MDBRow>
+
+        <MDBRow className="mt-4">
+          <MDBCol size="12">
+            <h2 className="text-center mb-0">Schedule</h2>
+            <hr className="mt-0 w-50" />
+          </MDBCol>
+
+          <AccountSchedule schedule={schedule} />
+        </MDBRow>
       </MDBContainer>
     );
   }
@@ -66,6 +77,7 @@ class AccountDetails extends React.Component {
 function mapStateToProps(state) {
   return {
     account: { ...state.account },
+    schedule: { ...state.schedule },
   };
 }
 

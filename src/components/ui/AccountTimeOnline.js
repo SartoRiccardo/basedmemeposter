@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBRow, MDBCol } from "mdbreact";
+import { MDBCol } from "mdbreact";
 import { isInRangeHours } from "../../util/time";
 
 function AccountTimeOnline(props) {
@@ -12,17 +12,17 @@ function AccountTimeOnline(props) {
     let color, textColor;
     if(active) {
       color = nowHours === i ? "indigo lighten-3" : "deep-purple lighten-4";
-      textColor = nowHours === i ? "grey-text" : "black-text";
+      textColor = "black-text";
     }
     else {
-      color = nowHours === i ? "grey lighten-2" : "grey lighten-3 grey-text";
-      textColor = nowHours === i ? "grey-text" : "grey-text lighten-3";
+      color = nowHours === i ? "grey lighten-2" : "grey lighten-3";
+      textColor = nowHours === i ? "black-text" : "grey-text";
     }
-    // const color = active ? "deep-purple lighten-4" : "grey lighten-3 grey-text";
+
     columns.push(
       <MDBCol key={i} className="px-1 my-1" size="3" sm="2" md="1">
         <div className={`mb-0 text-center ${color}`}>
-          {i}:00
+          <span className={textColor}>{i}:00</span>
         </div>
       </MDBCol>
     );
