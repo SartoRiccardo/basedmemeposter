@@ -20,7 +20,7 @@ function AccountTimeOnline(props) {
     }
 
     columns.push(
-      <MDBCol key={i} className="px-1 my-1" size="3" sm="2" md="1">
+      <MDBCol key={i} className={`px-1 my-1 ${className}`} size="3" sm="2" md="1">
         <div className={`mb-0 text-center ${color}`}>
           <span className={textColor}>{i}:00</span>
         </div>

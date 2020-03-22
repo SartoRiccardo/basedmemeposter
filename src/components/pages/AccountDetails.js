@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBIcon } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 // Custom components
@@ -13,20 +13,21 @@ class AccountDetails extends React.Component {
   // }
 
   render() {
-    const { params } = this.props.match;
+    const { history, match } = this.props;
     const { accounts } = this.props.account;
     const { schedule } = this.props.schedule;
 
     let matchingAccount = null;
     for(const a of accounts) {
-      if(a.id === parseInt(params.id)) {
+      if(a.id === parseInt(match.params.id)) {
         matchingAccount = a;
         break;
       }
     }
 
     const { id, username, avatar, startTime, endTime } = matchingAccount;
-    const breakpoint = "sm"
+    const breakpoint = "sm";
+    const logsLink = `/logs?account=${id}`;
 
     return (
       <MDBContainer>
@@ -41,15 +42,24 @@ class AccountDetails extends React.Component {
             <Avatar className="my-auto" image={avatar} />
           </MDBCol>
 
-          <MDBCol className="text-uppercase my-auto">
-            <h3 className={`h3-responsive
-                text-center text-${breakpoint}-left`}>
+          <MDBCol className={`text-uppercase my-auto text-center text-${breakpoint}-left`}>
+            <h3 className="h3-responsive">
               <a target="_blank" rel="noopener noreferrer"
                   href={`https://www.instagram.com/${username}`}>
                 {username}
                 <MDBIcon className="mx-2" icon="external-link-alt" />
               </a>
             </h3>
+
+            <MDBBtn
+              outline
+              color="purple darken-2"
+              size="sm"
+              className="z-depth-1"
+              onClick={() => history.push(logsLink)}
+            >
+              Check logs <MDBIcon icon="file-alt" className="ml-2" />
+            </MDBBtn>
           </MDBCol>
         </MDBRow>
 

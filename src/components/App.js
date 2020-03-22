@@ -2,7 +2,7 @@ import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 // Custom components
 import Navbar from "./ui/Navbar";
-import AccountLogs from "./pages/AccountLogs";
+import Logs from "./pages/Logs";
 import AccountDetails from "./pages/AccountDetails";
 import Dashboard from "./pages/Dashboard";
 import Anonymous from "./pages/Anonymous";
@@ -15,7 +15,7 @@ function App() {
   }
 
   const routeData = [
-    {path: "/accounts/:id/logs", exact: true, component: AccountLogs},
+    {path: "/logs", exact: true, component: Logs},
     {path: "/accounts/:id", exact: true, component: AccountDetails},
     {path: "/", component: Dashboard},
   ];
