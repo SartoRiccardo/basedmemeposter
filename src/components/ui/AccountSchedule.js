@@ -8,37 +8,43 @@ function AccountSchedule(props) {
   const scheduleUi = schedule.map((s) => {
     const { id, date, post } = s;
 
-    const convertedDate = new Date(Date.parse(date));
-    const dateText = moment(convertedDate).fromNow();
+    const dateText = moment(new Date(Date.parse(date))).fromNow();
+    const takenSince = moment(new Date(Date.parse(post.dateAdded))).fromNow();
+
+    const cardText = (
+      <React.Fragment>
+        <h5 className="h5-responsive">
+          Posting {dateText}
+          <MDBIcon icon="trash" className="mx-2 float-right icon-button trash" fixed />
+        </h5>
+        <p>
+          Platform:
+          <span className="text-capitalize">
+            {post.platform.toLowerCase()}<br />
+          </span>
+          Post registered {takenSince}
+        </p>
+      </React.Fragment>
+    );
 
     const backgroundImageStyle = {
       backgroundImage: `url(${post.thumbnail})`,
     };
     const cardBody = (
-      <React.Fragment>
-        <div className="d-block d-md-none">
-          <div className="w-100 pt-100 bg-image" style={backgroundImageStyle}></div>
-          <div className="mt-3 text-center">
-            <h5 className="h5-responsive">Posting {dateText}</h5>
-            <p className="text-capitalize">
-              Platform: {post.platform.toLowerCase()}
-            </p>
-          </div>
-        </div>
+      <div className="d-block d-md-flex">
+        <div
+          className="w-100 pt-100 bg-image d-block d-md-none"
+          style={backgroundImageStyle}
+        ></div>
+        <div
+          className="w-25 pt-25 bg-image d-none d-md-inline-block"
+          style={backgroundImageStyle}
+        ></div>
 
-        <div className="d-none d-md-flex">
-          <div className="w-25 pt-25 bg-image" style={backgroundImageStyle}></div>
-          <div className="ml-3">
-            <h5 className="h5-responsive mb-0">
-              Posting {dateText}
-              <MDBIcon icon="trash" className="mx-3" fixed />
-            </h5>
-            <p className="text-capitalize">
-              Platform: {post.platform.toLowerCase()}
-            </p>
-          </div>
+        <div className="mt-3 mt-md-0 ml-0 ml-md-3 flex-md-grow-1">
+          {cardText}
         </div>
-      </React.Fragment>
+      </div>
     );
 
     return (
