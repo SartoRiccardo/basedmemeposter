@@ -12,11 +12,14 @@ function Dashboard(props) {
   let warnings = 0;
   let errors = 0;
   for(const l of log.logs) {
-    if(l.level === "WARNING") {
-      warnings++;
-    }
-    else if(l.level === "ERROR") {
-      errors++;
+    switch(l.level) {
+      case "warning":
+        warnings++;
+        break;
+
+      case "error":
+        errors++;
+        break;
     }
   }
 
