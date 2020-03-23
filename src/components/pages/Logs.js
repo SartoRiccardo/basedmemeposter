@@ -11,14 +11,12 @@ class Logs extends React.Component {
   parseQueryParams(url) {
     let params = querystring.parse(url.substring(1));
 
-    for(const [ key ] of Object.entries(params)) {
-      if(typeof params[key] !== "object") {
-        params[key] = [params[key]];
-      }
+    for(const [ key, value ] of Object.entries(params)) {
+      params[key] = value.split(",");
     }
 
-    if(params.account) {
-      params.account = params.account.map((id) => parseInt(id));
+    if(params.accounts) {
+      params.accounts = params.accounts.map((id) => parseInt(id));
     }
 
     return params;
@@ -27,9 +25,11 @@ class Logs extends React.Component {
   encodeState(params) {
     let urlParams = [];
     for(const [ key, values ] of Object.entries(params)) {
-      for(const v of values) {
-        urlParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(v)}`);
+      if(values.length === 0) {
+        continue;
       }
+      const urlValues = values.map((v) => encodeURIComponent(v));
+      urlParams.push(`${key}=${urlValues.join()}`);
     }
     return `?${urlParams.join("&")}`;
   }
@@ -38,22 +38,16 @@ class Logs extends React.Component {
     const { history } = this.props;
     const { change } = evt;
 
-    const groupKeyMatch = {
-      accounts: "account",
-      levels: "level",
-    };
-    const keyMatch = groupKeyMatch[change.group];
-
     let params = this.parseQueryParams(history.location.search);
-    if(!params[keyMatch]) {
-      params[keyMatch] = [];
+    if(!params[change.group]) {
+      params[change.group] = [];
     }
 
     if(change.new) {
-      params[keyMatch].push(change.value);
+      params[change.group].push(change.value);
     }
     else {
-      params[keyMatch] = params[keyMatch].filter((param) => param !== change.value);
+      params[change.group] = params[change.group].filter((param) => param !== change.value);
     }
 
     const urlParams = this.encodeState(params);
@@ -64,11 +58,6 @@ class Logs extends React.Component {
     const { history } = this.props;
     const { logs } = this.props.log;
     const params = this.parseQueryParams(history.location.search);
-
-    const filters = {
-      accounts: params.account || [],
-      levels: params.level || [],
-    };
 
     const logsUi = logs.map((l) => {
       return (
@@ -87,7 +76,7 @@ class Logs extends React.Component {
 
         <MDBRow>
           <MDBCol>
-            <LogFilter value={filters} onChange={this.updateUrl} />
+            <LogFilter value={params} onChange={this.updateUrl} />
           </MDBCol>
         </MDBRow>
 
@@ -100,7 +89,7 @@ class Logs extends React.Component {
 
         <MDBRow>
           <MDBCol>
-            
+
             {logsUi}
           </MDBCol>
         </MDBRow>
