@@ -4,10 +4,10 @@ import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn } from "mdbreact";
 import { connect } from "react-redux";
 import { loadScheduleFor } from "../../storage/actions/schedule";
 // Custom components
-import Avatar from "../ui/Avatar";
-import AccountTimeOnline from "../ui/AccountTimeOnline";
-import AccountSchedule from "../ui/AccountSchedule";
-import AccountSchedulePlaceholder from "../ui/AccountSchedulePlaceholder";
+import Avatar from "../ui/account/Avatar";
+import AccountTimeOnline from "../ui/account/AccountTimeOnline";
+import AccountSchedule from "../ui/account/AccountSchedule";
+import AccountSchedulePlaceholder from "../ui/placeholders/AccountSchedulePlaceholder";
 
 class AccountDetails extends React.Component {
   componentDidMount() {

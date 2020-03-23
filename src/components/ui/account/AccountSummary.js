@@ -1,5 +1,5 @@
 import React from "react";
-import { isInRangeHours } from "../../util/time";
+import { isInRangeHours } from "../../../util/time";
 // Custom components
 import Avatar from "./Avatar";
 

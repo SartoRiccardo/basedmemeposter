@@ -1,6 +1,6 @@
 import React from "react";
 import { MDBCol } from "mdbreact";
-import { isInRangeHours } from "../../util/time";
+import { isInRangeHours } from "../../../util/time";
 
 function AccountTimeOnline(props) {
   const { startTime, endTime, className } = props;

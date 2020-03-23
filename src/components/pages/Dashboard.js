@@ -3,8 +3,8 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 // Custom components
-import LogCard from "../ui/LogCard";
-import AccountSummary from "../ui/AccountSummary";
+import LogCard from "../ui/log/LogCard";
+import AccountSummary from "../ui/account/AccountSummary";
 
 function Dashboard(props) {
   const { account, log, history } = props;

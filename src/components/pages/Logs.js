@@ -3,7 +3,7 @@ import querystring from "querystring";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // Custom components
 import LogFilter from "../forms/LogFilter";
-import SingleLog from "../ui/SingleLog";
+import SingleLog from "../ui/log/SingleLog";
 // HOCs and actions
 import { connect } from "react-redux";
 
