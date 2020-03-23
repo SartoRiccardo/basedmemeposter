@@ -7,6 +7,7 @@ import { loadScheduleFor } from "../../storage/actions/schedule";
 import Avatar from "../ui/Avatar";
 import AccountTimeOnline from "../ui/AccountTimeOnline";
 import AccountSchedule from "../ui/AccountSchedule";
+import AccountSchedulePlaceholder from "../ui/AccountSchedulePlaceholder";
 
 class AccountDetails extends React.Component {
   componentDidMount() {
@@ -18,7 +19,7 @@ class AccountDetails extends React.Component {
   }
 
   reloadScheduleIfNecessary = () => {
-    const { match, loadScheduleFor, status } = this.props;
+    const { match, status, loadScheduleFor, resetSchedule } = this.props;
     const { account } = this.props.schedule;
 
     let isLoading = false;
@@ -30,6 +31,7 @@ class AccountDetails extends React.Component {
     }
 
     if(!isLoading && account !== parseInt(match.params.id)) {
+      resetSchedule();
       loadScheduleFor(parseInt(match.params.id));
     }
   }
@@ -38,10 +40,6 @@ class AccountDetails extends React.Component {
     const { history, match, status } = this.props;
     const { accounts } = this.props.account;
     const { schedule } = this.props.schedule;
-
-    if(!status.schedule.initialized) {
-      return null;
-    }
 
     let matchingAccount = null;
     for(const a of accounts) {
@@ -107,7 +105,11 @@ class AccountDetails extends React.Component {
             <hr className="mt-0 w-50" />
           </MDBCol>
 
-          <AccountSchedule schedule={schedule} />
+          {
+            status.schedule.initialized ?
+            <AccountSchedule schedule={schedule} /> :
+            <AccountSchedulePlaceholder display={6} />
+          }
         </MDBRow>
       </MDBContainer>
     );
@@ -125,6 +127,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadScheduleFor: (user) => dispatch(loadScheduleFor(user)),
+    resetSchedule: () => dispatch({ type: "RESET_SCHEDULES" }),
   };
 }
 

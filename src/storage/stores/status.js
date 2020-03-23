@@ -23,7 +23,7 @@ function statusReducer(state=init, action) {
   const { type } = action;
   let matches, store;
 
-  matches = /(?:^SET_(.+)S|^RESET_(.+)S)/gm.exec(type);
+  matches = /^(?:RE)?SET_(.+)S$/gm.exec(type);
   if(matches) {
     store = matches[1].toLowerCase();
     return {
