@@ -3,6 +3,7 @@ import querystring from "querystring";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // Custom components
 import LogFilter from "../forms/LogFilter";
+import SingleLog from "../ui/SingleLog";
 // HOCs and actions
 import { connect } from "react-redux";
 
@@ -10,7 +11,7 @@ class Logs extends React.Component {
   parseQueryParams(url) {
     let params = querystring.parse(url.substring(1));
 
-    for(const [ key, value ] of Object.entries(params)) {
+    for(const [ key ] of Object.entries(params)) {
       if(typeof params[key] !== "object") {
         params[key] = [params[key]];
       }
@@ -69,17 +70,38 @@ class Logs extends React.Component {
       levels: params.level || [],
     };
 
+    const logsUi = logs.map((l) => {
+      return (
+        <SingleLog log={l} key={l.id} />
+      );
+    });
+
     return (
       <MDBContainer>
         <MDBRow className="mt-3">
           <MDBCol>
-            <h2 className="text-center">Logs</h2>
+            <h2 className="text-center">Filters</h2>
+            <hr className="mt-0 w-50" />
           </MDBCol>
         </MDBRow>
 
         <MDBRow>
           <MDBCol>
             <LogFilter value={filters} onChange={this.updateUrl} />
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow className="mt-3">
+          <MDBCol>
+            <h2 className="text-center">Logs</h2>
+            <hr className="mt-0 w-50" />
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow>
+          <MDBCol>
+            
+            {logsUi}
           </MDBCol>
         </MDBRow>
       </MDBContainer>
