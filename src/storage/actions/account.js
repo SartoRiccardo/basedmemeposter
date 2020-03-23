@@ -11,12 +11,8 @@ export function fetchAccounts() {
   const creator = async function(dispatch) {
     try {
       // const { REACT_APP_BACKEND } = process.env;
-      // const config = {
-      //   params: params || {},
-      // };
-      //
-      // const response = await axios.get(`${REACT_APP_BACKEND}/logs`, config);
-      
+      // const response = await axios.get(`${REACT_APP_BACKEND}/accounts`);
+
       // Simulate a request
       const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
 
@@ -25,11 +21,14 @@ export function fetchAccounts() {
           type: "SET_ACCOUNTS",
           accounts: dummyAccounts,
         });
+      }, (error) => {
+        dispatch({ type: "ERROR", store: "account", error: error.title });
       });
     }
     catch(e) {
+      dispatch({ type: "ERROR", store: "account", error: e.message });
     }
   }
 
-  return protectFunction(makeAction(creator, "account"));
+  return protectFunction(makeAction(creator, "account", "SET_ACCOUNTS"));
 }

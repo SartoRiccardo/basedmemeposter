@@ -2,20 +2,46 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
+import { loadScheduleFor } from "../../storage/actions/schedule";
 // Custom components
 import Avatar from "../ui/Avatar";
 import AccountTimeOnline from "../ui/AccountTimeOnline";
 import AccountSchedule from "../ui/AccountSchedule";
 
 class AccountDetails extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  componentDidMount() {
+    this.reloadScheduleIfNecessary();
+  }
+
+  componentDidUpdate() {
+    this.reloadScheduleIfNecessary();
+  }
+
+  reloadScheduleIfNecessary = () => {
+    const { match, loadScheduleFor, status } = this.props;
+    const { account } = this.props.schedule;
+
+    let isLoading = false;
+    for(const action of status.schedule.actions) {
+      if(action.type === "SET_SCHEDULES") {
+        isLoading = true;
+        break;
+      }
+    }
+
+    if(!isLoading && account !== parseInt(match.params.id)) {
+      loadScheduleFor(parseInt(match.params.id));
+    }
+  }
 
   render() {
-    const { history, match } = this.props;
+    const { history, match, status } = this.props;
     const { accounts } = this.props.account;
     const { schedule } = this.props.schedule;
+
+    if(!status.schedule.initialized) {
+      return null;
+    }
 
     let matchingAccount = null;
     for(const a of accounts) {
@@ -92,7 +118,14 @@ function mapStateToProps(state) {
   return {
     account: { ...state.account },
     schedule: { ...state.schedule },
+    status: { ...state.status },
   };
 }
 
-export default connect(mapStateToProps)(AccountDetails);
+function mapDispatchToProps(dispatch) {
+  return {
+    loadScheduleFor: (user) => dispatch(loadScheduleFor(user)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountDetails);

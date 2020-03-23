@@ -20,12 +20,12 @@ export function protectFunction(callback) {
   }
 }
 
-export function makeAction(callback, store) {
+export function makeAction(callback, store, futureAction) {
   return async function() {
     const [ dispatch ] = arguments;
 
     const id = Math.random();
-    dispatch({ type:"START_ACTION", store, id });
+    dispatch({ type:"START_ACTION", store, id, futureAction });
     await callback.apply(this, arguments);
     dispatch({ type:"END_ACTION", store, id });
   }

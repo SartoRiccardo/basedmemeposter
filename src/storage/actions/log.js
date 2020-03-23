@@ -33,12 +33,14 @@ export function fetchLogs(params=null) {
           type: "SET_LOGS",
           logs: dummyLogs,
         });
+      }, (error) => {
+        dispatch({ type: "ERROR", store: "log", error: error.title });
       });
     }
     catch(e) {
-      console.log(e);
+      dispatch({ type: "ERROR", store: "log", error: e.message });
     }
   }
 
-  return protectFunction(makeAction(creator, "log"));
+  return protectFunction(makeAction(creator, "log", "LOAD_LOGS"));
 }

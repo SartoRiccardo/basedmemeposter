@@ -20,6 +20,9 @@ class App extends React.Component {
   }
 
   render() {
+    const { status } = this.props;
+    if(!(status.log.initialized && status.account.initialized)) return null;
+
     if(false) {
       return (
         <Anonymous />
@@ -50,6 +53,12 @@ class App extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    status: { ...state.status },
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     fetchLogs: () => dispatch(fetchLogs()),
@@ -57,4 +66,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

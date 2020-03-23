@@ -4,7 +4,7 @@
  * @prop {boolean}  initialized  Whether the state has been initialized.
  * @prop {string[]} errors       Any errors that happened.
  * @prop {boolean}  dumping      Whether someone keeps dumping actions.
- * @prop {int[]}    actions      The IDs of the unresolved actions.
+ * @prop {Action[]} actions      The IDs of the unresolved actions.
  */
 const initialState = {
   initialized: false,
@@ -23,9 +23,9 @@ function statusReducer(state=init, action) {
   const { type } = action;
   let matches, store;
 
-  matches = type.match(/(?:^SET_(.+)S|^RESET_(.+)S)/gm);
+  matches = /(?:^SET_(.+)S|^RESET_(.+)S)/gm.exec(type);
   if(matches) {
-    store = matches[0].toLowerCase();
+    store = matches[1].toLowerCase();
     return {
       ...state,
       [ store ]: {
@@ -36,7 +36,7 @@ function statusReducer(state=init, action) {
   }
 
   store = action.store;
-  switch(action.type) {
+  switch(type) {
     case "START_DUMP":
       return {
         ...state,
@@ -60,7 +60,10 @@ function statusReducer(state=init, action) {
         ...state,
         [ store ]: {
           ...state[store],
-          actions: [ ...state[store].actions, action.id ],
+          actions: [
+            ...state[store].actions,
+            { id: action.id, type: action.futureAction },
+          ],
         },
       };
 
@@ -69,7 +72,16 @@ function statusReducer(state=init, action) {
         ...state,
         [ store ]: {
           ...state[store],
-          actions: state[store].actions.filter((id) => id !== action.id),
+          actions: state[store].actions.filter((a) => a.id !== action.id),
+        },
+      };
+
+    case "ERROR":
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          errors: [ ...state[store].errors, action.error ],
         },
       };
 
