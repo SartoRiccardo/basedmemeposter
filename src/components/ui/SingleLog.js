@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
+import { MDBIcon } from "mdbreact";
 import moment from "moment";
 
 const levelStyling = {

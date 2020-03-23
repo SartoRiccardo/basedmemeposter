@@ -1,14 +1,14 @@
 
 const storage = window.sessionStorage;
 
-function getToken() {
+export function getToken() {
   return storage.getItem("token");
 }
 
-function setToken(value) {
+export function setToken(value) {
   storage.setItem("token", value);
 }
 
-function deleteToken() {
+export function deleteToken() {
   storage.removeItem("token");
 }

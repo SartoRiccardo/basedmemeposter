@@ -19,7 +19,7 @@ function AccountSchedule(props) {
         </h5>
         <p>
           Platform:
-          <span className="text-capitalize">
+          <span className="text-capitalize ml-1">
             {post.platform.toLowerCase()}<br />
           </span>
           Post registered {takenSince}

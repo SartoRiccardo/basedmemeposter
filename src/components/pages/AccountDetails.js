@@ -27,7 +27,7 @@ class AccountDetails extends React.Component {
 
     const { id, username, avatar, startTime, endTime } = matchingAccount;
     const breakpoint = "sm";
-    const logsLink = `/logs?account=${id}`;
+    const logsLink = `/logs?accounts=${id}`;
 
     return (
       <MDBContainer>

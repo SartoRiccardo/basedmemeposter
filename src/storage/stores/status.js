@@ -21,55 +21,61 @@ const init = {
 
 function statusReducer(state=init, action) {
   const { type } = action;
-  let matches;
-
-  matches = type.match(/(?:START_DUMP_(.+)|END_DUMP_(.+))/gm);
-  if(matches) {
-    const index = matches[0].toLowerCase();
-    return {
-      ...state,
-      [ index ]: {
-        ...state[index],
-        dumping: type.includes("START_DUMP_"),
-      },
-    };
-  }
-
-  matches = type.match(/(?:START_ACTION_(.+)|END_ACTION_(.+))/gm);
-  if(matches) {
-    const index = matches[0].toLowerCase();
-    let newActions;
-    if(type.includes("START_ACTION_")) {
-      newActions = [...state[index].dumping, action.id];
-    }
-    else {
-      newActions = state[index].dumping.filter((id) => {
-        return id !== action.id;
-      });
-    }
-
-    return {
-      ...state,
-      [ index ]: {
-        ...state[index],
-        actions: newActions,
-      },
-    };
-  }
+  let matches, store;
 
   matches = type.match(/(?:^SET_(.+)S|^RESET_(.+)S)/gm);
   if(matches) {
-    const index = matches[0].toLowerCase();
+    store = matches[0].toLowerCase();
     return {
       ...state,
-      [ index ]: {
-        ...state[index],
+      [ store ]: {
+        ...state[store],
         initialized: type.startsWith("SET_"),
       },
     };
   }
 
-  return state;
+  store = action.store;
+  switch(action.type) {
+    case "START_DUMP":
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          dumping: true,
+        },
+      };
+
+    case "END_DUMP":
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          dumping: false,
+        },
+      };
+
+    case "START_ACTION":
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          actions: [ ...state[store].actions, action.id ],
+        },
+      };
+
+    case "END_ACTION":
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          actions: state[store].actions.filter((id) => id !== action.id),
+        },
+      };
+
+    default:
+      return state;
+  }
 }
 
 export default statusReducer;
