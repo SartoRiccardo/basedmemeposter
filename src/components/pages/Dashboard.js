@@ -26,8 +26,9 @@ function Dashboard(props) {
   }
   else {
     for(let i = 0; i < 6; i++) {
+      const truncateClass = i >= 4 ? "d-block d-md-none d-lg-block" : "";
       accountsUi.push(
-        <MDBCol key={i} size="6" sm="4" md="3" lg="2" className="px-1">
+        <MDBCol key={i} size="6" sm="4" md="3" lg="2" className={`px-1 ${truncateClass}`}>
           <AccountSummaryPlaceholder
             className="rounded-lg mx-1 my-2 p-2"
           />
