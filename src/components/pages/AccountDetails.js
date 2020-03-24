@@ -5,9 +5,11 @@ import { connect } from "react-redux";
 import { loadScheduleFor } from "../../storage/actions/schedule";
 // Custom components
 import Avatar from "../ui/account/Avatar";
+import AvatarPlaceholder from "../ui/placeholders/AvatarPlaceholder";
 import AccountTimeOnline from "../ui/account/AccountTimeOnline";
 import AccountSchedule from "../ui/account/AccountSchedule";
 import AccountSchedulePlaceholder from "../ui/placeholders/AccountSchedulePlaceholder";
+import AccountTimePlaceholder from "../ui/placeholders/AccountTimePlaceholder";
 
 class AccountDetails extends React.Component {
   componentDidMount() {
@@ -49,43 +51,87 @@ class AccountDetails extends React.Component {
       }
     }
 
-    const { id, username, avatar, startTime, endTime } = matchingAccount;
     const breakpoint = "sm";
-    const logsLink = `/logs?accounts=${id}`;
+    let accountHeader, accountActivity;
+    if(matchingAccount) {
+      const { id, username, avatar, startTime, endTime } = matchingAccount;
+      const logsLink = `/logs?accounts=${id}`;
+
+      accountHeader = (
+        <React.Fragment>
+          <MDBRow className={`mt-3 d-flex d-${breakpoint}-none
+              justify-content-center`}>
+            <MDBCol size="6">
+              {
+                matchingAccount ?
+                <Avatar image={avatar} /> :
+                <AvatarPlaceholder />
+              }
+            </MDBCol>
+          </MDBRow>
+
+          <MDBRow className={`mt-${breakpoint}-3`}>
+            <MDBCol sm="2" className={`d-none d-${breakpoint}-block`}>
+              {
+                matchingAccount ?
+                <Avatar className="my-auto" image={avatar} /> :
+                <AvatarPlaceholder />
+              }
+            </MDBCol>
+
+            <MDBCol className={`text-uppercase my-auto text-center
+                text-${breakpoint}-left`}>
+              <h3 className="h3-responsive">
+                <a target="_blank" rel="noopener noreferrer"
+                    href={`https://www.instagram.com/${username}`}>
+                  {username}
+                  <MDBIcon className="mx-2" icon="external-link-alt" />
+                </a>
+              </h3>
+
+              <MDBBtn
+                outline
+                color="purple darken-2"
+                size="sm"
+                className="z-depth-1"
+                onClick={() => history.push(logsLink)}
+              >
+                Check logs <MDBIcon icon="file-alt" className="ml-2" />
+              </MDBBtn>
+            </MDBCol>
+          </MDBRow>
+        </React.Fragment>
+      );
+      accountActivity = (
+        <AccountTimeOnline startTime={startTime} endTime={endTime} />
+      );
+    }
+    else {
+      accountHeader = (
+        <React.Fragment>
+          <MDBRow className={`mt-3 d-flex d-${breakpoint}-none
+              justify-content-center`}>
+            <MDBCol size="6">
+              <AvatarPlaceholder />
+            </MDBCol>
+          </MDBRow>
+
+          <MDBRow className={`mt-${breakpoint}-3`}>
+            <MDBCol sm="2" className={`d-none d-${breakpoint}-block`}>
+              <AvatarPlaceholder />
+            </MDBCol>
+          </MDBRow>
+        </React.Fragment>
+      );
+      accountActivity = (
+        <AccountTimePlaceholder />
+      );
+    }
 
     return (
       <MDBContainer>
-        <MDBRow className={`mt-3 d-flex d-${breakpoint}-none justify-content-center`}>
-          <MDBCol size="6">
-            <Avatar image={avatar} />
-          </MDBCol>
-        </MDBRow>
 
-        <MDBRow className={`mt-${breakpoint}-3`}>
-          <MDBCol sm="2" className={`d-none d-${breakpoint}-flex`}>
-            <Avatar className="my-auto" image={avatar} />
-          </MDBCol>
-
-          <MDBCol className={`text-uppercase my-auto text-center text-${breakpoint}-left`}>
-            <h3 className="h3-responsive">
-              <a target="_blank" rel="noopener noreferrer"
-                  href={`https://www.instagram.com/${username}`}>
-                {username}
-                <MDBIcon className="mx-2" icon="external-link-alt" />
-              </a>
-            </h3>
-
-            <MDBBtn
-              outline
-              color="purple darken-2"
-              size="sm"
-              className="z-depth-1"
-              onClick={() => history.push(logsLink)}
-            >
-              Check logs <MDBIcon icon="file-alt" className="ml-2" />
-            </MDBBtn>
-          </MDBCol>
-        </MDBRow>
+        {accountHeader}
 
         <MDBRow className="my-3">
           <MDBCol size="12">
@@ -93,10 +139,7 @@ class AccountDetails extends React.Component {
             <hr className="mt-0 w-50" />
           </MDBCol>
 
-          <AccountTimeOnline
-            startTime={startTime}
-            endTime={endTime}
-          />
+          {accountActivity}
         </MDBRow>
 
         <MDBRow className="mt-4">

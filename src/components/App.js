@@ -21,7 +21,7 @@ class App extends React.Component {
 
   render() {
     const { status } = this.props;
-    if(!(status.log.initialized && status.account.initialized)) return null;
+    if(!(status.log.initialized)) return null;
 
     if(false) {
       return (

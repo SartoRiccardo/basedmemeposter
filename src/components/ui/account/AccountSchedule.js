@@ -33,13 +33,13 @@ function AccountSchedule(props) {
     const cardBody = (
       <div className="d-block d-md-flex">
         <div
-          className="w-100 pt-100 bg-image d-block d-md-none"
+          className="w-100 pt-100 grey lighten-2 bg-image d-block d-md-none"
           style={backgroundImageStyle}
-        ></div>
+        />
         <div
-          className="w-25 pt-25 bg-image d-none d-md-inline-block"
+          className="w-25 pt-25 grey lighten-2 bg-image d-none d-md-inline-block"
           style={backgroundImageStyle}
-        ></div>
+        />
 
         <div className="mt-3 mt-md-0 ml-0 ml-md-3 flex-md-grow-1">
           {cardText}

@@ -5,11 +5,14 @@
 
 .avatar {
   border-radius: 50%;
-  width: 100%;
 }
 
 .avatar-container {
   position: relative;
+}
+
+.avatar.placeholder {
+  background-clip: content-box;
 }
 
 .overlay-avatar {
