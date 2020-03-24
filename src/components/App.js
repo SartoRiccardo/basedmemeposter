@@ -20,8 +20,6 @@ class App extends React.Component {
   }
 
   render() {
-    const { status } = this.props;
-
     if(false) {
       return (
         <Anonymous />

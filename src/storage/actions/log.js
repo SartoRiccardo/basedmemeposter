@@ -14,7 +14,7 @@ const dummyCount = {
   debug: 0,
   info: 0,
   warning: 50,
-  error: 7,
+  error: 0,
   critical: 0,
 };
 
