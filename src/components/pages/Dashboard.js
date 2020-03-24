@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 // Custom components
 import LogCard from "../ui/log/LogCard";
 import AccountSummary from "../ui/account/AccountSummary";
+import AccountSummaryPlaceholder from "../ui/placeholders/AccountSummaryPlaceholder";
 
 function Dashboard(props) {
-  const { account, log, history } = props;
+  const { account, log, status, history } = props;
 
   let warnings = 0;
   let errors = 0;
@@ -21,16 +22,29 @@ function Dashboard(props) {
   }
 
   let accountsUi = [];
-  for(const a of account.accounts) {
-    accountsUi.push(
-      <MDBCol key={a.id} size="6" sm="4" md="3" lg="2" className="px-1">
-        <AccountSummary
-          onClick={() => history.push(`/accounts/${a.id}`)}
-          className="white rounded-lg mx-1 my-2 p-2 c-pointer"
-          account={a}
-        />
-      </MDBCol>
-    );
+  if(status.account.initialized) {
+    for(const a of account.accounts) {
+      accountsUi.push(
+        <MDBCol key={a.id} size="6" sm="4" md="3" lg="2" className="px-1">
+          <AccountSummary
+            onClick={() => history.push(`/accounts/${a.id}`)}
+            className="white rounded-lg mx-1 my-2 p-2 c-pointer"
+            account={a}
+          />
+        </MDBCol>
+      );
+    }
+  }
+  else {
+    for(let i = 0; i < 6; i++) {
+      accountsUi.push(
+        <MDBCol key={i} size="6" sm="4" md="3" lg="2" className="px-1">
+          <AccountSummaryPlaceholder
+            className="rounded-lg mx-1 my-2 p-2"
+          />
+        </MDBCol>
+      );
+    }
   }
 
   return (
