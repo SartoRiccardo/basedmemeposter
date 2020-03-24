@@ -1,5 +1,6 @@
 import axios from "axios";
 import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
+import { setCookie, getCookie } from "../cookie";
 
 const someAccount = {id:1, username:"basedmemeposter", startTime:"10:00:00", endTime:"21:00:00", avatar:"https://instagram.fmxp6-1.fna.fbcdn.net/v/t51.2885-19/s150x150/88916645_2488601074737569_9207978216935915520_n.jpg?_nc_ht=instagram.fmxp6-1.fna.fbcdn.net&_nc_ohc=KNW0WNrTHkIAX-tgkUS&oh=10d17c1bc23ee90be33835514b31a120&oe=5E9DFD60"};
 const dummyLogs = [
@@ -47,4 +48,24 @@ export function fetchLogs(params=null) {
   }
 
   return protectFunction(makeAction(creator, "log", "LOAD_LOGS"));
+}
+
+export function ignoreLogs(level, amount) {
+  setCookie(`${level}Ignored`, amount);
+  return { type: "IGNORE_LOGS", level, amount };
+}
+
+export function initIgnoredLogs() {
+  return function(dispatch) {
+    dispatch({
+      type: "IGNORE_LOGS",
+      level: "warning",
+      amount: parseInt(getCookie("warningIgnored") || 0)
+    });
+    dispatch({
+      type: "IGNORE_LOGS",
+      level: "error",
+      amount: parseInt(getCookie("errorIgnored") || 0)
+    });
+  }
 }

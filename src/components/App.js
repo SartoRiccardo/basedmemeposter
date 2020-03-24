@@ -2,7 +2,7 @@ import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 // HOCs and actions
 import { connect } from "react-redux";
-import { fetchLogs } from "../storage/actions/log";
+import { fetchLogs, initIgnoredLogs } from "../storage/actions/log";
 import { fetchAccounts } from "../storage/actions/account";
 // Custom components
 import Navbar from "./ui/Navbar";
@@ -13,8 +13,9 @@ import Anonymous from "./pages/Anonymous";
 
 class App extends React.Component {
   componentDidMount() {
-    const { fetchLogs, fetchAccounts } = this.props;
+    const { fetchLogs, fetchAccounts, initIgnoredLogs } = this.props;
 
+    initIgnoredLogs();
     fetchAccounts();
     fetchLogs();
   }
@@ -60,6 +61,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchLogs: () => dispatch(fetchLogs()),
     fetchAccounts: () => dispatch(fetchAccounts()),
+    initIgnoredLogs: () => dispatch(initIgnoredLogs()),
   };
 }
 

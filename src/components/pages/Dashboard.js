@@ -1,5 +1,6 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { getIgnoredLogs } from "../../storage/cookie";
 // HOCs and actions
 import { connect } from "react-redux";
 // Custom components
