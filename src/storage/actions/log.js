@@ -10,6 +10,13 @@ const dummyLogs = [
   {id: 64, date: "2020-03-19 19:35:50", level: "info", account: {...someAccount}, message: "Wrote caption"},
   {id: 44, date: "2020-03-19 19:35:59", level: "info", account: {...someAccount}, message: "Shared image"},
 ];
+const dummyCount = {
+  debug: 0,
+  info: 0,
+  warning: 50,
+  error: 7,
+  critical: 0,
+};
 
 /**
  * Requests logs with the specific parameter.
@@ -29,10 +36,7 @@ export function fetchLogs(params=null) {
       const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
 
       callIfSuccessful(response, () => {
-        dispatch({
-          type: "SET_LOGS",
-          logs: dummyLogs,
-        });
+        dispatch({ type: "SET_LOGS", logs: dummyLogs, count: dummyCount });
       }, (error) => {
         dispatch({ type: "ERROR", store: "log", error: error.title });
       });

@@ -21,7 +21,6 @@ class App extends React.Component {
 
   render() {
     const { status } = this.props;
-    if(!(status.log.initialized)) return null;
 
     if(false) {
       return (

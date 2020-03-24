@@ -10,17 +10,6 @@ import AccountSummaryPlaceholder from "../ui/placeholders/AccountSummaryPlacehol
 function Dashboard(props) {
   const { account, log, status, history } = props;
 
-  let warnings = 0;
-  let errors = 0;
-  for(const l of log.logs) {
-    if(l.level === "warning") {
-      warnings++;
-    }
-    else if(l.level === "warning") {
-      errors++;
-    }
-  }
-
   let accountsUi = [];
   if(status.account.initialized) {
     for(const a of account.accounts) {
@@ -55,7 +44,7 @@ function Dashboard(props) {
             onClick={() => history.push("/logs?levels=warning")}
             className="c-pointer hover-darken"
             level="warning"
-            count={warnings}
+            count={log.count.warning}
           />
         </MDBCol>
 
@@ -64,7 +53,7 @@ function Dashboard(props) {
             onClick={() => history.push("/logs?levels=error")}
             className="c-pointer hover-darken"
             level="error"
-            count={errors}
+            count={log.count.error}
           />
         </MDBCol>
       </MDBRow>

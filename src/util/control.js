@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import { getToken } from "../storage/session";
 
 export function callIfSuccessful(response, callback, onFail=null) {

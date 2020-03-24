@@ -4,6 +4,7 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // Custom components
 import LogFilter from "../forms/LogFilter";
 import SingleLog from "../ui/log/SingleLog";
+import SingleLogPlaceholder from "../ui/placeholders/SingleLogPlaceholder";
 // HOCs and actions
 import { connect } from "react-redux";
 
@@ -55,15 +56,26 @@ class Logs extends React.Component {
   }
 
   render() {
-    const { history } = this.props;
+    const { history, status } = this.props;
     const { logs } = this.props.log;
     const params = this.parseQueryParams(history.location.search);
 
-    const logsUi = logs.map((l) => {
-      return (
-        <SingleLog log={l} key={l.id} />
-      );
-    });
+    let logsUi;
+    if(status.log.initialized) {
+      logsUi = logs.map((l) => {
+        return (
+          <SingleLog log={l} key={l.id} />
+        );
+      });
+    }
+    else {
+      logsUi = [];
+      for(let i = 0; i < 10; i++) {
+        logsUi.push(
+          <SingleLogPlaceholder key={i} />
+        );
+      }
+    }
 
     return (
       <MDBContainer>
@@ -101,6 +113,7 @@ class Logs extends React.Component {
 function mapStateToProps(state) {
   return {
     log: { ...state.log },
+    status: { ...state.status },
   };
 }
 
