@@ -42,3 +42,26 @@ export function loadScheduleFor(account) {
 
   return protectFunction(makeAction(creator, "schedule", "SET_SCHEDULES"));
 }
+
+export function cancelScheduledPost(id) {
+  const creator = async function(dispatch) {
+    try {
+      // const { REACT_APP_BACKEND } = process.env;
+      // const response = await axios.delete(`${REACT_APP_BACKEND}/schedule/${id}`);
+
+      // Simulate a request
+      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+
+      callIfSuccessful(response, () => {
+        dispatch({ type: "DELETE_SCHEDULED_POST", id });
+      }, (error) => {
+        dispatch({ type: "ERROR", store: "schedule", error: error.title });
+      });
+    }
+    catch(e) {
+      dispatch({ type: "ERROR", store: "schedule", error: e.message });
+    }
+  }
+
+  return protectFunction(makeAction(creator, "schedule", "DELETE_SCHEDULE"));
+}
