@@ -7,7 +7,7 @@ import { loadScheduleFor } from "../../storage/actions/schedule";
 import Avatar from "../ui/account/Avatar";
 import AvatarPlaceholder from "../ui/placeholders/AvatarPlaceholder";
 import AccountTimeOnline from "../ui/account/AccountTimeOnline";
-import AccountSchedule from "../ui/account/AccountSchedule";
+import ScheduledPost from "../ui/account/ScheduledPost";
 import AccountSchedulePlaceholder from "../ui/placeholders/AccountSchedulePlaceholder";
 import AccountTimePlaceholder from "../ui/placeholders/AccountTimePlaceholder";
 
@@ -50,6 +50,12 @@ class AccountDetails extends React.Component {
         break;
       }
     }
+
+    const accountSchedule = schedule.map((s) => {
+      return (
+        <ScheduledPost key={s.id} schedule={s} />
+      );
+    });
 
     const breakpoint = "sm";
     let accountHeader, accountActivity;
@@ -150,7 +156,7 @@ class AccountDetails extends React.Component {
 
           {
             status.schedule.initialized ?
-            <AccountSchedule schedule={schedule} /> :
+            accountSchedule :
             <AccountSchedulePlaceholder display={6} />
           }
         </MDBRow>
