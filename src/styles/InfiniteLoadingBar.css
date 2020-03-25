@@ -1,0 +1,16 @@
+
+.infinite-loader-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.infinite-loader {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  transition-property: left, right;
+  transition-duration: 0.5s, 0.5s;
+  transition-timing-function: linear;
+}
