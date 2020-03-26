@@ -7,8 +7,26 @@ import SingleLog from "../ui/log/SingleLog";
 import SingleLogPlaceholder from "../ui/placeholders/SingleLogPlaceholder";
 // HOCs and actions
 import { connect } from "react-redux";
+import { fetchLogs } from "../../storage/actions/log";
 
 class Logs extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const urlParams = this.props.location.search;
+    this.state = { urlParams };
+  }
+
+  componentDidUpdate() {
+    const { history, fetchLogs } = this.props;
+    const { urlParams } = this.state;
+    if(history.location.search !== urlParams) {
+      this.setState({ urlParams: history.location.search }, () => {
+        fetchLogs(this.parseQueryParams(this.state.urlParams));
+      });
+    }
+  }
+
   parseQueryParams(url) {
     let params = querystring.parse(url.substring(1));
 
@@ -117,4 +135,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Logs);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchLogs: (params) => dispatch(fetchLogs(params)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Logs);
