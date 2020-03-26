@@ -47,7 +47,7 @@ class ScheduledPost extends React.Component {
   }
 
   render() {
-    const { schedule, status } = this.props;
+    const { schedule } = this.props;
     const { id, date, post } = schedule;
     const { deleting } = this.state;
 

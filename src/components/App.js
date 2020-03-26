@@ -20,18 +20,18 @@ class App extends React.Component {
     fetchLogs();
   }
 
-  render() {
-    if(false) {
-      return (
-        <Anonymous />
-      );
-    }
-
+  generateBody = () => {
     const routeData = [
       {path: "/logs", exact: true, component: Logs},
       {path: "/accounts/:id", exact: true, component: AccountDetails},
       {path: "/", component: Dashboard},
     ];
+
+    if(true) {
+      return (
+        <Anonymous />
+      );
+    }
 
     const routes = routeData.map((rd, i) => {
       return (
@@ -40,12 +40,19 @@ class App extends React.Component {
     });
 
     return (
-      <BrowserRouter>
+      <React.Fragment>
         <Navbar />
+        <Switch>
+          {routes}
+        </Switch>
+      </React.Fragment>
+    );
+  }
 
-          <Switch>
-            {routes}
-          </Switch>
+  render() {
+    return (
+      <BrowserRouter>
+        {this.generateBody()}
       </BrowserRouter>
     );
   }

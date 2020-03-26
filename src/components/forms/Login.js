@@ -44,7 +44,7 @@ class Login extends React.Component {
         </div>
 
         <div className="text-center">
-          <MDBBtn type="submit">Login</MDBBtn>
+          <MDBBtn type="submit" color="purple">Login</MDBBtn>
         </div>
       </form>
     );
