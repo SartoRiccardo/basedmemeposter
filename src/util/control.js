@@ -33,7 +33,6 @@ export function makeAction(callback, store, futureAction) {
       newArguments.push(arguments[i])
     }
     await callback.apply(this, newArguments);
-
     dispatch({ type:"END_ACTION", store, id });
   }
 }

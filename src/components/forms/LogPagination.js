@@ -23,9 +23,16 @@ class LogPagination extends React.Component {
   }
 
   render() {
-    const { page, log, className } = this.props;
-    const logsPerPage = 100;
+    const { page, log, status, className } = this.props;
+    const logsPerPage = 5;
     const totalPages = Math.floor(log.filtered/logsPerPage);
+
+    let isSearching = false;
+    for(const action of status.log.actions) {
+      if(action.type === "SET_LOGS" && action.id === log.lastLoad) {
+        isSearching = true;
+      }
+    }
 
     const renderRangeMd = 5;
     const renderRangeXs = 2;
@@ -53,18 +60,17 @@ class LogPagination extends React.Component {
       const pageNum = i+1;
 
       let visibleClass = "";
-      if(pageNum >= page-render.backward.md &&
-          pageNum <= page+render.forward.md) {
+      if(pageNum >= page-render.backward.md && pageNum <= page+render.forward.md) {
         visibleClass = "d-md-block";
-        if(pageNum < page-render.backward.xs ||
-            pageNum > page+render.forward.xs) {
+        if(pageNum < page-render.backward.xs || pageNum > page+render.forward.xs) {
           visibleClass += " d-none"
         }
       }
 
       if(visibleClass.length > 0) {
         pages.push(
-          <MDBPageItem key={i} className={visibleClass} active={page === pageNum}>
+          <MDBPageItem key={i} className={visibleClass} disabled={isSearching}
+              active={page === pageNum} onClick={this.changeHandler}>
             <MDBPageNav name={pageNum}>{pageNum}</MDBPageNav>
           </MDBPageItem>
         );
@@ -72,14 +78,14 @@ class LogPagination extends React.Component {
     }
 
     return (
-      <MDBPagination className={className} onClick={this.changeHandler}>
-        <MDBPageItem>
+      <MDBPagination className={className}>
+        <MDBPageItem disabled={isSearching} onClick={this.changeHandler}>
           <MDBPageNav name="previous">&laquo;</MDBPageNav>
         </MDBPageItem>
 
         {pages}
 
-        <MDBPageItem>
+        <MDBPageItem disabled={isSearching} onClick={this.changeHandler}>
           <MDBPageNav name="next">&raquo;</MDBPageNav>
         </MDBPageItem>
       </MDBPagination>

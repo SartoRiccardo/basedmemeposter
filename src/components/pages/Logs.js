@@ -109,6 +109,14 @@ class Logs extends React.Component {
       }
     }
 
+    const pagination = (
+      <MDBRow>
+        <MDBCol className="d-flex justify-content-center">
+          <LogPagination onChange={this.changePage} page={page} />
+        </MDBCol>
+      </MDBRow>
+    );
+
     return (
       <MDBContainer>
         <MDBRow className="mt-3">
@@ -131,11 +139,7 @@ class Logs extends React.Component {
           </MDBCol>
         </MDBRow>
 
-        <MDBRow>
-          <MDBCol className="d-flex justify-content-center">
-            <LogPagination onChange={this.changePage} page={page} />
-          </MDBCol>
-        </MDBRow>
+        {status.log.initialized && pagination}
 
         <MDBRow>
           <MDBCol>
@@ -143,11 +147,7 @@ class Logs extends React.Component {
           </MDBCol>
         </MDBRow>
 
-        <MDBRow>
-          <MDBCol className="d-flex justify-content-center">
-            <LogPagination onChange={this.changePage} page={page} />
-          </MDBCol>
-        </MDBRow>
+        {status.log.initialized && pagination}
       </MDBContainer>
     );
   }
