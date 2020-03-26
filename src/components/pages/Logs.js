@@ -3,6 +3,7 @@ import querystring from "querystring";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 // Custom components
 import LogFilter from "../forms/LogFilter";
+import LogPagination from "../forms/LogPagination";
 import SingleLog from "../ui/log/SingleLog";
 import SingleLogPlaceholder from "../ui/placeholders/SingleLogPlaceholder";
 // HOCs and actions
@@ -73,10 +74,21 @@ class Logs extends React.Component {
     history.push(`${history.location.pathname}${urlParams}`);
   }
 
+  changePage = (newPage) => {
+    const { history } = this.props;
+
+    let params = this.parseQueryParams(history.location.search);
+    params.page = [ newPage ];
+
+    const urlParams = this.encodeState(params);
+    history.push(`${history.location.pathname}${urlParams}`);
+  }
+
   render() {
     const { history, status } = this.props;
     const { logs } = this.props.log;
     const params = this.parseQueryParams(history.location.search);
+    const page = (params.page && parseInt(params.page[0])) || 1;
 
     let logsUi;
     if(status.log.initialized) {
@@ -118,9 +130,20 @@ class Logs extends React.Component {
         </MDBRow>
 
         <MDBRow>
-          <MDBCol>
+          <MDBCol className="d-flex justify-content-center">
+            <LogPagination onChange={this.changePage} page={page} />
+          </MDBCol>
+        </MDBRow>
 
+        <MDBRow>
+          <MDBCol>
             {logsUi}
+          </MDBCol>
+        </MDBRow>
+
+        <MDBRow>
+          <MDBCol className="d-flex justify-content-center">
+            <LogPagination onChange={this.changePage} page={page} />
           </MDBCol>
         </MDBRow>
       </MDBContainer>

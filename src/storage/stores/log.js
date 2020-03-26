@@ -11,6 +11,7 @@ for(const l of levels) {
  * @prop {Object}   count     The total amount of each log type.
  * @prop {Object}   ignored   The amount of ignored logs.
  * @prop {float}    lastLoad  The last action to start a SET_LOGS promise's ID.
+ * @prop {int}      filtered  The total amount of logs that came out of a search.
  * @prop {Log[]}    logs      The logs for that account.
  */
 const init = {
@@ -21,6 +22,7 @@ const init = {
     error: 0,
   },
   lastLoad: null,
+  filtered: 0,
   logs: [],
 };
 
@@ -31,6 +33,7 @@ function logReducer(state=init, action) {
         ...state,
         account: action.account,
         count: action.count,
+        filtered: action.filtered,
         logs: action.logs,
       };
 

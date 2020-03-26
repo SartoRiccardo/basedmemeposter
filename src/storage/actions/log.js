@@ -38,7 +38,12 @@ export function fetchLogs(params=null) {
 
       callIfSuccessful(response, () => {
         if(actionId === getState().log.lastLoad) {
-          dispatch({ type: "SET_LOGS", logs: dummyLogs, count: dummyCount });
+          dispatch({
+            type: "SET_LOGS",
+            count: dummyCount,
+            filtered: 100,
+            logs: dummyLogs,
+          });
         }
       }, (error) => {
         dispatch({ type: "ERROR", store: "log", error: error.title });
