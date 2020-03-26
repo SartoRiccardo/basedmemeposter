@@ -82,6 +82,8 @@ class Logs extends React.Component {
 
     const urlParams = this.encodeState(params);
     history.push(`${history.location.pathname}${urlParams}`);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }
 
   render() {

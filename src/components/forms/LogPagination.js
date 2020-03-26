@@ -24,19 +24,40 @@ class LogPagination extends React.Component {
 
   render() {
     const { page, log, className } = this.props;
-    const logsPerPage = 8;
+    const logsPerPage = 100;
+    const totalPages = Math.floor(log.filtered/logsPerPage);
 
-    const renderRangeMd = 3;
-    const renderRangeXs = 1;
+    const renderRangeMd = 5;
+    const renderRangeXs = 2;
+    const render = {
+      forward: {
+        md: renderRangeMd +
+            (page-1-renderRangeMd < 0 ?
+                Math.abs(page-1-renderRangeMd) : 0),
+        xs: renderRangeXs +
+            (page-1-renderRangeXs < 0 ?
+                Math.abs(page-1-renderRangeXs) : 0),
+      },
+      backward: {
+        md: renderRangeMd +
+            (page-1+renderRangeMd > totalPages ?
+                Math.abs(page-1+renderRangeMd-totalPages) : 0),
+        xs: renderRangeXs +
+            (page-1+renderRangeXs > totalPages ?
+                Math.abs(page-1+renderRangeXs-totalPages) : 0),
+      }
+    }
 
     const pages = [];
     for(let i = 0; i*logsPerPage < log.filtered; i++) {
       const pageNum = i+1;
 
       let visibleClass = "";
-      if(pageNum >= page-renderRangeMd && pageNum <= page+renderRangeMd) {
+      if(pageNum >= page-render.backward.md &&
+          pageNum <= page+render.forward.md) {
         visibleClass = "d-md-block";
-        if(pageNum < page-renderRangeXs || pageNum > page+renderRangeXs) {
+        if(pageNum < page-render.backward.xs ||
+            pageNum > page+render.forward.xs) {
           visibleClass += " d-none"
         }
       }
