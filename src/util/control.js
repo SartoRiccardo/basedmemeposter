@@ -27,7 +27,20 @@ export function makeAction(callback, store, futureAction) {
 
     const id = Math.random();
     dispatch({ type:"START_ACTION", store, id, futureAction });
-    await callback.apply(this, arguments);
+
+    let newArguments = [ dispatchWithId(id, dispatch) ];
+    for(let i = 1; i < arguments.length; i++) {
+      newArguments.push(arguments[i])
+    }
+    await callback.apply(this, newArguments);
+
     dispatch({ type:"END_ACTION", store, id });
+  }
+}
+
+function dispatchWithId(id, dispatch) {
+  return function() {
+    let [ action ] = arguments;
+    dispatch({ ...action, id });
   }
 }
