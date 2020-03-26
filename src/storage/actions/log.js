@@ -24,7 +24,7 @@ const dummyCount = {
  * @param  {Object} params  An object containing the search params.
  */
 export function fetchLogs(params=null) {
-  const creator = async function(dispatch) {
+  const creator = async function(dispatch, actionId, getState) {
     try {
       // const { REACT_APP_BACKEND } = process.env;
       // const config = {
@@ -37,7 +37,9 @@ export function fetchLogs(params=null) {
       const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
 
       callIfSuccessful(response, () => {
-        dispatch({ type: "SET_LOGS", logs: dummyLogs, count: dummyCount });
+        if(actionId === getState().log.lastLoad) {
+          dispatch({ type: "SET_LOGS", logs: dummyLogs, count: dummyCount });
+        }
       }, (error) => {
         dispatch({ type: "ERROR", store: "log", error: error.title });
       });
@@ -47,7 +49,7 @@ export function fetchLogs(params=null) {
     }
   }
 
-  return protectFunction(makeAction(creator, "log", "LOAD_LOGS"));
+  return protectFunction(makeAction(creator, "log", "SET_LOGS"));
 }
 
 export function ignoreLogs(level, amount) {
