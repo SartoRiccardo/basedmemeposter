@@ -30,7 +30,7 @@ export function login(user, pswd) {
     }
   }
 
-  return makeAction(creator, "auth", "SET_LOGIN");
+  return makeAction(creator, "auth", "SET_LOGIN_CREDENTIALS");
 }
 
 export function tokenAuth() {
@@ -60,5 +60,5 @@ export function tokenAuth() {
     }
   }
 
-  return protectFunction(makeAction(creator, "auth", "SET_LOGIN"));
+  return protectFunction(makeAction(creator, "auth", "SET_LOGIN_INIT"));
 }

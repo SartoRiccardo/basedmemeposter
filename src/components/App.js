@@ -11,8 +11,18 @@ import Logs from "./pages/Logs";
 import AccountDetails from "./pages/AccountDetails";
 import Dashboard from "./pages/Dashboard";
 import Anonymous from "./pages/Anonymous";
+import BrandLogo from "./pages/BrandLogo";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      reloadingAuth: false,
+      reloadingNecessary: false,
+    };
+  }
+
   componentDidMount() {
     const { initAuth } = this.props;
 
@@ -20,7 +30,9 @@ class App extends React.Component {
   }
 
   componentDidUpdate(previous) {
-    const { auth, initLogs, initAccounts, initIgnoredLogs } = this.props;
+    const { auth, status, initLogs, initAccounts, initIgnoredLogs,
+        initAuth } = this.props;
+
     if(previous.auth.token && !auth.token) {
       // Log out
     }
@@ -29,10 +41,23 @@ class App extends React.Component {
       initAccounts();
       initIgnoredLogs();
     }
+
+    const { errors } = status.auth;
+    if(previous.status.auth.errors.length < errors.length) {
+      const newError = errors[errors.length-1];
+      if(newError === "Network Error") {
+        this.setState({ reloadingAuth: true });
+        setTimeout(() => {
+          initAuth();
+          this.setState((state)=> ({ reloadingAuth: false }));
+        }, 5000);
+      }
+    }
   }
 
   generateBody = () => {
     const { auth, status } = this.props;
+    const { reloadingAuth } =this.state;
     const routeData = [
       {path: "/logs", exact: true, component: Logs},
       {path: "/accounts/:id", exact: true, component: AccountDetails},
@@ -40,13 +65,12 @@ class App extends React.Component {
     ];
 
     const isFetchingToken = status.auth.actions.some(
-      (a) => a.type === "SET_LOGIN"
+      (a) => a.type === "SET_LOGIN_INIT"
     );
-    if(isFetchingToken) {
-      return null;
-      // return (
-      //   <BrandLogo />
-      // );
+    if(isFetchingToken || reloadingAuth) {
+      return (
+        <BrandLogo />
+      );
     }
 
     if(!auth.token) {
