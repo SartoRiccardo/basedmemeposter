@@ -32,7 +32,7 @@ class Navbar extends React.Component {
   }
 
   render() {
-    const { logout } = this.props;
+    
     const { accounts } = this.props.account;
     const { open } = this.state;
 

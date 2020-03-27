@@ -53,7 +53,7 @@ export function cancelScheduledPost(id) {
       const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
 
       callIfSuccessful(response, () => {
-        dispatch({ type: "DELETE_SCHEDULED_POST", id });
+        dispatch({ type: "DELETE_SCHEDULED_POST", postId: id });
       }, (error) => {
         dispatch({ type: "ERROR", store: "schedule", error: error.title });
       });

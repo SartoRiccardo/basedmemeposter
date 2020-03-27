@@ -24,7 +24,7 @@ function scheduleReducer(state=init, action) {
     case "DELETE_SCHEDULED_POST":
       return {
         ...state,
-        schedule: state.schedule.filter((s) => s.id !== action.id),
+        schedule: state.schedule.filter((s) => s.id !== action.postId),
       };
 
     default:
