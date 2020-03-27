@@ -12,7 +12,7 @@ export function login(user, pswd) {
     await attemptLogin(dispatch, config);
   }
 
-  return makeAction(creator, "auth", "SET_LOGIN_CREDENTIALS");
+  return makeAction(creator, "auth", "SET_AUTH_CREDENTIALS");
 }
 
 export function tokenAuth() {
@@ -24,7 +24,7 @@ export function tokenAuth() {
     await attemptLogin(dispatch, config);
   }
 
-  return protectFunction(makeAction(creator, "auth", "SET_LOGIN_INIT"));
+  return protectFunction(makeAction(creator, "auth", "SET_AUTH_INIT"));
 }
 
 async function attemptLogin(dispatch, config) {
@@ -38,7 +38,7 @@ async function attemptLogin(dispatch, config) {
 
     if(!error) {
       setToken(dummyToken);
-      dispatch({ type: "SET_LOGIN", token: dummyToken });
+      dispatch({ type: "SET_AUTH", token: dummyToken });
     }
     else {
       dispatch({ type: "ERROR", store: "auth", error: error.title });
@@ -56,7 +56,7 @@ async function attemptLogin(dispatch, config) {
 
 export function logout() {
   return function(dispatch) {
-    const actions = ["RESET_LOGIN", "RESET_LOGS", "RESET_SCHEDULES", "RESET_ACCOUNTS"];
+    const actions = ["RESET_AUTH", "RESET_LOGS", "RESET_SCHEDULES", "RESET_ACCOUNTS"];
     for(const type of actions) {
       dispatch({ type });
     }

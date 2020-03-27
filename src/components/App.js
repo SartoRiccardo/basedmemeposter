@@ -66,7 +66,7 @@ class App extends React.Component {
     ];
 
     const isFetchingToken = status.auth.actions.some(
-      (a) => a.type === "SET_LOGIN_INIT"
+      (a) => a.type === "SET_AUTH_INIT"
     );
     if(isFetchingToken || reloadingAuth) {
       return (

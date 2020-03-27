@@ -5,13 +5,13 @@ const init = {
 
 function authReducer(state=init, action) {
   switch(action.type) {
-    case "SET_LOGIN":
+    case "SET_AUTH":
       return {
         ...state,
         token: action.token,
       };
 
-    case "RESET_LOGIN":
+    case "RESET_AUTH":
       return {
         ...state,
         token: null,
