@@ -1,33 +1,15 @@
 import axios from "axios";
-import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
+import { protectFunction, makeAction } from "../../util/control";
 import { getToken, setToken, deleteToken } from "../session";
 
 const dummyToken = "AEOFHAEOHFOAEFOGFAEGU";
 
 export function login(user, pswd) {
   const creator = async function(dispatch) {
-    try {
-      // const { REACT_APP_BACKEND } = process.env;
-      //
-      // const config = {
-      //   headers: { "Authorization": `Basic ${user}:${pswd}` }
-      // }
-      //
-      // const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
-
-      // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
-
-      callIfSuccessful(response, () => {
-        setToken(dummyToken);
-        dispatch({ type: "SET_LOGIN", token: dummyToken });
-      }, (error) => {
-        dispatch({ type: "ERROR", store: "auth", error: error.title });
-      });
+    const config = {
+      headers: { "Authorization": `Basic ${user}:${pswd}` }
     }
-    catch(e) {
-      dispatch({ type: "ERROR", store: "auth", error: e.message });
-    }
+    await attemptLogin(dispatch, config);
   }
 
   return makeAction(creator, "auth", "SET_LOGIN_CREDENTIALS");
@@ -35,30 +17,49 @@ export function login(user, pswd) {
 
 export function tokenAuth() {
   const creator = async function(dispatch) {
-    try {
-      const token = getToken();
-      // const { REACT_APP_BACKEND } = process.env;
-      //
-      // const config = {
-      //   headers: { "Authorization": `Basic ${user}:${pswd}` }
-      // }
-      //
-      // const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
-
-      // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
-
-      callIfSuccessful(response, () => {
-        setToken(token);
-        dispatch({ type: "SET_LOGIN", token });
-      }, (error) => {
-        dispatch({ type: "ERROR", store: "auth", error: error.title });
-      });
-    }
-    catch(e) {
-      dispatch({ type: "ERROR", store: "auth", error: e.message });
-    }
+    const token = getToken();
+    const config = {
+      headers: { "Authorization": `Bearer ${token}` },
+    };
+    await attemptLogin(dispatch, config);
   }
 
   return protectFunction(makeAction(creator, "auth", "SET_LOGIN_INIT"));
+}
+
+async function attemptLogin(dispatch, config) {
+  try {
+    // const { REACT_APP_BACKEND } = process.env;
+    // const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
+
+    // Simulate a request
+    const response = await axios.get("http://localhost/testcodes.php?code=200");
+    const { error } = response.data;
+
+    if(!error) {
+      setToken(dummyToken);
+      dispatch({ type: "SET_LOGIN", token: dummyToken });
+    }
+    else {
+      dispatch({ type: "ERROR", store: "auth", error: error.title });
+    }
+  }
+  catch(e) {
+    let error = e.message;
+    if(e.response) {
+      const { status } = e.response;
+      error = status;
+    }
+    dispatch({ type: "ERROR", store: "auth", error });
+  }
+}
+
+export function logout() {
+  return function(dispatch) {
+    dispatch("RESET_LOGIN");
+    dispatch("RESET_LOGS");
+    dispatch("RESET_SCHEDULES");
+    dispatch("RESET_ACCOUNTS");
+    deleteToken();
+  }
 }

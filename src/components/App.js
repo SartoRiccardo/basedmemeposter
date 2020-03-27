@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { getToken } from "../storage/session";
 // HOCs and actions
 import { connect } from "react-redux";
 import { fetchLogs, initIgnoredLogs } from "../storage/actions/log";
@@ -43,7 +44,7 @@ class App extends React.Component {
     }
 
     const { errors } = status.auth;
-    if(previous.status.auth.errors.length < errors.length) {
+    if(previous.status.auth.errors.length < errors.length && getToken()) {
       const newError = errors[errors.length-1];
       if(newError === "Network Error") {
         this.setState({ reloadingAuth: true });
@@ -106,8 +107,8 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    status: { ...state.status },
-    auth: { ...state.auth },
+    status: state.status,
+    auth: state.auth,
   };
 }
 
