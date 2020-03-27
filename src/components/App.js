@@ -31,16 +31,11 @@ class App extends React.Component {
   }
 
   componentDidUpdate(previous) {
-    const { auth, status, initLogs, initAccounts, initIgnoredLogs,
-        initAuth } = this.props;
+    const { auth, status, initAuth } = this.props;
+    const { reloadingNecessary } = this.state;
 
-    if(previous.auth.token && !auth.token) {
-      // Log out
-    }
-    else if(!previous.auth.token && auth.token) {
-      initLogs();
-      initAccounts();
-      initIgnoredLogs();
+    if(!previous.auth.token && auth.token) {
+      this.loadNecessary();
     }
 
     const { errors } = status.auth;
@@ -50,10 +45,55 @@ class App extends React.Component {
         this.setState({ reloadingAuth: true });
         setTimeout(() => {
           initAuth();
-          this.setState((state)=> ({ reloadingAuth: false }));
-        }, 5000);
+          this.setState((state) => ({ reloadingAuth: false }));
+        }, 5 * 1000);
       }
     }
+
+    if(auth.token && !this.areNecessaryLoaded() &&
+        !this.areNecessaryBeingLoaded() && !reloadingNecessary) {
+      this.setState((state) => ({ reloadingNecessary: true }));
+      setTimeout(() => {
+        if(!this.areNecessaryLoaded()) {
+          this.loadNecessary();
+        }
+        this.setState((state) => ({ reloadingNecessary: false }));
+      }, 5 * 1000);
+    }
+  }
+
+  loadNecessary = () => {
+    const { initLogs, initAccounts, initIgnoredLogs } = this.props;
+    initLogs();
+    initAccounts();
+    initIgnoredLogs();
+  }
+
+  areNecessaryLoaded = () => {
+    const { status, ignored } = this.props;
+
+    const necessary = ["log", "account"];
+    let areAllLoaded = necessary.every((n) => status[n].initialized);
+    areAllLoaded = areAllLoaded && Object.entries(ignored).every(
+      ([ level, count ]) => count !== null
+    );
+
+    return areAllLoaded;
+  }
+
+  areNecessaryBeingLoaded = () => {
+    const { status } = this.props;
+
+    const necessary = ["log", "account"];
+    let areBeingLoaded = necessary.some(
+      (n) => status[n].actions.some(
+        (act) => act.type === `SET_${n.toUpperCase()}S`
+      )
+    );
+    areBeingLoaded = areBeingLoaded ||
+        status.log.actions.some((act) => act.type === "GET_IGNORED_LOGS");
+
+    return areBeingLoaded;
   }
 
   generateBody = () => {
@@ -108,6 +148,7 @@ class App extends React.Component {
 function mapStateToProps(state) {
   return {
     status: state.status,
+    ignored: state.log.ignored,
     auth: state.auth,
   };
 }

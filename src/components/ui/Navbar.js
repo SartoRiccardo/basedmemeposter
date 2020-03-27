@@ -1,9 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
     MDBNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
     MDBDropdownItem, MDBNavLink, MDBCollapse, MDBNavbarToggler } from "mdbreact";
 // HOCs and actions
+import { compose } from "redux";
 import { connect } from "react-redux";
 import { logout } from "../../storage/actions/auth";
 
@@ -21,6 +22,13 @@ class Navbar extends React.Component {
     this.setState({
       open: !open,
     });
+  }
+
+  performLogout = () => {
+    const { logout, history } = this.props;
+
+    logout();
+    history.push("/");
   }
 
   render() {
@@ -72,7 +80,7 @@ class Navbar extends React.Component {
                 </MDBDropdownToggle>
 
                 <MDBDropdownMenu right>
-                  <MDBDropdownItem onClick={logout}>
+                  <MDBDropdownItem onClick={this.performLogout}>
                     Logout
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
@@ -97,4 +105,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+)(Navbar);

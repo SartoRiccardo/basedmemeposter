@@ -8,7 +8,7 @@ function authReducer(state=init, action) {
     case "SET_AUTH":
       return {
         ...state,
-        token: action.token,
+        token: action.anonymous ? null : action.token,
       };
 
     case "RESET_AUTH":

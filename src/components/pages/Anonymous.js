@@ -1,13 +1,16 @@
 import React from "react";
 import { withRouter, Redirect } from "react-router-dom";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdbreact";
-import "../../styles/Anonymous.css"
+import "../../styles/Anonymous.css";
+import { compose } from "redux";
+import { connect } from "react-redux";
 // Custom components
-import Login from "../forms/Login"
+import Login from "../forms/Login";
 
 function Anonymous(props) {
+  const { status } = props
   const { pathname, search } = props.history.location;
-  if(pathname !== "/" || search !== "") {
+  if((pathname !== "/" || search !== "") && status.initialized) {
     return (
       <Redirect to="/" />
     );
@@ -32,4 +35,10 @@ function Anonymous(props) {
   );
 }
 
-export default withRouter(Anonymous);
+function mapStateToProps(state) {
+  return {
+    status: state.status.auth,
+  };
+}
+
+export default compose(connect(mapStateToProps), withRouter)(Anonymous);

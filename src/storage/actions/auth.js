@@ -24,6 +24,9 @@ export function tokenAuth() {
     await attemptLogin(dispatch, config);
   }
 
+  if(!getToken()) {
+    return { type: "SET_AUTH", anonymous: true };
+  }
   return protectFunction(makeAction(creator, "auth", "SET_AUTH_INIT"));
 }
 
