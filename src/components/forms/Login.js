@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBInput, MDBBtn } from "mdbreact";
+import { MDBInput, MDBBtn, MDBIcon } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 import { login } from "../../storage/actions/auth";
@@ -27,8 +27,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const { errors } = this.props.status.auth;
+    const { errors, actions } = this.props.status.auth;
     const { username, password } = this.state;
+
+    const isLoading = actions.some(
+      (act) => act.type === "SET_AUTH_CREDENTIALS"
+    );
 
     const failedAuth = errors.length > 0 && errors[errors.length-1] === 401;
     const failedMessage = failedAuth ? (
@@ -50,7 +54,11 @@ class Login extends React.Component {
         {failedMessage}
 
         <div className="text-center">
-          <MDBBtn type="submit" color="purple">Login</MDBBtn>
+          <MDBBtn type="submit" color="purple" disabled={isLoading}>
+            <MDBIcon icon="spinner" pulse
+                className={"mr-2 " + (isLoading ? "" : "d-none")} />
+            Login
+          </MDBBtn>
         </div>
       </form>
     );

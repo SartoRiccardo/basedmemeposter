@@ -93,7 +93,10 @@ class Logs extends React.Component {
     const page = (params.page && parseInt(params.page[0])) || 1;
 
     let logsUi;
-    if(status.log.initialized) {
+    const loadingNewLogs = status.log.actions.some(
+      (act) => act.type === "SET_LOGS"
+    );
+    if(status.log.initialized && !loadingNewLogs) {
       logsUi = logs.map((l) => {
         return (
           <SingleLog log={l} key={l.id} />
