@@ -45,7 +45,7 @@ function Dashboard(props) {
             onClick={() => history.push("/logs?levels=warning")}
             className="c-pointer hover-darken"
             level="warning"
-            loading={!status.log.initialized}
+            loading={!status.log.initialized || log.ignored.warning === null}
             count={log.count.warning}
           />
         </MDBCol>
@@ -55,7 +55,7 @@ function Dashboard(props) {
             onClick={() => history.push("/logs?levels=error")}
             className="c-pointer hover-darken"
             level="error"
-            loading={!status.log.initialized}
+            loading={!status.log.initialized || log.ignored.error === null}
             count={log.count.error}
           />
         </MDBCol>

@@ -33,7 +33,7 @@ async function attemptLogin(dispatch, config) {
     // const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
 
     // Simulate a request
-    const response = await axios.get("http://localhost/testcodes.php?code=200");
+    const response = await axios.get("http://jsonplaceholder.typicode.com/todos/1");
     const { error } = response.data;
 
     if(!error) {

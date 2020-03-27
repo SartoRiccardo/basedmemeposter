@@ -18,8 +18,8 @@ const init = {
   levels,
   count,
   ignored: {
-    warning: 0,
-    error: 0,
+    warning: null,
+    error: null,
   },
   lastLoad: null,
   filtered: 0,

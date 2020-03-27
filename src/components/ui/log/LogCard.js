@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ignoreLogs } from "../../../storage/actions/log";
 
 function LogCard(props) {
-  const { level, count, onClick, loading, ignored, className } = props;
+  const { level, status, count, onClick, loading, ignored, className } = props;
   const countWithoutIgnored = count - ignored[level];
 
   let icon, color, text;
@@ -37,15 +37,24 @@ function LogCard(props) {
     props.ignoreLogs(level, count);
     evt.stopPropagation();
   }
+  const ignoring = status.actions.some(
+    (a) => a.type === `IGNORE_LOGS_${level.toUpperCase()}`
+  );
+  const btnIcon = ignoring ? (
+    <MDBIcon icon="spinner" className="mr-2" pulse />
+  ) : (
+    <MDBIcon icon="eye-slash" className="mr-2" />
+  );
   const ignoreBtn = (
       <MDBBtn outline size="sm" color="purple darken-2" onClick={ignore}
-          className={countWithoutIgnored > 0 ? "visible" : "invisible"}>
-        <MDBIcon icon="eye-slash" className="mr-2" />Dismiss
+          className={countWithoutIgnored > 0 && !loading ? "visible" : "invisible"}
+          disabled={ignoring}>
+        {btnIcon}Dismiss
       </MDBBtn>
   );
 
   return (
-    <MDBCard onClick={onClick} className={`h-100 ${className}`}>
+    <MDBCard onClick={!ignoring ? onClick : ()=>{}} className={`h-100 ${className}`}>
       <MDBCardBody>
         <div className="d-block d-md-none">
           <MDBIcon className={`big-icon ${color}`} icon={icon} /><br />
@@ -65,6 +74,7 @@ function LogCard(props) {
 function mapStateToProps(state) {
   return {
     ignored: { ...state.log.ignored },
+    status: state.status.log,
   };
 }
 

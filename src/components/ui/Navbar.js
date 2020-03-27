@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBBtn, MDBFormInline,
+import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
     MDBNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
     MDBDropdownItem, MDBNavLink, MDBCollapse, MDBNavbarToggler } from "mdbreact";
 // HOCs and actions

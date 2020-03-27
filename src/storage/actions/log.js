@@ -1,6 +1,5 @@
 import axios from "axios";
 import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
-import { setCookie, getCookie } from "../cookie";
 
 const someAccount = {id:1, username:"basedmemeposter", startTime:"10:00:00", endTime:"21:00:00", avatar:"https://instagram.fmxp6-1.fna.fbcdn.net/v/t51.2885-19/s150x150/88916645_2488601074737569_9207978216935915520_n.jpg?_nc_ht=instagram.fmxp6-1.fna.fbcdn.net&_nc_ohc=KNW0WNrTHkIAX-tgkUS&oh=10d17c1bc23ee90be33835514b31a120&oe=5E9DFD60"};
 const dummyLogs = [
@@ -15,7 +14,7 @@ const dummyCount = {
   debug: 0,
   info: 0,
   warning: 50,
-  error: 0,
+  error: 10,
   critical: 0,
 };
 
@@ -58,21 +57,46 @@ export function fetchLogs(params=null) {
 }
 
 export function ignoreLogs(level, amount) {
-  setCookie(`${level}Ignored`, amount);
-  return { type: "IGNORE_LOGS", level, amount };
+  const creator = async function(dispatch) {
+    try {
+      // Simulate a request
+      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+
+      callIfSuccessful(response, () => {
+        dispatch({ type: "IGNORE_LOGS", level, amount });
+      }, (error) => {
+        dispatch({ type: "ERROR", store: "log", error: error.title });
+      });
+    }
+    catch(e) {
+      dispatch({ type: "ERROR", store: "log", error: e.message });
+    }
+  }
+
+  return protectFunction(makeAction(creator, "log", `IGNORE_LOGS_${level.toUpperCase()}`));
 }
 
 export function initIgnoredLogs() {
-  return function(dispatch) {
-    dispatch({
-      type: "IGNORE_LOGS",
-      level: "warning",
-      amount: parseInt(getCookie("warningIgnored") || 0)
-    });
-    dispatch({
-      type: "IGNORE_LOGS",
-      level: "error",
-      amount: parseInt(getCookie("errorIgnored") || 0)
-    });
+  const creator = async function (dispatch, level) {
+    try {
+      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+
+      callIfSuccessful(response, () => {
+        const amount = 5;
+        dispatch({ type: "IGNORE_LOGS", level, amount });
+      }, (error) => {
+        dispatch({ type: "ERROR", store: "log", error: error.title });
+      });
+    }
+    catch(e) {
+      dispatch({ type: "ERROR", store: "log", error: e.message });
+    }
   }
+
+  const loadForAll = async function(dispatch) {
+    const levels = ["warning", "error"];
+    await Promise.all(levels.map(async (l) => await creator(dispatch, l)));
+  }
+
+  return protectFunction(makeAction(loadForAll, "log", "GET_IGNORED_LOGS"));
 }
