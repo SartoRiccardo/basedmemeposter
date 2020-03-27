@@ -1,19 +1,26 @@
 import React from "react";
 import { MDBInput, MDBBtn } from "mdbreact";
+// HOCs and actions
+import { connect } from "react-redux";
+import { login } from "../../storage/actions/auth";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      "username": "",
-      "password": "",
+      username: "",
+      password: "",
     };
   }
 
   handleSubmit = (evt) => {
     evt.preventDefault();
     evt.target.className += " was-validated";
+    if(evt.target.checkValidity()) {
+      const { username, password } = this.state;
+      this.props.login(username, password);
+    }
   }
 
   handleChange = (evt) => {
@@ -51,4 +58,10 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (user, pswd) => dispatch(login(user, pswd)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Login);

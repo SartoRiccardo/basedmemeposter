@@ -14,7 +14,7 @@ export function callIfSuccessful(response, callback, onFail=null) {
 
 export function protectFunction(callback) {
   return function() {
-    if(false) { // if(!getToken()) {
+    if(!getToken()) {
       return;
     }
     callback.apply(this, arguments);

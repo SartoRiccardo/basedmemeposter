@@ -17,13 +17,14 @@ const init = {
   account: {...initialState},
   schedule: {...initialState},
   log: {...initialState},
+  auth: {...initialState},
 };
 
 function statusReducer(state=init, action) {
   const { type } = action;
   let matches, store;
 
-  matches = /^(?:RE)?SET_(.+)S$/gm.exec(type);
+  matches = /^(?:RE)?SET_(.+?)S?$/gm.exec(type);
   if(matches) {
     store = matches[1].toLowerCase();
     return {

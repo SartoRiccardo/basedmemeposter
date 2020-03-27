@@ -1,3 +1,4 @@
-#root {
+.anonymous-root {
   background-image: linear-gradient(to bottom right, #311b92, #263238);
+  height: 100%;
 }

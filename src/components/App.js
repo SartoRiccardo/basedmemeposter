@@ -4,6 +4,7 @@ import { Route, BrowserRouter, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchLogs, initIgnoredLogs } from "../storage/actions/log";
 import { fetchAccounts } from "../storage/actions/account";
+import { tokenAuth } from "../storage/actions/auth";
 // Custom components
 import Navbar from "./ui/Navbar";
 import Logs from "./pages/Logs";
@@ -13,21 +14,42 @@ import Anonymous from "./pages/Anonymous";
 
 class App extends React.Component {
   componentDidMount() {
-    const { fetchLogs, fetchAccounts, initIgnoredLogs } = this.props;
+    const { initAuth } = this.props;
 
-    initIgnoredLogs();
-    fetchAccounts();
-    fetchLogs();
+    initAuth();
+  }
+
+  componentDidUpdate(previous) {
+    const { auth, initLogs, initAccounts, initIgnoredLogs } = this.props;
+    if(previous.auth.token && !auth.token) {
+      // Log out
+    }
+    else if(!previous.auth.token && auth.token) {
+      initLogs();
+      initAccounts();
+      initIgnoredLogs();
+    }
   }
 
   generateBody = () => {
+    const { auth, status } = this.props;
     const routeData = [
       {path: "/logs", exact: true, component: Logs},
       {path: "/accounts/:id", exact: true, component: AccountDetails},
       {path: "/", component: Dashboard},
     ];
 
-    if(true) {
+    const isFetchingToken = status.auth.actions.some(
+      (a) => a.type === "SET_LOGIN"
+    );
+    if(isFetchingToken) {
+      return null;
+      // return (
+      //   <BrandLogo />
+      // );
+    }
+
+    if(!auth.token) {
       return (
         <Anonymous />
       );
@@ -61,14 +83,16 @@ class App extends React.Component {
 function mapStateToProps(state) {
   return {
     status: { ...state.status },
+    auth: { ...state.auth },
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLogs: () => dispatch(fetchLogs()),
-    fetchAccounts: () => dispatch(fetchAccounts()),
+    initLogs: () => dispatch(fetchLogs()),
+    initAccounts: () => dispatch(fetchAccounts()),
     initIgnoredLogs: () => dispatch(initIgnoredLogs()),
+    initAuth: () => dispatch(tokenAuth()),
   };
 }
 
