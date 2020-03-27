@@ -56,10 +56,10 @@ async function attemptLogin(dispatch, config) {
 
 export function logout() {
   return function(dispatch) {
-    dispatch("RESET_LOGIN");
-    dispatch("RESET_LOGS");
-    dispatch("RESET_SCHEDULES");
-    dispatch("RESET_ACCOUNTS");
+    const actions = ["RESET_LOGIN", "RESET_LOGS", "RESET_SCHEDULES", "RESET_ACCOUNTS"];
+    for(const type of actions) {
+      dispatch({ type });
+    }
     deleteToken();
   }
 }

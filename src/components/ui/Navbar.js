@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
+import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBBtn, MDBFormInline,
     MDBNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
     MDBDropdownItem, MDBNavLink, MDBCollapse, MDBNavbarToggler } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
+import { logout } from "../../storage/actions/auth";
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class Navbar extends React.Component {
   }
 
   render() {
+    const { logout } = this.props;
     const { accounts } = this.props.account;
     const { open } = this.state;
 
@@ -61,6 +63,22 @@ class Navbar extends React.Component {
               </MDBDropdown>
             </MDBNavItem>
           </MDBNavbarNav>
+
+          <MDBNavbarNav right>
+            <MDBNavItem>
+              <MDBDropdown>
+                <MDBDropdownToggle nav caret>
+                  <MDBIcon icon="user" />
+                </MDBDropdownToggle>
+
+                <MDBDropdownMenu right>
+                  <MDBDropdownItem onClick={logout}>
+                    Logout
+                  </MDBDropdownItem>
+                </MDBDropdownMenu>
+              </MDBDropdown>
+            </MDBNavItem>
+          </MDBNavbarNav>
         </MDBCollapse>
       </MDBNavbar>
     );
@@ -69,8 +87,14 @@ class Navbar extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    account: { ...state.account },
+    account: state.account,
   };
 }
 
-export default connect(mapStateToProps)(Navbar);
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
