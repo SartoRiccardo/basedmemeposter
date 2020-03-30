@@ -1,3 +1,14 @@
-from apis.twitter import get_user_image_statuses
+from modules import account
+import urllib3
 
-get_user_image_statuses("apandahvevo")
+
+pool = urllib3.PoolManager()
+accts = [account.Account("", "", pool) for _ in range(5)]
+
+for a in accts:
+    a.start()
+
+for a in accts:
+    a.join()
+
+
