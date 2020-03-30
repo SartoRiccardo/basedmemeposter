@@ -1,12 +1,12 @@
 import praw
-import config
+from config import config
 
 
 def get_sub_image_posts(sub):
     reddit = praw.Reddit(
-        client_id=config.config("reddit", "client-id"),
-        client_secret=config.config("reddit", "client-secret"),
-        user_agent=config.config("reddit", "user-agent")
+        client_id=config("reddit", "client-id"),
+        client_secret=config("reddit", "client-secret"),
+        user_agent=config("reddit", "user-agent")
     )
     reddit.read_only = True
 

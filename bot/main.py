@@ -1,3 +1,3 @@
-from apis.reddit import get_sub_image_posts
+from apis.twitter import get_user_image_statuses
 
-print(get_sub_image_posts("pewdiepiesubmissions"))
+get_user_image_statuses("apandahvevo")

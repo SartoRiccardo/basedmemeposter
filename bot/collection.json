@@ -2,7 +2,12 @@
   "reddit": {
     "subreddits": [
       "cursedcomments", "interestingasfuck", "eyebleach", "gamingdetails",
-      "wojak", "4chan"
+      "wojak", "4chan", "me_irl"
+    ]
+  },
+  "twitter": {
+    "accounts": [
+      "touhoumemes", "nightmareperol", "me_irl"
     ]
   }
 }
