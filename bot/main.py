@@ -1,5 +1,3 @@
-from config import USER, PSWD
-from apis.instagram import Poster
+from apis.reddit import get_sub_image_posts
 
-p = Poster(USER, PSWD)
-p.post("path/to/image", "caption")
+print(get_sub_image_posts("pewdiepiesubmissions"))
