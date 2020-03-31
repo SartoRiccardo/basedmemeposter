@@ -133,23 +133,19 @@ class Gallery:
 client = ImgurClient(config("imgur", "client-id"))
 
 
-def topGalleries(only_elegible=True):
+def topGalleries():
     """
     Fetches the top imgur galleries.
     :return: BasedPost[]
     """
     response = client.get("/gallery/top")
     galleries = json.loads(response.data)["data"]
-
-    ret = [Gallery(g) for g in galleries]
-    if not only_elegible:
-        [print(g.toJson()) for g in ret]
-        return ret
+    galleries = [Gallery(g) for g in galleries]
 
     max_ratio = 16/9
     min_ratio = 9/16
     elegible = []
-    for gallery in ret:
+    for gallery in galleries:
         post = None
         if gallery.nsfw:
             continue
@@ -171,15 +167,3 @@ def topGalleries(only_elegible=True):
         if post:
             elegible.append(post)
     return elegible
-
-
-def getGallery(gallery_hash):
-    """
-    Fetches a gallery by its hash.
-    :param gallery_hash: str: The gallery hash.
-    :return: BasedPost
-    """
-    response = client.get(f"/gallery/{gallery_hash}")
-    gallery = json.loads(response.data)["data"]
-    ret = Gallery(gallery)
-    return ret
