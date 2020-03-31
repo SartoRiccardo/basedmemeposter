@@ -5,6 +5,11 @@ import twitter
 
 
 def userImageStatuses(user):
+    """
+    Gets all image non-reply elegible tweets from an user.
+    :param user: str: A Twitter username
+    :return: BasedPost[]: A list of elegible posts
+    """
     api = twitter.Api(
         consumer_key=config("twitter", "consumer-key"),
         consumer_secret=config("twitter", "consumer-secret"),

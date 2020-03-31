@@ -5,6 +5,11 @@ import praw
 
 
 def topSubImagePosts(sub):
+    """
+    Fetches a subreddit's top Instagram-postable submissions.
+    :param sub: str: The name of the subreddit.
+    :return: BasedPost[]: A list of elegible posts.
+    """
     reddit = praw.Reddit(
         client_id=config("reddit", "client-id"),
         client_secret=config("reddit", "client-secret"),

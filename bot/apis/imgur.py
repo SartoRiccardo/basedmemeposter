@@ -135,8 +135,8 @@ client = ImgurClient(config("imgur", "client-id"))
 
 def topGalleries():
     """
-    Fetches the top imgur galleries.
-    :return: BasedPost[]
+    Fetches the top Instagram-postable Imgur galleries.
+    :return: BasedPost[]: A list of elegible posts.
     """
     response = client.get("/gallery/top")
     galleries = json.loads(response.data)["data"]
