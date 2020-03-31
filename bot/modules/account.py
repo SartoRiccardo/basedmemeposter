@@ -15,7 +15,7 @@ class Account(Thread):
 
     def run(self):
         link = "https://i.imgur.com/Cl96z64.mp4"
-        self.retrieve(link)
+        random_file_name = self.retrieve(link)
 
     def retrieve(self, url):
         if self.pool is None:
@@ -35,3 +35,5 @@ class Account(Thread):
         for chunk in response.stream(1024):
             stdout.write(chunk)
         response.release_conn()
+
+        return random_file_name
