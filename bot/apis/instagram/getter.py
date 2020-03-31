@@ -1,8 +1,10 @@
+import apis.based
+
 import urllib3
 import json
 
 
-def get_posts_from_user(user):
+def getPostsFromUser(user):
     url = f"https://www.instagram.com/{user}/?__a=1"
 
     pool = urllib3.PoolManager()
@@ -11,12 +13,14 @@ def get_posts_from_user(user):
     user_data = response["graphql"]["user"]
 
     if user_data["is_private"]:
-        return
+        return []
     posts = [data["node"] for data in user_data["edge_owner_to_timeline_media"]["edges"]]
 
     ret = []
     for p in posts:
         if p["__typename"] == "GraphImage":
-            ret.append(p)
+            ret.append(apis.based.BasedPost(
+                "instagram", p["id"], f"https://instagram.com/p/{p['shortcode']}", p["display_url"]
+            ))
 
     return ret
