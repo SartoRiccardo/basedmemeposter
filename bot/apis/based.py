@@ -1,4 +1,3 @@
-from apis.config import BASED_ID, BASED_URL
 from urllib.parse import urlencode
 import urllib3
 import json
@@ -14,23 +13,23 @@ class BasedClient:
         self.http = urllib3.PoolManager()
 
     def get(self, endpoint):
-        url = f"{BASED_URL}{endpoint}"
+        url = f"{1}{endpoint}"
         r = self.http.request(
             "GET",
             url,
             headers={
-                "X-Authorization": f"{self.client_id}"
+                "Authorization": f"Bearer {self.client_id}"
             }
         )
         return r
 
     def post(self, endpoint, params):
-        url = f"{BASED_URL}{endpoint}?{urlencode(params)}"
+        url = f"{1}{endpoint}?{urlencode(params)}"
         r = self.http.request(
             "POST",
             url,
             headers={
-                "X-Authorization": f"{self.client_id}"
+                "Authorization": f"Bearer {self.client_id}"
             }
         )
 
@@ -40,19 +39,21 @@ class BasedClient:
         return res["data"]
 
 
-client = BasedClient(BASED_ID)
+class BasedPost:
+    def __init__(self, platform, original_id, original_link, image_url):
+        self.platform = platform
+        self.original_id = original_id
+        self.original_link = original_link
+        self.image_url = image_url
+
+    def toJson(self):
+        return vars(self)
 
 
-def insertPost(id, platform):
+def insertPost(based_post):
     """
     Inserts a post.
-    :param id: str: The post's ID on its platform.
-    :param platform: str: The post's platform.
+    :param based_post: BasedPost: The post to insert.
     :return: int: The ID of the newly inserted post.
     """
-    response = client.post("/post", {
-        "platform_id": id,
-        "platform": platform,
-    })
-
-    return response["post_id"]
+    pass

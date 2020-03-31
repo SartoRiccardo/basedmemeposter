@@ -1,4 +1,5 @@
-from apis.config import IMGUR_ID
+from config import config
+import apis.based
 import urllib3
 import json
 
@@ -129,26 +130,54 @@ class Gallery:
         return ret
 
 
-client = ImgurClient(IMGUR_ID)
+client = ImgurClient(config("imgur", "client-id"))
 
 
-def topGalleries():
+def topGalleries(only_elegible=True):
     """
     Fetches the top imgur galleries.
-    :return: Gallery[]
+    :return: BasedPost[]
     """
     response = client.get("/gallery/top")
     galleries = json.loads(response.data)["data"]
 
     ret = [Gallery(g) for g in galleries]
-    return ret
+    if not only_elegible:
+        [print(g.toJson()) for g in ret]
+        return ret
+
+    max_ratio = 16/9
+    min_ratio = 9/16
+    elegible = []
+    for gallery in ret:
+        post = None
+        if gallery.nsfw:
+            continue
+
+        allowed_formats = ["image/jpeg", "image/png"]
+        if gallery.is_album and gallery.images_count == 1:
+            img = gallery.images[0]
+            if img.type in allowed_formats and min_ratio <= img.width/img.height <= max_ratio:
+                post = apis.based.BasedPost(
+                    "imgur", gallery.id, gallery.link, img.link
+                )
+
+        elif not gallery.is_album and min_ratio <= gallery.width / gallery.height <= max_ratio and \
+                gallery.type in allowed_formats:
+            post = apis.based.BasedPost(
+                "imgur", gallery.id, f"https://imgur.com/gallery/{gallery.id}", gallery.link
+            )
+
+        if post:
+            elegible.append(post)
+    return elegible
 
 
 def getGallery(gallery_hash):
     """
     Fetches a gallery by its hash.
     :param gallery_hash: str: The gallery hash.
-    :return: Gallery
+    :return: BasedPost
     """
     response = client.get(f"/gallery/{gallery_hash}")
     gallery = json.loads(response.data)["data"]
