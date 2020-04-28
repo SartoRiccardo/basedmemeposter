@@ -8,11 +8,12 @@ import { fetchAccounts } from "../storage/actions/account";
 import { tokenAuth } from "../storage/actions/auth";
 // Custom components
 import Navbar from "./ui/Navbar";
-import Logs from "./pages/Logs";
-import AccountDetails from "./pages/AccountDetails";
-import Dashboard from "./pages/Dashboard";
-import Anonymous from "./pages/Anonymous";
-import BrandLogo from "./pages/BrandLogo";
+import Logs from "./routes/Logs";
+import AccountDetails from "./routes/AccountDetails";
+import CreateAccount from "./routes/CreateAccount";
+import Dashboard from "./routes/Dashboard";
+import Anonymous from "./routes/Anonymous";
+import BrandLogo from "./routes/BrandLogo";
 
 class App extends React.Component {
   constructor(props) {
@@ -99,38 +100,26 @@ class App extends React.Component {
   generateBody = () => {
     const { auth, status } = this.props;
     const { reloadingAuth } =this.state;
-    const routeData = [
-      {path: "/logs", exact: true, component: Logs},
-      {path: "/accounts/:id", exact: true, component: AccountDetails},
-      {path: "/", component: Dashboard},
-    ];
 
     const isFetchingToken = status.auth.actions.some(
       (a) => a.type === "SET_AUTH_INIT"
     );
     if(isFetchingToken || reloadingAuth) {
-      return (
-        <BrandLogo />
-      );
+      return ( <BrandLogo /> );
     }
 
     if(!auth.token) {
-      return (
-        <Anonymous />
-      );
+      return ( <Anonymous /> );
     }
-
-    const routes = routeData.map((rd, i) => {
-      return (
-        <Route key={i} path={rd.path} component={rd.component} exact={rd.exact} />
-      );
-    });
 
     return (
       <React.Fragment>
         <Navbar />
         <Switch>
-          {routes}
+          <Route path="/logs" component={Logs} exact />
+          <Route path="/accounts/new" component={CreateAccount} exact />
+          <Route path="/accounts/:id" component={AccountDetails} exact />
+          <Route path="/" component={Dashboard} />
         </Switch>
       </React.Fragment>
     );

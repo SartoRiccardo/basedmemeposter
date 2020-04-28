@@ -1,9 +1,10 @@
 import React from "react";
-import FaBed from "../../../img/FaBed.js"
+import FaBed from "../../../img/FaBed.js";
+import FaPlus from "../../../img/FaPlus.js";
 import "../../../styles/Avatar.css";
 
 function Avatar(props) {
-  const { image, active, className } = props;
+  const { image, active, className, plus } = props;
 
   const disabled = active !== undefined && !active;
   const disabledClass = disabled && "avatar-disabled";
@@ -17,7 +18,8 @@ function Avatar(props) {
             <div className="avatar bg-image grey lighten-2 w-100 p-100"
                 style={backgroundStyle} />
           </div>
-          { disabled && <FaBed className="avatar bed-icon" /> }
+          { disabled && <FaBed className="avatar overlay-icon" /> }
+          { plus && <FaPlus className="avatar overlay-icon" /> }
         </div>
       </div>
     </div>

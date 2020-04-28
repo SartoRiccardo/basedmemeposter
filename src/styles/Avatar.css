@@ -27,7 +27,7 @@
   position: relative;
 }
 
-.avatar.bed-icon {
+.avatar.overlay-icon {
   position: absolute;
   top: 50%;
   left: 50%;
