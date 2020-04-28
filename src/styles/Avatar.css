@@ -22,3 +22,30 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+.avatar.image-container {
+  position: relative;
+}
+
+.avatar.bed-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 70%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  fill: white;
+  border-radius: 0;
+}
+
+.hover-no-img-padding:not(:hover) .avatar-container > div {
+  transition-property: padding;
+  transition-duration: 0.5s;
+}
+
+.hover-no-img-padding:hover .avatar-container > div {
+  transition-property: padding;
+  transition-duration: 0.5s;
+  padding: 0 !important;
+}

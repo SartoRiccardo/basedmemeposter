@@ -18,6 +18,19 @@ function accountReducer(state=init, action) {
     case "RESET_ACCOUNTS":
       return init;
 
+    case "SET_ACCOUNT_IMAGE":
+      return {
+        ...state,
+        accounts: state.accounts.map(account => {
+          if(account.id !== action.accountId) return account;
+
+          return {
+            ...account,
+            avatar: action.avatar,
+          };
+        }),
+      }
+
     default:
       return state;
   }

@@ -40,17 +40,6 @@ code {
   transition-duration: 0.5s;
 }
 
-.hover-no-img-padding:not(:hover) .avatar-container > div {
-  transition-property: padding;
-  transition-duration: 0.5s;
-}
-
-.hover-no-img-padding:hover .avatar-container > div {
-  transition-property: padding;
-  transition-duration: 0.5s;
-  padding: 0 !important;
-}
-
 .pt-100, .p-100, .py-100 {
   padding-top: 100% !important;
 }
