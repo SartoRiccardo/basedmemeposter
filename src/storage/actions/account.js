@@ -68,6 +68,7 @@ export function addAccount(account) {
           const newAccountId = Math.floor(Math.random()*1000);
           account.id = newAccountId;
           dispatch({ type: "ADD_ACCOUNT", account });
+          fetchAccountAvatar(newAccountId, account.username)(dispatch);
         },
         error => dispatch({ type: "ERROR", store: "account", error: error.title })
       );

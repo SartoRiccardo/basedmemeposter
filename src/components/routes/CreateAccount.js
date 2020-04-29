@@ -8,6 +8,7 @@ class CreateAccount extends React.Component {
   constructor(props) {
     super(props);
 
+    this.avatarSearch = null;
     this.state = {
       username: "",
       password: "",
@@ -27,6 +28,17 @@ class CreateAccount extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    if(this.avatarSearch) {
+      clearTimeout(this.avatarSearch);
+    }
+  }
+
+  /**
+   * This function will remain unused as of now to not waste Instagram's public API's
+   * limit rates, as I don't know what they are just yet and I fear of getting
+   * IP banned from it permanently.
+   */
   previewAvatar = async username => {
     return;
 
@@ -34,9 +46,16 @@ class CreateAccount extends React.Component {
     const currentAvatarSearchId = Math.random();
     try {
       await this.setState({ lastAvatarSearchId: currentAvatarSearchId });
-      const avatar = getUserAvatar(username);
-      this.setState(
-        state => state.lastAvatarSearchId === currentAvatarSearchId ? { avatar } : {}
+      this.avatarSearch = setTimeout(
+        async () => {
+          if(this.state.lastAvatarSearchId !== currentAvatarSearchId) return;
+
+          const avatar = await getUserAvatar(username);
+          this.setState(
+            state => state.lastAvatarSearchId === currentAvatarSearchId ? { avatar } : {}
+          );
+        },
+        2000,
       );
     }
     catch(e) {
