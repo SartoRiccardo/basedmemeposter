@@ -71,10 +71,13 @@ function Dashboard(props) {
 
       <MDBRow className="border account-summaries grey lighten-4 mx-0">
         {accountsUi}
-        
-        <MDBCol size="6" sm="4" md="3" lg="2" className="px-1">
-          <AddAccount className="white rounded-lg mx-1 my-2 p-2 c-pointer" />
-        </MDBCol>
+
+        {
+          status.account.initialized &&
+          <MDBCol size="6" sm="4" md="3" lg="2" className="px-1">
+            <AddAccount className="white rounded-lg mx-1 my-2 p-2 c-pointer" />
+          </MDBCol>
+        }
       </MDBRow>
     </MDBContainer>
   );
