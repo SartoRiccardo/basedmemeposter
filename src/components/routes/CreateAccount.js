@@ -1,5 +1,4 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 import { connect } from "react-redux";
 import { addAccount } from "../../storage/actions/account";
@@ -152,4 +151,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateAccount));
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount);
