@@ -31,6 +31,12 @@ function accountReducer(state=init, action) {
         }),
       }
 
+    case "ADD_ACCOUNT":
+      return {
+        ...state,
+        accounts: [ ...state.accounts, action.account ],
+      };
+
     default:
       return state;
   }

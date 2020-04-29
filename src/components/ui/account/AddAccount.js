@@ -10,7 +10,7 @@ function AddAccount(props) {
   return (
     <div onClick={() => history.push("/accounts/new")}
         className={`border text-center hover-no-img-padding ${className}`}>
-      <Avatar plus />
+      <Avatar active={false} noBed plus />
       <p className="my-2 mb-0"><br/><br/></p>
     </div>
   );

@@ -4,7 +4,7 @@ import FaPlus from "../../../img/FaPlus.js";
 import "../../../styles/Avatar.css";
 
 function Avatar(props) {
-  const { image, active, className, plus } = props;
+  const { className, image, active, noBed, plus, error } = props;
 
   const disabled = active !== undefined && !active;
   const disabledClass = disabled && "avatar-disabled";
@@ -15,11 +15,11 @@ function Avatar(props) {
       <div className="p-2 p-md-3">
         <div className="avatar image-container">
           <div className={`${disabledClass || ""}`}>
-            <div className="avatar bg-image grey lighten-2 w-100 p-100"
-                style={backgroundStyle} />
+            <div className="avatar bg-image grey lighten-2 w-100 p-100" style={backgroundStyle} />
           </div>
-          { disabled && <FaBed className="avatar overlay-icon" /> }
+          { disabled && !noBed && <FaBed className="avatar overlay-icon" /> }
           { plus && <FaPlus className="avatar overlay-icon" /> }
+          { error && <FaPlus className="avatar overlay-icon avatar-error" /> }
         </div>
       </div>
     </div>
