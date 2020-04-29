@@ -2,7 +2,7 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 import { connect } from "react-redux";
 import { addAccount } from "../../storage/actions/account";
-import axios from "axios";
+import { getUserAvatar } from "../../util/instagram";
 
 class CreateAccount extends React.Component {
   constructor(props) {
@@ -28,13 +28,13 @@ class CreateAccount extends React.Component {
   }
 
   previewAvatar = async username => {
-    return;  // Instagram IP blocked me damn
+    return;
 
+    // eslint-disable-next-line
     const currentAvatarSearchId = Math.random();
     try {
       await this.setState({ lastAvatarSearchId: currentAvatarSearchId });
-      const response = await axios.get(`https://www.instagram.com/${username}/?__a=1`);
-      const avatar = response.data.graphql.user.profile_pic_url;
+      const avatar = getUserAvatar(username);
       this.setState(
         state => state.lastAvatarSearchId === currentAvatarSearchId ? { avatar } : {}
       );
@@ -70,7 +70,7 @@ class CreateAccount extends React.Component {
 
   render() {
     const { username, password, startTime, endTime } = this.state;
-    const { accounts, status } = this.props;
+    const { status } = this.props;
 
     if(!status.initialized) {
       return null;

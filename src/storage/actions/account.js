@@ -1,5 +1,6 @@
 import axios from "axios";
 import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
+import { getUserAvatar } from "../../util/instagram";
 import JSEncrypt from "jsencrypt";
 
 const dummyAccounts = [
@@ -39,17 +40,11 @@ export function fetchAccounts() {
 
 export function fetchAccountAvatar(id, username) {
   const creator = async function(dispatch) {
-    try {
-      const response = await axios.get(`https://www.instagram.com/${username}/?__a=1`);
-
-      callIfSuccessful(response, () => {
-        const avatar = response.data.graphql.user.profile_pic_url;
-        dispatch({ type: "SET_ACCOUNT_IMAGE", accountId: id, avatar });
-      });
+    const avatar = await getUserAvatar(username);
+    if(!avatar) {
+      return null;
     }
-    catch(e) {
-      // dispatch({ type: "ERROR", store: "account", error: e.message });
-    }
+    dispatch({ type: "SET_ACCOUNT_IMAGE", accountId: id, avatar });
   }
 
   return protectFunction(makeAction(creator, "account", "SET_ACCOUNT_IMAGE"));
