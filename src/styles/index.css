@@ -82,3 +82,25 @@ code {
   transition-duration: 0.5s;
   color: red;
 }
+
+.vertical-center, .horizontal-center {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.vertical-center div {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.horizontal-center div {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.vertical-center.horizontal-center div {
+  transform: translateY(-50%) translateX(-50%);
+}

@@ -43,6 +43,19 @@ class AccountDetails extends React.Component {
     const { accounts } = this.props.account;
     const { schedule } = this.props.schedule;
 
+    const accountExists = accounts.some(
+      ({ id }) => id === parseInt(match.params.id)
+    );
+
+    if(status.account.initialized && !accountExists) {
+      return (
+        <div className="text-center my-4">
+          <h1>Sorry!</h1>
+          <p className="lead">There is no account here</p>
+        </div>
+      );
+    }
+
     let matchingAccount = null;
     for(const a of accounts) {
       if(a.id === parseInt(match.params.id)) {
@@ -167,9 +180,9 @@ class AccountDetails extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    account: { ...state.account },
-    schedule: { ...state.schedule },
-    status: { ...state.status },
+    account: state.account,
+    schedule: state.schedule,
+    status: state.status,
   };
 }
 
