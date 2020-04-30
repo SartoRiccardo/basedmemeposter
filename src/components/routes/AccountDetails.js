@@ -115,7 +115,17 @@ class AccountDetails extends React.Component {
                 className="z-depth-1"
                 onClick={() => history.push(logsLink)}
               >
-                Check logs <MDBIcon icon="file-alt" className="ml-2" />
+                Check logs
+              </MDBBtn>
+
+              <MDBBtn
+                outline
+                color="purple darken-2"
+                size="sm"
+                className="z-depth-1"
+                onClick={() => history.push(`${history.location.pathname}/edit`)}
+              >
+                Edit
               </MDBBtn>
             </MDBCol>
           </MDBRow>

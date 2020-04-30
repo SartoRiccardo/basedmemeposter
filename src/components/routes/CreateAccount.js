@@ -1,5 +1,6 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import AccountForm from "../forms/AccountForm";
 import { connect } from "react-redux";
 import { addAccount } from "../../storage/actions/account";
 import { getUserAvatar } from "../../util/instagram";
@@ -10,10 +11,6 @@ class CreateAccount extends React.Component {
 
     this.avatarSearch = null;
     this.state = {
-      username: "",
-      password: "",
-      startTime: 0,
-      endTime: 0,
       avatar: null,
       lastAvatarSearchId: 0,
     };
@@ -58,27 +55,15 @@ class CreateAccount extends React.Component {
         2000,
       );
     }
+    // eslint-disable-next-line
     catch(e) {
       this.setState({ avatar: null });
     }
   }
 
-  updateInputValue = evt => {
-    const { name, value } = evt.target;
-
-    const numericValues = [ "startTime", "endTime" ];
-    this.setState(
-      { [ name ]: numericValues.includes(name) ? parseInt(value) : value },
-      () => {
-        if(name === "username") this.previewAvatar(value);
-      }
-    );
-  }
-
   submit = evt => {
     const { addAccount } = this.props;
-    const { username, password, startTime, endTime } = this.state;
-    evt.preventDefault();
+    const { username, password, startTime, endTime } = evt.account;
 
     addAccount({
       username, password,
@@ -88,7 +73,6 @@ class CreateAccount extends React.Component {
   }
 
   render() {
-    const { username, password, startTime, endTime } = this.state;
     const { status } = this.props;
 
     if(!status.initialized) {
@@ -98,9 +82,6 @@ class CreateAccount extends React.Component {
     const isAdding = status.actions.some(
       action => action.type === "ADD_ACCOUNT"
     );
-
-    const activeHours = endTime >= startTime ?
-        endTime - startTime : (24 - startTime) + endTime;
     return (
       <MDBContainer>
         <MDBRow className="mt-3">
@@ -110,48 +91,7 @@ class CreateAccount extends React.Component {
           </MDBCol>
         </MDBRow>
 
-        <form className="text-center" onSubmit={this.submit}>
-          <MDBRow>
-            <MDBCol md="6" className="order-md-1">
-              <div className="no-input-margine">
-                <MDBInput name="username" onChange={this.updateInputValue}
-                    label="Nome" value={username}
-                    className="my-2 my-md-0" disabled={isAdding} />
-              </div>
-            </MDBCol>
-
-            <MDBCol md="6" className="order-md-3">
-              <div className="no-input-margine">
-                <MDBInput type="password" name="password" value={password}
-                    onChange={this.updateInputValue} label="Password"
-                    className="mb-4 my-md-0" disabled={isAdding} />
-              </div>
-            </MDBCol>
-
-            <MDBCol md="6" className="order-md-2">
-              <p className="mb-0 mt-4">
-                Start posting at: <b>{startTime < 10 && "0"}{startTime}:00:00</b>
-              </p>
-              <input type="range" className="custom-range" min="0" max="23" step="1"
-                  onChange={this.updateInputValue} value={startTime}
-                  name="startTime" disabled={isAdding}/>
-            </MDBCol>
-
-            <MDBCol md="6" className="order-md-4">
-              <p className="mb-0 mt-4">
-                Stop posting at: <b>{endTime < 10 && "0"}{endTime}:00:00</b>
-              </p>
-              <input type="range" className="custom-range" min="0" max="23" step="1"
-                  onChange={this.updateInputValue} value={endTime}
-                  name="endTime" disabled={isAdding}/>
-              <p>For a total of <b>{activeHours} hours</b></p>
-            </MDBCol>
-
-            <MDBCol size="12" className="order-md-last">
-              <MDBBtn type="submit" color="purple" disabled={isAdding}>Add</MDBBtn>
-            </MDBCol>
-          </MDBRow>
-        </form>
+        <AccountForm onSubmit={this.submit} disabled={isAdding} />
       </MDBContainer>
     );
   }

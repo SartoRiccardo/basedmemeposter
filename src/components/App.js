@@ -118,7 +118,8 @@ class App extends React.Component {
         <Switch>
           <Route path="/logs" component={Logs} exact />
           <Route path="/accounts/new" component={CreateAccount} exact />
-          <Route path="/accounts/:id" component={AccountDetails} exact />
+          <Route path="/accounts/:id([0-9]+)" component={AccountDetails} exact />
+          <Route path="/accounts/:id([0-9]+)/edit" component={AccountDetails} exact />
           <Route path="/" component={Dashboard} />
         </Switch>
       </React.Fragment>
