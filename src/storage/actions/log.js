@@ -33,7 +33,7 @@ export function fetchLogs(params=null) {
       // const response = await axios.get(`${REACT_APP_BACKEND}/logs`, config);
 
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         if(actionId === getState().log.lastLoad) {
@@ -60,7 +60,7 @@ export function ignoreLogs(level, amount) {
   const creator = async function(dispatch) {
     try {
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         dispatch({ type: "IGNORE_LOGS", level, amount });
@@ -79,7 +79,7 @@ export function ignoreLogs(level, amount) {
 export function initIgnoredLogs() {
   const creator = async function (dispatch, level) {
     try {
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         const amount = 5;

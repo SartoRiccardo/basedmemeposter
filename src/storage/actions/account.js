@@ -16,7 +16,7 @@ export function fetchAccounts() {
       // const response = await axios.get(`${REACT_APP_BACKEND}/accounts`);
 
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         dispatch({
@@ -60,7 +60,7 @@ export function addAccount(account) {
       encryptor.setPublicKey(REACT_APP_PUBLIC_KEY);
       account.password = encryptor.encrypt(account.password);
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(
         response,

@@ -23,7 +23,7 @@ export function loadScheduleFor(account) {
       // const response = await axios.get(`${REACT_APP_BACKEND}/accounts/${user}/schedule?showOnlyScheduled`);
 
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         dispatch({
@@ -50,7 +50,7 @@ export function cancelScheduledPost(id) {
       // const response = await axios.delete(`${REACT_APP_BACKEND}/schedule/${id}`);
 
       // Simulate a request
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+      const response = await axios.get("http://localhost:3000");
 
       callIfSuccessful(response, () => {
         dispatch({ type: "DELETE_SCHEDULED_POST", postId: id });
