@@ -37,6 +37,15 @@ function accountReducer(state=init, action) {
         accounts: [ ...state.accounts, action.account ],
       };
 
+    case "UPDATE_ACCOUNT":
+      return {
+        ...state,
+        accounts: state.accounts.map(
+          stateAccount => stateAccount.id === action.account.id
+              ? action.account : stateAccount
+        ),
+      }
+
     default:
       return state;
   }

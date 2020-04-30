@@ -1,11 +1,11 @@
 import React from "react";
-import { MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
+import { MDBRow, MDBCol, MDBInput, MDBBtn, MDBTooltip } from "mdbreact";
 
 class AccountForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { defaultValue } = this.props;
+    const { defaultValue, update } = this.props;
     this.initialState = {
       username: "",
       password: "",
@@ -13,11 +13,22 @@ class AccountForm extends React.Component {
       endTime: 0,
     };
     this.state = {
-      username: (defaultValue && defaultValue.username) || "",
-      password: (defaultValue && defaultValue.password) || "",
-      startTime: (defaultValue && defaultValue.startTime) || 0,
-      endTime: (defaultValue && defaultValue.endTime) || 0,
+      account: {
+        username: (defaultValue && defaultValue.username) || "",
+        password: (defaultValue && !update && defaultValue.password) || "",
+        startTime: (defaultValue && defaultValue.startTime) || 0,
+        endTime: (defaultValue && defaultValue.endTime) || 0,
+      },
+      passwordEnabled: !update,
     };
+  }
+
+  componentDidUpdate(previousProps) {
+    if(!previousProps.resetForm && this.props.resetForm) {
+      this.setState({
+        account: { ...this.initialState },
+      })
+    }
   }
 
   updateInputValue = evt => {
@@ -38,7 +49,12 @@ class AccountForm extends React.Component {
     }
 
     this.setState(
-      { [ name ]: trueValue },
+      state => ({
+        account: {
+          ...state.account,
+          [ name ]: trueValue,
+        }
+      }),
       () => {
         const { onChange } = this.props;
         if(onChange) {
@@ -52,23 +68,29 @@ class AccountForm extends React.Component {
     );
   }
 
+  togglePasswordUpdate = () => {
+    this.setState(state => ({ passwordEnabled: !state.passwordEnabled }));
+  }
+
   submit = evt => {
     const { onSubmit } = this.props;
     evt.preventDefault();
 
     if(onSubmit) {
       const accepted = onSubmit({
-        account: { ...this.state },
+        account: { ...this.state.account },
+        passwordChanged: this.state.passwordEnabled,
       });
       if(accepted) {
-        this.setState({ ...this.initialState })
+        this.setState({ account: { ...this.initialState } })
       }
     }
   }
 
   render() {
-    const { value, disabled } = this.props;
-    const { username, password, startTime, endTime } = value || this.state;
+    const { value, disabled, update } = this.props;
+    const { passwordEnabled } = this.state;
+    const { username, password, startTime, endTime } = value || this.state.account;
 
     const activeHours = endTime >= startTime ?
         endTime - startTime : (24 - startTime) + endTime;
@@ -76,19 +98,35 @@ class AccountForm extends React.Component {
       <form className="text-center" onSubmit={this.submit}>
         <MDBRow>
           <MDBCol md="6" className="order-md-1">
-            <div className="no-input-margine">
-              <MDBInput name="username" onChange={this.updateInputValue}
-                  label="Nome" value={username}
-                  className="my-2 my-md-0" disabled={disabled} />
-            </div>
+            <MDBInput name="username" onChange={this.updateInputValue}
+                label="Username" value={username}
+                className="my-2 my-md-0" disabled={disabled} />
           </MDBCol>
 
           <MDBCol md="6" className="order-md-3">
-            <div className="no-input-margine">
-              <MDBInput type="password" name="password" value={password}
-                  onChange={this.updateInputValue} label="Password"
-                  className="mb-4 my-md-0" disabled={disabled} />
-            </div>
+            <MDBRow>
+              {
+                update &&
+                <MDBCol size="auto" className="pr-0">
+                  <MDBTooltip domElement tag="span" placement="top">
+                    <span>
+                    <input type="checkbox" onChange={this.togglePasswordUpdate}
+                      value={passwordEnabled}  className="mt-4-7"
+                      disabled={disabled} />
+                    </span>
+
+                    <span>Change password</span>
+                  </MDBTooltip>
+                </MDBCol>
+              }
+
+              <MDBCol>
+                <MDBInput type="password" name="password" value={password}
+                    onChange={this.updateInputValue} label="Password"
+                    className="mb-4 my-md-0"
+                    disabled={disabled || (update && !passwordEnabled)} />
+              </MDBCol>
+            </MDBRow>
           </MDBCol>
 
           <MDBCol md="6" className="order-md-2">
@@ -111,7 +149,9 @@ class AccountForm extends React.Component {
           </MDBCol>
 
           <MDBCol size="12" className="order-md-last">
-            <MDBBtn type="submit" color="purple" disabled={disabled}>Add</MDBBtn>
+            <MDBBtn type="submit" color="purple" disabled={disabled}>
+              {update ? "Save" : "Add"}
+            </MDBBtn>
           </MDBCol>
         </MDBRow>
       </form>

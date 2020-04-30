@@ -56,6 +56,10 @@ code {
   padding-top: 25% !important;
 }
 
+.mt-4-7, .my-4-7, .m-4-7 {
+  margin-top: 2.5rem !important;
+}
+
 .bg-image {
   background-repeat: no-repeat;
   background-position: center;

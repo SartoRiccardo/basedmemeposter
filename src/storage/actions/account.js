@@ -67,6 +67,7 @@ export function addAccount(account) {
         () => {
           const newAccountId = Math.floor(Math.random()*1000);
           account.id = newAccountId;
+          delete account.password;
           dispatch({ type: "ADD_ACCOUNT", account });
           fetchAccountAvatar(newAccountId, account.username)(dispatch);
         },
@@ -79,4 +80,42 @@ export function addAccount(account) {
   }
 
   return protectFunction(makeAction(creator, "account", "ADD_ACCOUNT"));
+}
+
+export function updateAccount(accountId, account, passwordHasChanged) {
+  const creator = async dispatch => {
+    try {
+      const { REACT_APP_BACKEND, REACT_APP_PUBLIC_KEY } = process.env;
+      if(!passwordHasChanged) {
+        delete account.password;
+      }
+      else {
+        const encryptor = new JSEncrypt();
+        encryptor.setPublicKey(REACT_APP_PUBLIC_KEY);
+        account.password = encryptor.encrypt(account.password);
+      }
+      // const response = await axios.put(`${REACT_APP_BACKEND}/accounts/${accountId}`, account);
+
+      // Simulate a request
+      const response = await axios.get("http://localhost:3000", account);
+
+      callIfSuccessful(
+        response,
+        () => {
+          if(account.password) {
+            delete account.password;
+          }
+          account.id = accountId;
+          dispatch({ type: "UPDATE_ACCOUNT", account });
+          fetchAccountAvatar(account.id, account.username)(dispatch);
+        },
+        error => dispatch({ type: "ERROR", store: "account", error: error.title })
+      );
+    }
+    catch(e) {
+      dispatch({ type: "ERROR", store: "account", error: e.message });
+    }
+  }
+
+  return protectFunction(makeAction(creator, "account", "UPDATE_ACCOUNT"));
 }

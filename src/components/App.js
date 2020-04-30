@@ -11,6 +11,7 @@ import Navbar from "./ui/Navbar";
 import Logs from "./routes/Logs";
 import AccountDetails from "./routes/AccountDetails";
 import CreateAccount from "./routes/CreateAccount";
+import EditAccount from "./routes/EditAccount";
 import Dashboard from "./routes/Dashboard";
 import Anonymous from "./routes/Anonymous";
 import BrandLogo from "./routes/BrandLogo";
@@ -119,7 +120,7 @@ class App extends React.Component {
           <Route path="/logs" component={Logs} exact />
           <Route path="/accounts/new" component={CreateAccount} exact />
           <Route path="/accounts/:id([0-9]+)" component={AccountDetails} exact />
-          <Route path="/accounts/:id([0-9]+)/edit" component={AccountDetails} exact />
+          <Route path="/accounts/:id([0-9]+)/edit" component={EditAccount} exact />
           <Route path="/" component={Dashboard} />
         </Switch>
       </React.Fragment>
