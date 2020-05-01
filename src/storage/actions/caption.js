@@ -58,3 +58,28 @@ export function deleteCaption(id) {
 
   return protectFunction(makeAction(creator, "caption", "DELETE_CAPTION"));
 }
+
+export function changeCaption(caption) {
+  const creator = async dispatch => {
+    try {
+      // const { REACT_APP_BACKEND } = process.env;
+      // const response = await axios.put(`${REACT_APP_BACKEND}/captions/${caption.id}`, caption);
+
+      // Simulate a request
+      const response = await axios.get("http://localhost:3000");
+
+      callIfSuccessful(
+        response,
+        () => {
+          dispatch({ type: "CHANGE_CAPTION", caption });
+        },
+        error => dispatch({ type: "ERROR", store: "caption", error: error.title })
+      )
+    }
+    catch(e) {
+      dispatch({ type: "ERROR", store: "caption", error: e.message });
+    }
+  }
+
+  return protectFunction(makeAction(creator, "caption", "CHANGE_CAPTION"));
+}

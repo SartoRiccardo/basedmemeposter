@@ -24,7 +24,15 @@ function captionReducer(state=init, action) {
         captions: state.captions.filter(
           caption => caption.id !== action.caption
         ),
-      }
+      };
+
+    case "CHANGE_CAPTION":
+      return {
+        ...state,
+        captions: state.captions.map(
+          caption => caption.id === action.caption.id ? action.caption : caption
+        ),
+      };
 
     default:
       return state;

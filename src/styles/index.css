@@ -134,3 +134,8 @@ code {
   cursor: default;
   user-select: none;
 }
+
+.no-glow:focus {
+  box-shadow: none !important;
+  outline: 0 !important;
+}
