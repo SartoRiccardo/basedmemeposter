@@ -4,6 +4,7 @@ import accountReducer from "./account";
 import scheduleReducer from "./schedule";
 import logReducer from "./log";
 import authReducer from "./auth";
+import captionReducer from "./caption";
 
 const rootReducer = combineReducers({
   status: statusReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   schedule: scheduleReducer,
   log: logReducer,
   auth: authReducer,
+  caption: captionReducer,
 });
 
 export default rootReducer;

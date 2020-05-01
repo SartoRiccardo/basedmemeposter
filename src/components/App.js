@@ -9,6 +9,7 @@ import { tokenAuth } from "../storage/actions/auth";
 // Custom components
 import Navbar from "./ui/Navbar";
 import Logs from "./routes/Logs";
+import Captions from "./routes/Captions";
 import AccountDetails from "./routes/AccountDetails";
 import CreateAccount from "./routes/CreateAccount";
 import EditAccount from "./routes/EditAccount";
@@ -118,6 +119,7 @@ class App extends React.Component {
         <Navbar />
         <Switch>
           <Route path="/logs" component={Logs} exact />
+          <Route path="/captions" component={Captions} exact />
           <Route path="/accounts/new" component={CreateAccount} exact />
           <Route path="/accounts/:id([0-9]+)" component={AccountDetails} exact />
           <Route path="/accounts/:id([0-9]+)/edit" component={EditAccount} exact />

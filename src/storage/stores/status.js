@@ -14,10 +14,11 @@ const initialState = {
 };
 
 const init = {
-  account: {...initialState},
-  schedule: {...initialState},
-  log: {...initialState},
-  auth: {...initialState},
+  account: { ...initialState },
+  schedule: { ...initialState },
+  log: { ...initialState },
+  auth: { ...initialState },
+  caption: { ...initialState },
 };
 
 function statusReducer(state=init, action) {
@@ -27,13 +28,15 @@ function statusReducer(state=init, action) {
   matches = /^(?:RE)?SET_(.+?)S?$/gm.exec(type);
   if(matches) {
     store = matches[1].toLowerCase();
-    return {
-      ...state,
-      [ store ]: {
-        ...state[store],
-        initialized: type.startsWith("SET_"),
-      },
-    };
+    if(Object.keys(state).includes(store)) {
+      return {
+        ...state,
+        [ store ]: {
+          ...state[store],
+          initialized: type.startsWith("SET_"),
+        },
+      };
+    }
   }
 
   store = action.store;

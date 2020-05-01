@@ -32,7 +32,7 @@ class Navbar extends React.Component {
   }
 
   render() {
-    
+
     const { accounts } = this.props.account;
     const { open } = this.state;
 
@@ -57,6 +57,14 @@ class Navbar extends React.Component {
           <MDBNavbarNav left>
             <MDBNavItem>
               <MDBNavLink to="/">Dashboard</MDBNavLink>
+            </MDBNavItem>
+
+            <MDBNavItem>
+              <MDBNavLink to="/captions">Captions</MDBNavLink>
+            </MDBNavItem>
+
+            <MDBNavItem>
+              <MDBNavLink to="/sources">Sources</MDBNavLink>
             </MDBNavItem>
 
             <MDBNavItem>

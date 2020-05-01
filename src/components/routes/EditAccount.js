@@ -3,7 +3,6 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import AccountForm from "../forms/AccountForm";
 import { connect } from "react-redux";
 import { updateAccount } from "../../storage/actions/account";
-import { getUserAvatar } from "../../util/instagram";
 import { strToTime } from "../../util/time";
 
 class EditAccount extends React.Component {

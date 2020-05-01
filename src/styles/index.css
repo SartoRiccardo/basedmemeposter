@@ -72,6 +72,7 @@ code {
 }
 
 .icon-button:hover {
+  cursor: pointer;
   transition: filter 0.5s;
   filter: opacity(100%);
 }
@@ -107,4 +108,8 @@ code {
 
 .vertical-center.horizontal-center div {
   transform: translateY(-50%) translateX(-50%);
+}
+
+.break-word {
+  word-wrap: break-word;
 }
