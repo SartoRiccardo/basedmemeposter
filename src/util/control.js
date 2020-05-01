@@ -21,12 +21,15 @@ export function protectFunction(callback) {
   }
 }
 
-export function makeAction(callback, store, futureAction) {
+export function makeAction(callback, store, futureAction, extraParams=null) {
   return async function() {
     const [ dispatch ] = arguments;
 
     const id = Math.random();
-    dispatch({ type:"START_ACTION", store, id, futureAction });
+    if(extraParams === null) {
+      extraParams = {};
+    }
+    dispatch({ ...extraParams, type:"START_ACTION", store, id, futureAction, });
 
     let newArguments = [ dispatchWithId(id, dispatch), id ];
     for(let i = 1; i < arguments.length; i++) {

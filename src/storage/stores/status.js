@@ -66,7 +66,11 @@ function statusReducer(state=init, action) {
           ...state[store],
           actions: [
             ...state[store].actions,
-            { id: action.id, type: action.futureAction },
+            {
+              id: action.id,
+              type: action.futureAction,
+              ...stripKeys(action, ["id", "type", "futureAction", "store"]),
+            },
           ],
         },
       };
@@ -92,6 +96,16 @@ function statusReducer(state=init, action) {
     default:
       return state;
   }
+}
+
+function stripKeys(obj, keys) {
+  let stripped = {};
+  for(const [ key, value ] of Object.entries(obj)) {
+    if(!keys.includes(key)) {
+      stripped[key] = value;
+    }
+  }
+  return stripped;
 }
 
 export default statusReducer;

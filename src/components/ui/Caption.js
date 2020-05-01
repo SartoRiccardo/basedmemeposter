@@ -13,9 +13,10 @@ class Caption extends React.Component {
   }
 
   isDisabled = () => {
-    const { status } = this.props;
+    const { status, caption } = this.props;
     return status.actions.some(
-      action => ["DELETE_CAPTION", "CHANGE_CAPTION"].includes(action.type)
+      action => ["DELETE_CAPTION", "CHANGE_CAPTION"].includes(action.type) &&
+          action.caption === caption.id
     );
   }
 
@@ -67,8 +68,6 @@ class Caption extends React.Component {
     return (
       <MDBRow className="my-2 py-2 mx-1 grey lighten-3">
         <MDBCol className="break-word pr-0 text-justify" size="10">
-          <textarea id={`caption-${caption.id}-textarea`} className="hidden"
-              value={caption.text} readOnly />
           {
             this.state.newText === null
             ?
@@ -103,6 +102,9 @@ class Caption extends React.Component {
             </React.Fragment>
           }
         </MDBCol>
+
+        <textarea id={`caption-${caption.id}-textarea`} className="hidden"
+            value={caption.text} readOnly />
       </MDBRow>
     );
   }

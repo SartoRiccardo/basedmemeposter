@@ -56,7 +56,8 @@ export function deleteCaption(id) {
     }
   }
 
-  return protectFunction(makeAction(creator, "caption", "DELETE_CAPTION"));
+  const extraParams = { caption: id };
+  return protectFunction(makeAction(creator, "caption", "DELETE_CAPTION", extraParams));
 }
 
 export function changeCaption(caption) {
@@ -81,5 +82,6 @@ export function changeCaption(caption) {
     }
   }
 
-  return protectFunction(makeAction(creator, "caption", "CHANGE_CAPTION"));
+  const extraParams = { caption: caption.id };
+  return protectFunction(makeAction(creator, "caption", "CHANGE_CAPTION", extraParams));
 }
