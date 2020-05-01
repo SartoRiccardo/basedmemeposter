@@ -77,6 +77,15 @@ code {
   filter: opacity(100%);
 }
 
+.icon-button.disabled {
+  filter: opacity(20%);
+}
+
+.icon-button.disabled:hover {
+  filter: inherit;
+  cursor: default;
+}
+
 .icon-button.trash:not(:hover) {
   transition-property: filter, color;
   transition-duration: 0.5s;
@@ -119,4 +128,9 @@ code {
   top: 0;
   left: 0;
   transform: translateX(-100%);
+}
+
+.text-disabled:hover {
+  cursor: default;
+  user-select: none;
 }

@@ -16,6 +16,14 @@ function captionReducer(state=init, action) {
       return {
         ...state,
         page: action.page,
+      };
+
+    case "DELETE_CAPTION":
+      return {
+        ...state,
+        captions: state.captions.filter(
+          caption => caption.id !== action.caption
+        ),
       }
 
     default:
