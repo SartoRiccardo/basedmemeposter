@@ -106,7 +106,7 @@ class Caption extends React.Component {
     );
 
     return (
-      <MDBCard className="w-100 my-2 p-0 mx-1 ">
+      <MDBCard className="w-100 my-2 p-0 mx-1">
         <MDBCardBody className="py-3">
             {cardBody}
         </MDBCardBody>

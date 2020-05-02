@@ -1,6 +1,7 @@
 import React from "react";
 import querystring from "querystring";
 import { MDBContainer, MDBRow, MDBCol} from "mdbreact";
+import CaptionPlaceholder from "../ui/placeholders/CaptionPlaceholder";
 import Caption from "../ui/Caption";
 import Pagination from "../forms/Pagination";
 import { connect } from "react-redux";
@@ -70,9 +71,17 @@ class Captions extends React.Component {
     const isLoading = status.actions.some(action => action.type === "SET_CAPTIONS");
     const currentPage = querystring.parse(location.search.substring(1)).page || 1;
 
+    const captionsPerPage = 60;
     let captionBlocks;
     if(!status.initialized || isLoading) {
-      captionBlocks ="TODO Placeholder";
+      captionBlocks = [];
+      for(let i = 0; i < captionsPerPage; i++) {
+        captionBlocks.push(
+          <MDBCol className="px-1 h-100" xs="12" md="6" lg="4" key={i}>
+            <CaptionPlaceholder />
+          </MDBCol>
+        );
+      }
     }
     else {
       captionBlocks = captions.map(caption =>
@@ -85,8 +94,8 @@ class Captions extends React.Component {
     const pagination = (
       <MDBRow>
         <MDBCol className="d-flex justify-content-center">
-          <Pagination totalCount={count} itemsPerPage={50} currentPage={parseInt(currentPage)}
-              onChange={this.changePage} />
+          <Pagination totalCount={count} itemsPerPage={captionsPerPage}
+              currentPage={parseInt(currentPage)} onChange={this.changePage} />
         </MDBCol>
       </MDBRow>
     );
