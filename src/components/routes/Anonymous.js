@@ -15,6 +15,7 @@ function Anonymous(props) {
       <Redirect to="/" />
     );
   }
+  document.title = "Mastermemed";
 
   return (
     <div className="anonymous-root">

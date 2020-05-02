@@ -7,6 +7,7 @@ class BrandLogo extends React.Component {
     this.state = {
       lowConnection: false,
     };
+    document.title = "Mastermemed";
   }
 
   componentDidMount() {

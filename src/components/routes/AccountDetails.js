@@ -12,12 +12,31 @@ import AccountSchedulePlaceholder from "../ui/placeholders/AccountSchedulePlaceh
 import AccountTimePlaceholder from "../ui/placeholders/AccountTimePlaceholder";
 
 class AccountDetails extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.titleTemplate = ":accountName - Mastermemed";
+  }
+
   componentDidMount() {
     this.reloadScheduleIfNecessary();
   }
 
   componentDidUpdate() {
+    const { match } = this.props;
+    const { accounts } = this.props.account;
+
     this.reloadScheduleIfNecessary();
+
+    const accountExists = accounts.some(
+      account => account.id === parseInt(match.params.id)
+    );
+    if(accountExists) {
+      const matchingAccount = accounts.filter(
+        account => account.id === parseInt(match.params.id)
+      )[0];
+      document.title = this.titleTemplate.replace(":accountName", matchingAccount.username);
+    }
   }
 
   reloadScheduleIfNecessary = () => {

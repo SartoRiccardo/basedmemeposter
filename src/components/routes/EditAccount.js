@@ -10,9 +10,12 @@ class EditAccount extends React.Component {
     super(props);
 
     const { match } = this.props;
+    this.titleTemplate = "Edit :accountName - Mastermemed";
     this.state = {
       currentAccount: parseInt(match.params.id),
     };
+
+    this.setDocumentTitle();
   }
 
   componentDidUpdate(previousProps) {
@@ -27,6 +30,19 @@ class EditAccount extends React.Component {
     if(updatingFinished) {
       const { history } = this.props;
       history.push(`/accounts/${parseInt(match.params.id)}`);
+    }
+
+    this.setDocumentTitle();
+  }
+
+  setDocumentTitle = () => {
+    const { match, accounts } = this.props;
+
+    const matchingAccounts = accounts.filter(
+      account => account.id === parseInt(match.params.id)
+    );
+    if(matchingAccounts.length) {
+      document.title = this.titleTemplate.replace(":accountName", matchingAccounts[0].username);
     }
   }
 

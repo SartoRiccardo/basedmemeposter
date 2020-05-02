@@ -16,6 +16,8 @@ class Captions extends React.Component {
       fetchCaptions(currentPage);
     }
 
+    this.titleTemplate = "Captions (Page :pageNumber) - Mastermemed";
+    document.title = this.titleTemplate.replace(":pageNumber", currentPage);
     this.reloadTimeout = null;
     this.reloadTime = 5;
     this.state = {
@@ -46,6 +48,10 @@ class Captions extends React.Component {
 
     if(!isLoading && page === currentPage && status.initialized && this.state.timesReloaded > 0) {
       this.setState({ timesReloaded: 0 });
+    }
+
+    if(location.search !== prevProps.location.search) {
+      document.title = this.titleTemplate.replace(":pageNumber", currentPage);
     }
   }
 

@@ -14,6 +14,7 @@ class CreateAccount extends React.Component {
       avatar: null,
       lastAvatarSearchId: 0,
     };
+    document.title = "New Account - Mastermemed";
   }
 
   componentDidUpdate(previousProps) {
