@@ -91,6 +91,7 @@ class Captions extends React.Component {
       );
     }
 
+    const paginationNeeded = status.initialized && count/captionsPerPage > 1;
     const pagination = (
       <MDBRow>
         <MDBCol className="d-flex justify-content-center">
@@ -109,13 +110,13 @@ class Captions extends React.Component {
           </MDBCol>
         </MDBRow>
 
-        {pagination}
+        {paginationNeeded && pagination}
 
         <MDBRow>
           {captionBlocks}
         </MDBRow>
 
-        {pagination}
+        {paginationNeeded && pagination}
       </MDBContainer>
     );
   }
