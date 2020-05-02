@@ -70,7 +70,7 @@ function Dashboard(props) {
         </MDBCol>
       </MDBRow>
 
-      <MDBRow className="border account-summaries grey lighten-4 mx-0">
+      <MDBRow className="mx-0">
         {accountsUi}
 
         {
