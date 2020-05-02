@@ -74,7 +74,7 @@ class Pagination extends React.Component {
     }
 
     return (
-      <MDBPagination>
+      <MDBPagination className={className}>
         <MDBPageItem disabled={disabled} onClick={this.changePage}>
           <MDBPageNav name="previous">&laquo;</MDBPageNav>
         </MDBPageItem>

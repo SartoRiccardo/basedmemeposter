@@ -5,7 +5,7 @@ function CaptionPlaceholder(props) {
   const { className } = props;
 
   return (
-    <MDBCard className="w-100 my-2 p-0 mx-1 grey lighten-5">
+    <MDBCard className={`w-100 my-2 p-0 mx-1 grey lighten-5 ${className}`}>
       <MDBCardBody className="py-3">
         <MDBRow>
           <MDBCol size="10" />

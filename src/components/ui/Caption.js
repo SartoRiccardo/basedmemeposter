@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBRow, MDBCol, MDBIcon, MDBInput, MDBCard, MDBCardBody } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon, MDBCard, MDBCardBody } from "mdbreact";
 import { connect } from "react-redux";
 import { deleteCaption, changeCaption } from "../../storage/actions/caption";
 
