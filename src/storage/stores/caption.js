@@ -1,6 +1,7 @@
 
 const init = {
   captions: [],
+  count: 0,
   page: null,
 };
 
@@ -10,6 +11,7 @@ function captionReducer(state=init, action) {
       return {
         ...state,
         captions: action.captions,
+        count: action.count,
       };
 
     case "SET_PAGE":

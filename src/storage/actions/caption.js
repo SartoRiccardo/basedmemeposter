@@ -21,7 +21,7 @@ export function fetchCaptions(page) {
         response,
         () => {
           dispatch({ type: "SET_PAGE", page });
-          dispatch({ type: "SET_CAPTIONS", captions: dummyCaptions });
+          dispatch({ type: "SET_CAPTIONS", captions: dummyCaptions, count: 500 });
         },
         error => dispatch({ type: "ERROR", store: "caption", error: error.title })
       )

@@ -1,7 +1,8 @@
 import React from "react";
 import querystring from "querystring";
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol} from "mdbreact";
 import Caption from "../ui/Caption";
+import Pagination from "../forms/Pagination";
 import { connect } from "react-redux";
 import { fetchCaptions } from "../../storage/actions/caption.js";
 
@@ -10,7 +11,7 @@ class Captions extends React.Component {
     super(props);
 
     const { page, location, fetchCaptions, status } = this.props;
-    const currentPage = querystring.parse(location.search.substring(1)).page || 0;
+    const currentPage = querystring.parse(location.search.substring(1)).page || 1;
     if(page !== currentPage || !status.initialized) {
       fetchCaptions(currentPage);
     }
@@ -27,7 +28,8 @@ class Captions extends React.Component {
 
     const hasUpdatedSignificantly = page !== prevProps.page ||
         captions.length !== prevProps.captions.length ||
-        status.actions.length !== prevProps.status.actions.length;
+        status.actions.length !== prevProps.status.actions.length ||
+        location.search !== prevProps.location.search;
 
     const currentPage = querystring.parse(location.search.substring(1)).page || 0;
     const isLoading = status.actions.some(action => action.type === "SET_CAPTIONS");
@@ -51,17 +53,36 @@ class Captions extends React.Component {
     clearTimeout(this.reloadTimeout);
   }
 
-  render() {
-    const { status, captions } = this.props;
+  changePage = evt => {
+    const { newPage } = evt;
+    const { history } = this.props;
+    history.push(`/captions?page=${encodeURIComponent(newPage)}`)
+  }
 
-    if(!status.initialized) {
-      return "TODO Placeholder";
+  render() {
+    const { status, captions, count, location } = this.props;
+    const isLoading = status.actions.some(action => action.type === "SET_CAPTIONS");
+    const currentPage = querystring.parse(location.search.substring(1)).page || 1;
+
+    let captionBlocks;
+    if(!status.initialized || isLoading) {
+      captionBlocks ="TODO Placeholder";
+    }
+    else {
+      captionBlocks = captions.map(caption =>
+        <MDBCol className="px-1 h-100" xs="12" md="6" lg="4" key={caption.id}>
+          <Caption caption={caption} />
+        </MDBCol>
+      );
     }
 
-    const captionBlocks = captions.map(caption =>
-      <MDBCol className="px-1 h-100" xs="12" md="6" lg="4" key={caption.id}>
-        <Caption caption={caption} />
-      </MDBCol>
+    const pagination = (
+      <MDBRow>
+        <MDBCol className="d-flex justify-content-center">
+          <Pagination totalCount={count} itemsPerPage={50} currentPage={parseInt(currentPage)}
+              onChange={this.changePage} />
+        </MDBCol>
+      </MDBRow>
     );
 
     return (
@@ -73,9 +94,13 @@ class Captions extends React.Component {
           </MDBCol>
         </MDBRow>
 
+        {pagination}
+
         <MDBRow>
           {captionBlocks}
         </MDBRow>
+
+        {pagination}
       </MDBContainer>
     );
   }

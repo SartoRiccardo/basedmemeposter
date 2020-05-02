@@ -95,8 +95,8 @@ class LogPagination extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    log: { ...state.log },
-    status: { ...state.status },
+    log: state.log,
+    status: state.status,
   };
 }
 
