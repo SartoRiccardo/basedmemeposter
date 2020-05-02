@@ -87,6 +87,13 @@ class AccountForm extends React.Component {
     }
   }
 
+  cancel = () => {
+    const { onCancel } = this.props;
+    if(onCancel) {
+      onCancel();
+    }
+  }
+
   render() {
     const { value, disabled, update } = this.props;
     const { passwordEnabled } = this.state;
@@ -149,6 +156,13 @@ class AccountForm extends React.Component {
           </MDBCol>
 
           <MDBCol size="12" className="order-md-last">
+            {
+              update &&
+              <MDBBtn color="purple" disabled={disabled} onClick={this.cancel} outline>
+                Cancel
+              </MDBBtn>
+            }
+
             <MDBBtn type="submit" color="purple" disabled={disabled}>
               {update ? "Save" : "Add"}
             </MDBBtn>

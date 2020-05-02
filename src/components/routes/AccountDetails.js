@@ -16,6 +16,7 @@ class AccountDetails extends React.Component {
     super(props);
 
     this.titleTemplate = ":accountName - Mastermemed";
+    this.setDocumentTitle();
   }
 
   componentDidMount() {
@@ -23,10 +24,13 @@ class AccountDetails extends React.Component {
   }
 
   componentDidUpdate() {
+    this.reloadScheduleIfNecessary();
+    this.setDocumentTitle();
+  }
+
+  setDocumentTitle = () => {
     const { match } = this.props;
     const { accounts } = this.props.account;
-
-    this.reloadScheduleIfNecessary();
 
     const accountExists = accounts.some(
       account => account.id === parseInt(match.params.id)
@@ -120,9 +124,9 @@ class AccountDetails extends React.Component {
             <MDBCol className={`text-uppercase my-auto text-center
                 text-${breakpoint}-left`}>
               <h3 className="h3-responsive">
+                {username}
                 <a target="_blank" rel="noopener noreferrer"
                     href={`https://www.instagram.com/${username}`}>
-                  {username}
                   <MDBIcon className="mx-2" icon="external-link-alt" />
                 </a>
               </h3>

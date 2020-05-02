@@ -61,6 +61,11 @@ class EditAccount extends React.Component {
     );
   }
 
+  cancel = () => {
+    const { history, match } = this.props;
+    history.push(`/accounts/${match.params.id}`);
+  }
+
   render() {
     const { status, accounts } = this.props;
 
@@ -98,7 +103,8 @@ class EditAccount extends React.Component {
         </MDBRow>
 
         <AccountForm update onSubmit={this.submit} disabled={isModifying}
-          defaultValue={matchingAccount} key={this.state.currentAccount} />
+          defaultValue={matchingAccount} key={this.state.currentAccount}
+          onCancel={this.cancel} />
       </MDBContainer>
     );
   }
