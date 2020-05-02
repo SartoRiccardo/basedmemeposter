@@ -16,7 +16,7 @@ class Captions extends React.Component {
       fetchCaptions(currentPage);
     }
 
-    this.titleTemplate = "Captions (Page :pageNumber) - Mastermemed";
+    this.titleTemplate = `Captions (Page :pageNumber) - ${process.env.REACT_APP_TITLE}`;
     document.title = this.titleTemplate.replace(":pageNumber", currentPage);
     this.reloadTimeout = null;
     this.reloadTime = 5;
@@ -33,7 +33,7 @@ class Captions extends React.Component {
         status.actions.length !== prevProps.status.actions.length ||
         location.search !== prevProps.location.search;
 
-    const currentPage = querystring.parse(location.search.substring(1)).page || 0;
+    const currentPage = querystring.parse(location.search.substring(1)).page || 1;
     const isLoading = status.actions.some(action => action.type === "SET_CAPTIONS");
     if(hasUpdatedSignificantly && !isLoading &&
         (page !== currentPage || !status.initialized)) {

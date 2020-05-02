@@ -10,7 +10,7 @@ import AccountSummaryPlaceholder from "../ui/placeholders/AccountSummaryPlacehol
 
 function Dashboard(props) {
   const { account, log, status, history } = props;
-  document.title = "Dashboard - Mastermemed";
+  document.title = `Dashboard - ${process.env.REACT_APP_TITLE}`;
 
   let accountsUi = [];
   if(status.account.initialized) {

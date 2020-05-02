@@ -16,7 +16,7 @@ class Logs extends React.Component {
 
     const urlParams = this.props.location.search;
     this.state = { urlParams };
-    document.title = "Logs - Mastermemed";
+    document.title = `Logs - ${process.env.REACT_APP_TITLE}`;
   }
 
   componentDidUpdate() {

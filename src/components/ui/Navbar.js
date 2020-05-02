@@ -48,7 +48,7 @@ class Navbar extends React.Component {
       <MDBNavbar color="purple darken-2" dark expand="md">
         <MDBNavbarBrand href="/">
           <MDBIcon className="mr-2" fab icon="instagram" />
-          Based Meme Poster
+          {process.env.REACT_APP_TITLE}
         </MDBNavbarBrand>
 
         <MDBNavbarToggler onClick={this.toggleCollapse} />

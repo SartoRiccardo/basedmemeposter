@@ -10,7 +10,7 @@ class EditAccount extends React.Component {
     super(props);
 
     const { match } = this.props;
-    this.titleTemplate = "Edit :accountName - Mastermemed";
+    this.titleTemplate = `Edit :accountName - ${process.env.REACT_APP_TITLE}`;
     this.state = {
       currentAccount: parseInt(match.params.id),
     };

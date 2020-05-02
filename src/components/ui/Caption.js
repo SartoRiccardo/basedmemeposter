@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBRow, MDBCol, MDBIcon, MDBInput } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon, MDBInput, MDBCard, MDBCardBody } from "mdbreact";
 import { connect } from "react-redux";
 import { deleteCaption, changeCaption } from "../../storage/actions/caption";
 
@@ -65,8 +65,8 @@ class Caption extends React.Component {
     const { caption, className } = this.props;
     const disabled = this.isDisabled();
 
-    return (
-      <MDBRow className="my-2 py-2 mx-1 grey lighten-3">
+    const cardBody = (
+      <MDBRow className="caption-container">
         <MDBCol className="break-word pr-0 text-justify" size="10">
           {
             this.state.newText === null
@@ -102,10 +102,18 @@ class Caption extends React.Component {
             </React.Fragment>
           }
         </MDBCol>
+      </MDBRow>
+    );
+
+    return (
+      <MDBCard className="w-100 my-2 p-0 mx-1 ">
+        <MDBCardBody className="py-3">
+            {cardBody}
+        </MDBCardBody>
 
         <textarea id={`caption-${caption.id}-textarea`} className="hidden"
             value={caption.text} readOnly />
-      </MDBRow>
+      </MDBCard>
     );
   }
 }

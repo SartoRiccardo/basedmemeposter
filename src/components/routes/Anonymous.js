@@ -15,7 +15,7 @@ function Anonymous(props) {
       <Redirect to="/" />
     );
   }
-  document.title = "Mastermemed";
+  document.title = `${process.env.REACT_APP_TITLE}`;
 
   return (
     <div className="anonymous-root">

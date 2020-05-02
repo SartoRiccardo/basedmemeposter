@@ -15,7 +15,7 @@ class AccountDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    this.titleTemplate = ":accountName - Mastermemed";
+    this.titleTemplate = `:accountName - ${process.env.REACT_APP_TITLE}`;
     this.setDocumentTitle();
   }
 
