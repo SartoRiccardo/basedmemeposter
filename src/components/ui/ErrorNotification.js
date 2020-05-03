@@ -1,6 +1,5 @@
 import React from "react";
 import "../../styles/Notification.css";
-import { MDBNotification } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 
@@ -74,7 +73,7 @@ class ErrorNotification extends React.Component {
 
 function mapStateToProps(state) {
   let errors = [];
-  for(const [ store, config ] of Object.entries(state.status)) {
+  for(const [ , config ] of Object.entries(state.status)) {
     errors = [ ...errors, ...config.errors];
   }
   return { errors };

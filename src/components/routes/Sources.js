@@ -57,7 +57,6 @@ class Sources extends React.Component {
         }
       }
 
-      let lastHrId = -1;
       sourceUi = Object.entries(sourcesByPlatform).map(
         ([ platform, platformSources ]) => (
           <MDBRow key={platform} className="mt-5">

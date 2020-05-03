@@ -1,11 +1,11 @@
 import React from "react";
 import querystring from "querystring";
-import { MDBContainer, MDBRow, MDBCol} from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from "mdbreact";
 import CaptionPlaceholder from "../ui/placeholders/CaptionPlaceholder";
 import Caption from "../ui/Caption";
 import Pagination from "../forms/Pagination";
 import { connect } from "react-redux";
-import { fetchCaptions } from "../../storage/actions/caption.js";
+import { fetchCaptions, addCaption } from "../../storage/actions/caption.js";
 
 class Captions extends React.Component {
   constructor(props) {
@@ -23,6 +23,7 @@ class Captions extends React.Component {
     this.reloadTime = 5;
     this.state = {
       timesReloaded: 0,
+      newCaption: "",
     }
   }
 
@@ -63,7 +64,21 @@ class Captions extends React.Component {
   changePage = evt => {
     const { newPage } = evt;
     const { history } = this.props;
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
     history.push(`/captions?page=${encodeURIComponent(newPage)}`)
+  }
+
+  changeNewCaption = evt => {
+    this.setState({ newCaption: evt.target.value });
+  }
+
+  submit = evt => {
+    evt.preventDefault();
+    const { addCaption } = this.props;
+
+    addCaption({ text: this.state.newCaption });
+    this.setState({ newCaption: "" });
   }
 
   render() {
@@ -101,6 +116,10 @@ class Captions extends React.Component {
       </MDBRow>
     );
 
+    const isAddingCaption = status.actions.some(
+      action => action.type === "ADD_CAPTION"
+    );
+
     return (
       <MDBContainer>
         <MDBRow>
@@ -117,6 +136,21 @@ class Captions extends React.Component {
         </MDBRow>
 
         {paginationNeeded && pagination}
+
+        <hr />
+
+        <MDBRow className="d-flex justify-content-center">
+          <MDBCol size="12" md="6">
+            <form className="text-center" onSubmit={this.submit}>
+              <MDBInput type="textarea" label="New Caption..." rows="3"
+                  value={this.state.newCaption} onChange={this.changeNewCaption}
+                  disabled={isAddingCaption} />
+              <MDBBtn type="submit" color="purple" disabled={isAddingCaption}>
+                Add
+              </MDBBtn>
+            </form>
+          </MDBCol>
+        </MDBRow>
       </MDBContainer>
     );
   }
@@ -132,6 +166,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchCaptions: page => dispatch(fetchCaptions(page)),
+    addCaption: caption => dispatch(addCaption(caption)),
   };
 }
 

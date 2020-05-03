@@ -28,6 +28,12 @@ function captionReducer(state=init, action) {
         ),
       };
 
+    case "ADD_CAPTION":
+      return {
+        ...state,
+        captions: [ ...state.captions, action.caption ],
+      };
+
     case "CHANGE_CAPTION":
       return {
         ...state,
