@@ -64,10 +64,12 @@ class Source extends React.Component {
     }
 
     const { updateSource, source } = this.props;
-    updateSource({
-      ...source,
-      name: this.state.newName,
-    });
+    if(source.name !== this.state.newName) {
+      updateSource({
+        ...source,
+        name: this.state.newName,
+      });
+    }
     this.setState({ newName: null });
   }
 

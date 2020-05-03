@@ -1,0 +1,20 @@
+.notification {
+  position: fixed;
+  bottom: 5%;
+  left: 5%;
+  right: 5%;
+  padding: 1rem;
+  opacity: 0;
+  height: 0;
+  transition: opacity 1.5s;
+}
+
+.notification.active {
+  height: inherit;
+  opacity: 1;
+  transition: opacity 1.5s;
+}
+
+.notification.fading {
+  height: inherit;
+}

@@ -35,7 +35,9 @@ class Caption extends React.Component {
     const { caption, changeCaption } = this.props;
     if(this.isDisabled()) return;
 
-    changeCaption({ id: caption.id, text: this.state.newText });
+    if(caption.text !== this.state.newText) {
+      changeCaption({ ...caption, text: this.state.newText });
+    }
     this.setState({ newText: null });
   }
 

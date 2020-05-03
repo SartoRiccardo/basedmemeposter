@@ -17,6 +17,7 @@ import EditAccount from "./routes/EditAccount";
 import Dashboard from "./routes/Dashboard";
 import Anonymous from "./routes/Anonymous";
 import BrandLogo from "./routes/BrandLogo";
+import ErrorNotification from "./ui/ErrorNotification";
 
 class App extends React.Component {
   constructor(props) {
@@ -127,6 +128,7 @@ class App extends React.Component {
           <Route path="/accounts/:id([0-9]+)/edit" component={EditAccount} exact />
           <Route path="/" component={Dashboard} />
         </Switch>
+        <ErrorNotification />
       </React.Fragment>
     );
   }
