@@ -25,6 +25,12 @@ function sourceReducer(state=init, action) {
         ),
       };
 
+    case "ADD_SOURCE":
+      return {
+        ...state,
+        sources: [ ...state.sources, action.source ]
+      }
+
     default:
       return state;
   }

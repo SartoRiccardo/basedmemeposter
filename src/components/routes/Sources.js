@@ -1,6 +1,7 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import Source from "../ui/Source";
+import AddSource from "../forms/AddSource";
 import SourcePlaceholder from "../ui/placeholders/SourcePlaceholder";
 import { connect } from "react-redux";
 import { fetchSources } from "../../storage/actions/source";
@@ -59,7 +60,7 @@ class Sources extends React.Component {
 
       sourceUi = Object.entries(sourcesByPlatform).map(
         ([ platform, platformSources ]) => (
-          <MDBRow key={platform} className="mt-5">
+          <MDBRow key={platform} className="my-4">
             {
               platformSources.map(source => (
                 <MDBCol className="px-1 py-1" key={source.id} size="12" md="6" lg="4">
@@ -85,7 +86,7 @@ class Sources extends React.Component {
         }
 
         sourceUi.push(
-          <MDBRow key={i} className="mt-5">
+          <MDBRow key={i} className="my-4">
             {platformSources}
           </MDBRow>
         )
@@ -102,6 +103,14 @@ class Sources extends React.Component {
         </MDBRow>
 
         {sourceUi}
+
+        <hr />
+
+        <MDBRow className="d-flex justify-content-center">
+          <MDBCol size="12" md="8">
+            <AddSource />
+          </MDBCol>
+        </MDBRow>
       </MDBContainer>
     );
   }

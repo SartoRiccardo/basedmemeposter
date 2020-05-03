@@ -89,7 +89,7 @@ export function addCaption(caption) {
   const creator = async dispatch => {
     try {
       // const { REACT_APP_BACKEND } = process.env;
-      // const response = await axios.post(`${REACT_APP_BACKEND}/captions/${caption.id}`, caption);
+      // const response = await axios.post(`${REACT_APP_BACKEND}/captions`, caption);
 
       // Simulate a request
       const response = await axios.get("http://localhost:3000");

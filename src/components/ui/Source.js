@@ -3,7 +3,7 @@ import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from "mdbreac
 import { connect } from "react-redux";
 import { deleteSource, updateSource } from "../../storage/actions/source";
 
-const platformData = {
+export const platformData = {
   twitter: {
     icon: <MDBIcon icon="twitter" className="light-blue-text" fixed />,
     hrefTemplate: "https://www.twitter.com/:name",
