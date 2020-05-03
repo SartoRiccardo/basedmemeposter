@@ -19,6 +19,7 @@ const init = {
   log: { ...initialState },
   auth: { ...initialState },
   caption: { ...initialState },
+  source: { ...initialState },
 };
 
 function statusReducer(state=init, action) {

@@ -139,3 +139,7 @@ code {
   box-shadow: none !important;
   outline: 0 !important;
 }
+
+.no-form-margin .md-form {
+  margin: 0 !important;
+}
