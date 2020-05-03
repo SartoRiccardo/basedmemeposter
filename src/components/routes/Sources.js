@@ -1,6 +1,7 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import Source from "../ui/Source";
+import SourcePlaceholder from "../ui/placeholders/SourcePlaceholder";
 import { connect } from "react-redux";
 import { fetchSources } from "../../storage/actions/source";
 
@@ -41,7 +42,7 @@ class Sources extends React.Component {
   render() {
     const { sources, status } = this.props;
 
-    let sourceUi;
+    let sourceUi = [];
     if(status.initialized) {
       let sourcesByPlatform = {};
       for(const source of sources) {
@@ -56,7 +57,6 @@ class Sources extends React.Component {
         }
       }
 
-      sourceUi = [];
       let lastHrId = -1;
       sourceUi = Object.entries(sourcesByPlatform).map(
         ([ platform, platformSources ]) => (
@@ -73,7 +73,24 @@ class Sources extends React.Component {
       );
     }
     else {
-      sourceUi = null;
+      const platforms = 3;
+      const sourcesPerPlatform = 12;
+      for(let i = 0; i < platforms; i++) {
+        let platformSources = [];
+        for(let j = 0; j < sourcesPerPlatform; j++) {
+          platformSources.push(
+            <MDBCol className="px-1 py-1" key={j} size="12" md="6" lg="4">
+              <SourcePlaceholder />
+            </MDBCol>
+          );
+        }
+
+        sourceUi.push(
+          <MDBRow key={i} className="mt-5">
+            {platformSources}
+          </MDBRow>
+        )
+      }
     }
 
     return (
