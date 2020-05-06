@@ -13,6 +13,8 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get("/accounts", "AccountController@index");
+$router->get("/accounts/{account}", "AccountController@show");
+$router->post("/accounts", "AccountController@store");
+$router->put("/accounts/{account}", "AccountController@update");
+$router->delete("/accounts/{account}", "AccountController@destroy");
