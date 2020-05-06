@@ -25,3 +25,4 @@ function Resource($router, $path, $controller)
 }
 
 Resource($router, "accounts", "AccountController");
+Resource($router, "posts", "PostController");

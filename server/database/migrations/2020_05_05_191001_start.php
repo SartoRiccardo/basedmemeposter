@@ -30,7 +30,8 @@ class Start extends Migration
         Schema::create("posts", function(Blueprint $table) {
             $table->id();
             $table->string("platform", 16);
-            $table->date("dateAdded");
+            $table->string("originalId", 32);
+            $table->date("dateAdded")->default(date("Y-m-d H:i:s"));
             $table->text("originalLink");
             $table->text("thumbnail");
 
