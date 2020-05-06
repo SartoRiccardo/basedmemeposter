@@ -13,8 +13,15 @@
 |
 */
 
-$router->get("/accounts", "AccountController@index");
-$router->get("/accounts/{account}", "AccountController@show");
-$router->post("/accounts", "AccountController@store");
-$router->put("/accounts/{account}", "AccountController@update");
-$router->delete("/accounts/{account}", "AccountController@destroy");
+function Resource($router, $path, $controller)
+{
+    $pathSingular = substr($path, 0, strlen($path)-1);
+
+    $router->get("/$path", "{$controller}@index");
+    $router->get("/$path/{{$pathSingular}}", "{$controller}@show");
+    $router->post("/$path", "{$controller}@store");
+    $router->put("/$path/{{$pathSingular}}", "{$controller}@update");
+    $router->delete("/$path/{{$pathSingular}}", "{$controller}@destroy");
+}
+
+Resource($router, "accounts", "AccountController");
