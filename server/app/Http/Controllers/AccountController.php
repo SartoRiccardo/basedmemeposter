@@ -8,6 +8,8 @@ use Illuminate\Validation\ValidationException;
 
 class AccountController extends Controller
 {
+    public $resourceName = "Account";
+
     /**
      * Display a listing of the resource.
      *
@@ -60,7 +62,7 @@ class AccountController extends Controller
         $account = Account::find($account);
         return $account !== null
             ? ["data" => $account]
-            : $this->accountNotFound();
+            : $this->resourceNotFound();
     }
 
     /**
@@ -74,7 +76,7 @@ class AccountController extends Controller
     {
         $account = Account::find($account);
         if($account === null) {
-          return $this->accountNotFound();
+          return $this->resourceNotFound();
         }
 
         try {
@@ -96,6 +98,8 @@ class AccountController extends Controller
         $account->startTime = request("startTime");
         $account->finishTime = request("finishTime");
         $account->save();
+
+        return ["data" => $account];
     }
 
     /**
@@ -108,21 +112,8 @@ class AccountController extends Controller
     {
         $account = Account::find($account);
         if($account === null) {
-          return $this->accountNotFound();
+          return $this->resourceNotFound();
         }
         $account->delete();
-    }
-
-    /**
-     * Craft a response for when an account is not found.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    private function accountNotFound() {
-      return response([
-        "errors" => [
-            ["title" => "No account found with the given ID"],
-          ]
-        ], 404);
     }
 }
