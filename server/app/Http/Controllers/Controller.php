@@ -19,7 +19,7 @@ class Controller extends BaseController
       else {
         $classPath = explode("\\", get_class($this));
         $className = $classPath[count($classPath)-1];
-        $resourceName = str_replace("Controller", "", $className);
+        $resourceName = str_replace("Controller", "", strtolower($className));
       }
 
       return response([
