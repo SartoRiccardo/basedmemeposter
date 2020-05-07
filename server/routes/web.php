@@ -13,9 +13,9 @@
 |
 */
 
-function Resource($router, $path, $controller)
+function Resource($router, $path, $controller, $isSingular=false)
 {
-    $pathSingular = substr($path, 0, strlen($path)-1);
+    $pathSingular = $isSingular ? $path : substr($path, 0, strlen($path)-1);
 
     $router->get("/$path", "{$controller}@index");
     $router->get("/$path/{{$pathSingular}}", "{$controller}@show");
@@ -26,3 +26,4 @@ function Resource($router, $path, $controller)
 
 Resource($router, "accounts", "AccountController");
 Resource($router, "posts", "PostController");
+Resource($router, "schedule", "ScheduleController", true);

@@ -47,7 +47,7 @@ class PostController extends Controller
         $post->thumbnail = request("thumbnail");
         $post->save();
 
-        return response(null, 201)->header("Location", "/posts/{$post->id}");
+        return response(["data" => $post], 201)->header("Location", "/posts/{$post->id}");
     }
 
     /**

@@ -15,7 +15,7 @@ class Start extends Migration
     {
         Schema::create("accounts", function(Blueprint $table) {
             $table->id();
-            $table->string("username", 30);
+            $table->string("username", 30)->unique();
             $table->text("password");
             $table->time("startTime");
             $table->time("finishTime");
@@ -35,6 +35,7 @@ class Start extends Migration
             $table->text("originalLink");
             $table->text("thumbnail");
 
+            $table->unique(["platform", "originalId"]);
             $table->foreign("platform")->references("name")->on("platforms");
         });
 
@@ -44,13 +45,14 @@ class Start extends Migration
             $table->unsignedBigInteger("account");
             $table->unsignedBigInteger("post");
 
+            $table->unique(["account", "post"]);
             $table->foreign("account")->references("id")->on("accounts");
             $table->foreign("post")->references("id")->on("posts");
         });
 
         Schema::create("captions", function(Blueprint $table) {
             $table->id();
-            $table->text("text");
+            $table->text("text")->unique();
         });
 
         Schema::create("sources", function(Blueprint $table) {
@@ -58,12 +60,13 @@ class Start extends Migration
             $table->string("name", 32);
             $table->string("platform", 16);
 
+            $table->unique(["name", "platform"]);
             $table->foreign("platform")->references("name")->on("platforms");
         });
 
         Schema::create("logs", function(Blueprint $table) {
             $table->id();
-            $table->dateTime("date");
+            $table->dateTime("date")->default(date("Y-m-d H:i:s"));
             $table->string("level", 16);
             $table->unsignedBigInteger("account");
             $table->text("message");
@@ -73,14 +76,14 @@ class Start extends Migration
 
         Schema::create("users", function(Blueprint $table) {
             $table->id();
-            $table->string("username", 64);
+            $table->string("username", 64)->unique();
             $table->string("password");
         });
 
         Schema::create("salt", function(Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user");
-            $table->string("salt");
+            $table->string("salt")->unique();
 
             $table->foreign("user")->references("id")->on("users");
         });
