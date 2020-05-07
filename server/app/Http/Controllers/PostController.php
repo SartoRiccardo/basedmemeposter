@@ -8,8 +8,6 @@ use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
-    protected $resourceName = "Post";
-
     /**
      * Display a listing of the resource.
      *

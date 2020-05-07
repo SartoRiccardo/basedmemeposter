@@ -12,9 +12,19 @@ class Controller extends BaseController
      * @return \Illuminate\Http\Response
      */
     protected function resourceNotFound() {
+      $resourceName = null;
+      if(property_exists($this, "resourceName")) {
+        $resourceName = $this->resourceName;
+      }
+      else {
+        $classPath = explode("\\", get_class($this));
+        $className = $classPath[count($classPath)-1];
+        $resourceName = str_replace("Controller", "", $className);
+      }
+
       return response([
         "errors" => [
-            ["title" => "No {$this->resourceName} found with the given ID"],
+            ["title" => "No {$resourceName} found with the given ID"],
           ]
         ], 404);
     }

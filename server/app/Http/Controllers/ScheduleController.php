@@ -10,8 +10,6 @@ use Illuminate\Validation\ValidationException;
 
 class ScheduleController extends Controller
 {
-    public $resourceName = "Schedule";
-
     /**
      * Display a listing of the resource.
      *

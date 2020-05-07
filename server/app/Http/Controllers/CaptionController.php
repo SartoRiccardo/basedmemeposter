@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 
 class CaptionController extends Controller
 {
-    public $resourceName = "Caption";
-
     /**
      * Display a listing of the resource.
      *

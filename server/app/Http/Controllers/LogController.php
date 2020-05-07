@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
-    public $resourceName = "Log";
-
     /**
      * Display a listing of the resource.
      *

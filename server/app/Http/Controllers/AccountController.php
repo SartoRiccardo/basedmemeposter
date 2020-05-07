@@ -8,8 +8,6 @@ use Illuminate\Validation\ValidationException;
 
 class AccountController extends Controller
 {
-    public $resourceName = "Account";
-
     /**
      * Display a listing of the resource.
      *
