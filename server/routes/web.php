@@ -27,3 +27,4 @@ function Resource($router, $path, $controller, $isSingular=false)
 Resource($router, "accounts", "AccountController");
 Resource($router, "posts", "PostController");
 Resource($router, "schedule", "ScheduleController", true);
+Resource($router, "logs", "LogController");
