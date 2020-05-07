@@ -17,7 +17,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return ["data" => Account::all()];
+        $accounts = Account::all()->makeVisible(["password"]);
+        return ["data" => $accounts];
     }
 
     /**
@@ -45,6 +46,7 @@ class AccountController extends Controller
         $account->password = request("password");
         $account->startTime = request("startTime");
         $account->finishTime = request("finishTime");
+        $account = $account->makeVisible(["password"]);
         $account->save();
 
         return response(["data" => $account], 201)
@@ -60,9 +62,11 @@ class AccountController extends Controller
     public function show($account)
     {
         $account = Account::find($account);
-        return $account !== null
-            ? ["data" => $account]
-            : $this->resourceNotFound();
+        if(!$account) {
+          return $this->resourceNotFound();
+        }
+        $account = $account->makeVisible(["password"]);
+        return ["data" => $account];
     }
 
     /**
@@ -97,6 +101,7 @@ class AccountController extends Controller
         $account->password = request("password");
         $account->startTime = request("startTime");
         $account->finishTime = request("finishTime");
+        $account = $account->makeVisible(["password"]);
         $account->save();
 
         return ["data" => $account];
