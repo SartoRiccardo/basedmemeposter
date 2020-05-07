@@ -29,3 +29,4 @@ Resource($router, "posts", "PostController");
 Resource($router, "schedule", "ScheduleController", true);
 Resource($router, "logs", "LogController");
 Resource($router, "captions", "CaptionController");
+Resource($router, "sources", "SourceController");
