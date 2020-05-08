@@ -51,7 +51,7 @@ class ScheduleController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response()->json($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $schedule = new Schedule();
@@ -106,7 +106,7 @@ class ScheduleController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response()->json($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $schedule->account = request("account");

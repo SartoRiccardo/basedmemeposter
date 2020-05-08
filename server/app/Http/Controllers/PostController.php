@@ -35,7 +35,7 @@ class PostController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response()->json($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $post = new Post();
@@ -87,7 +87,7 @@ class PostController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response()->json($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $post->platform = request("platform");

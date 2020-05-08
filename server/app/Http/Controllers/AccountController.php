@@ -36,7 +36,7 @@ class AccountController extends Controller
           ]);
         }
         catch(ValidationException $exception) {
-          return response()->json($exception->errors(), 400);
+          return $this->validationErrorResponse($exception);
         }
 
         $account = new Account();
@@ -92,7 +92,7 @@ class AccountController extends Controller
           ]);
         }
         catch(ValidationException $exception) {
-          return response()->json($exception->errors(), 400);
+          return $this->validationErrorResponse($exception);
         }
 
         $account->username = request("username");

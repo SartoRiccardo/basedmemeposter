@@ -33,7 +33,7 @@ class SourceController extends Controller
             ]);
         }
         catch(ValidatorException $exception) {
-            return response($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $source = new Source();
@@ -77,7 +77,7 @@ class SourceController extends Controller
             ]);
         }
         catch(ValidatorException $exception) {
-            return response($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $source->platform = request("platform");

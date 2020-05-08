@@ -31,7 +31,7 @@ class CaptionController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $caption = new Caption();
@@ -73,7 +73,7 @@ class CaptionController extends Controller
             ]);
         }
         catch(ValidationException $exception) {
-            return response($exception->errors(), 400);
+            return $this->validationErrorResponse($exception);
         }
 
         $caption->text = request("text");

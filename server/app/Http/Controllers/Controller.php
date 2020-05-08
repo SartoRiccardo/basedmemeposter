@@ -11,7 +11,8 @@ class Controller extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    protected function resourceNotFound() {
+    protected function resourceNotFound()
+    {
       $resourceName = null;
       if(property_exists($this, "resourceName")) {
         $resourceName = $this->resourceName;
@@ -19,7 +20,7 @@ class Controller extends BaseController
       else {
         $classPath = explode("\\", get_class($this));
         $className = $classPath[count($classPath)-1];
-        $resourceName = str_replace("Controller", "", strtolower($className));
+        $resourceName = str_replace("controller", "", strtolower($className));
       }
 
       return response([
@@ -27,5 +28,22 @@ class Controller extends BaseController
             ["title" => "No {$resourceName} found with the given ID"],
           ]
         ], 404);
+    }
+
+    /**
+     * Craft a response when a validation error occurs
+     * @param  ValidationError $error The given error
+     * @return \Illuminate\Http\Response
+     */
+    protected function validationErrorResponse($exception)
+    {
+      $errors = $exception->errors();
+      $response = [];
+      foreach ($errors as $field => $fieldErrors) {
+        foreach ($fieldErrors as $error) {
+          array_push($response, ["title" => $error]);
+        }
+      }
+      return response(["errors" => $response], 400);
     }
 }
