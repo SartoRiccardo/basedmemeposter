@@ -78,14 +78,7 @@ class Start extends Migration
             $table->id();
             $table->string("username", 64)->unique();
             $table->string("password");
-        });
-
-        Schema::create("salt", function(Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger("user");
             $table->string("salt")->unique();
-
-            $table->foreign("user")->references("id")->on("users");
         });
     }
 

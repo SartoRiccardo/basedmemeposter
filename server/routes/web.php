@@ -24,9 +24,14 @@ function Resource($router, $path, $controller, $isSingular=false)
     $router->delete("/$path/{{$pathSingular}}", "{$controller}@destroy");
 }
 
-Resource($router, "accounts", "AccountController");
-Resource($router, "posts", "PostController");
-Resource($router, "schedule", "ScheduleController", true);
-Resource($router, "logs", "LogController");
-Resource($router, "captions", "CaptionController");
-Resource($router, "sources", "SourceController");
+$router->group(["middleware" => "auth"], function() use ($router) {
+    Resource($router, "accounts", "AccountController");
+    Resource($router, "posts", "PostController");
+    Resource($router, "schedule", "ScheduleController", true);
+    Resource($router, "logs", "LogController");
+    Resource($router, "captions", "CaptionController");
+    Resource($router, "sources", "SourceController");
+});
+
+$router->get("/auth", "AuthController@index");
+$router->get("/auth/me", "AuthController@validate");
