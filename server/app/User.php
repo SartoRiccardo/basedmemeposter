@@ -11,7 +11,7 @@ use Laravel\Lumen\Auth\Authorizable;
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
-    
+
     protected $hidden = [
         'password',
     ];

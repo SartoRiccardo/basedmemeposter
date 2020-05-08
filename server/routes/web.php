@@ -31,7 +31,7 @@ $router->group(["middleware" => "auth"], function() use ($router) {
     Resource($router, "logs", "LogController");
     Resource($router, "captions", "CaptionController");
     Resource($router, "sources", "SourceController");
+    $router->get("/auth/me", "AuthController@me");
 });
 
 $router->get("/auth", "AuthController@index");
-$router->get("/auth/me", "AuthController@validate");
