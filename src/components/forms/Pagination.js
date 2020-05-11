@@ -13,7 +13,7 @@ class Pagination extends React.Component {
         break;
 
       case "next":
-        if(currentPage <= totalPages) newPage = currentPage + 1;
+        if(currentPage < totalPages) newPage = currentPage + 1;
         break;
 
       default:

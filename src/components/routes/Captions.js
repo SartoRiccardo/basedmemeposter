@@ -82,15 +82,14 @@ class Captions extends React.Component {
   }
 
   render() {
-    const { status, captions, count, location } = this.props;
+    const { status, captions, count, perPage, location } = this.props;
     const isLoading = status.actions.some(action => action.type === "SET_CAPTIONS");
     const currentPage = querystring.parse(location.search.substring(1)).page || 1;
 
-    const captionsPerPage = 60;
     let captionBlocks;
     if(!status.initialized || isLoading) {
       captionBlocks = [];
-      for(let i = 0; i < captionsPerPage; i++) {
+      for(let i = 0; i < perPage; i++) {
         captionBlocks.push(
           <MDBCol className="px-1 h-100" xs="12" md="6" lg="4" key={i}>
             <CaptionPlaceholder />
@@ -106,11 +105,11 @@ class Captions extends React.Component {
       );
     }
 
-    const paginationNeeded = status.initialized && count/captionsPerPage > 1;
+    const paginationNeeded = status.initialized && count/perPage > 1;
     const pagination = (
       <MDBRow>
         <MDBCol className="d-flex justify-content-center">
-          <Pagination totalCount={count} itemsPerPage={captionsPerPage}
+          <Pagination totalCount={count} itemsPerPage={perPage}
               currentPage={parseInt(currentPage)} onChange={this.changePage} />
         </MDBCol>
       </MDBRow>
