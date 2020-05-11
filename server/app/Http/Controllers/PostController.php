@@ -13,9 +13,23 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Post::paginate(50);
+        $after = $request->query("after");
+        $platforms = $request->query("platforms");
+
+        $posts = Post::where(function($query) use ($platforms) {
+          if(!$platforms) return;
+          foreach ($platforms as $platform) {
+              $query->orWhere("platform", "=", $platform);
+          }
+        });
+        if($after) {
+            $posts = $posts->where("dateAdded", ">", $after);
+        }
+        $posts = $posts->paginate(50);
+
+        return ["data" => $posts];
     }
 
     /**
@@ -57,6 +71,16 @@ class PostController extends Controller
     public function show($post)
     {
         $post = Post::find($post);
+        if($post === null) {
+            return $this->resourceNotFound();
+        }
+
+        return ["data" => $post];
+    }
+
+    public function showByOtherId($platform, $post)
+    {
+        $post = Post::where("platform", "=", $platform)->where("originalId", "=", $post)->first();
         if($post === null) {
             return $this->resourceNotFound();
         }

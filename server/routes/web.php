@@ -27,6 +27,7 @@ function Resource($router, $path, $controller, $isSingular=false)
 $router->group(["middleware" => "auth"], function() use ($router) {
     Resource($router, "accounts", "AccountController");
     Resource($router, "posts", "PostController");
+    $router->get("/posts/{platform}/{post}", "PostController@showByOtherId");
     Resource($router, "schedule", "ScheduleController", true);
     Resource($router, "logs", "LogController");
     Resource($router, "captions", "CaptionController");
