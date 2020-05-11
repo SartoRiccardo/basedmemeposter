@@ -1,0 +1,36 @@
+.loading-bar {
+  position: relative;
+}
+
+.loading-bar .bar-background {
+  width: 100%;
+}
+
+.loading-bar div {
+  height: 5px;
+}
+
+.loading-bar .bar {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  animation: loading-bar 3s infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes loading-bar {
+  0% { left: 0%; right: 100%; }
+  25% { right: 60%; }
+  37% { left: 0%; }
+  45% { right: 0%; }
+  50% { left: 100%; right: 0%; }
+  60% { left: 0%; right: 100%; }
+  73% { left: 0%; }
+  86% { right: 0%; }
+  87% { left: 100%; }
+  93% { right: 0%; }
+  100% { left: 100%; right: 0%; }
+}
