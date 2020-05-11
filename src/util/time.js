@@ -2,8 +2,8 @@
 /**
  * Checks if a certain time is included in an interval.
  * @param  {string}  time    The time to check.
- * @param  {string}  start   The start of the interval.
- * @param  {string}  finish  The end of the interval.
+ * @param  {string}  start   The start of the interval, inclusive.
+ * @param  {string}  finish  The end of the interval, exclusive.
  * @return {boolean}
  */
 export function isInRangeHours(time, start, finish) {
@@ -19,9 +19,9 @@ export function isInRangeHours(time, start, finish) {
 
   const overnight = compareTimes(start, finish) === -1;
   if(overnight) {
-    return compareTimes(time, start) !== 1 || compareTimes(time, finish) !== -1;
+    return compareTimes(time, start) !== 1 || compareTimes(time, finish) === 1;
   }
-  return compareTimes(time, start) !== 1 && compareTimes(time, finish) !== -1;
+  return compareTimes(time, start) !== 1 && compareTimes(time, finish) === 1;
 }
 
 /**
