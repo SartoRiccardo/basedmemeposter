@@ -80,6 +80,15 @@ class Start extends Migration
             $table->string("password");
             $table->string("salt")->unique();
         });
+
+        Schema::create("tokens", function(Blueprint $table) {
+            $table->unsignedBigInteger("user");
+            $table->string("token");
+            $table->dateTime("expire");
+
+            $table->primary("token");
+            $table->foreign("user")->references("id")->on("users");
+        });
     }
 
     /**
@@ -90,6 +99,7 @@ class Start extends Migration
     public function down()
     {
         $tables = [
+          "tokens",
           "salt",
           "users",
           "logs",

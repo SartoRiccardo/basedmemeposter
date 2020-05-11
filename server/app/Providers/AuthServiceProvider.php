@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\User;
+use App\Token;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,14 +34,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['auth']->viaRequest('api', function ($request) {
             $authorization = $request->header("Authorization");
             $token = substr($authorization, 7);
-            if(!$token || substr_count($token, ".") !== 2) return null;
+            if(!$token) return null;
 
-            [$headerRaw, $payloadRaw, $signature] = explode(".", $token);
-            $payload = json_decode(base64_decode($payloadRaw));
-            $header = json_decode(base64_decode($headerRaw));
-
-            $user = User::find($payload->user);
-            if(!$user || hash("sha256", $headerRaw.$payloadRaw.$user->salt) !== $signature) return null;
+            $token = Token::find($token);
+            if(!$token || $token->expire < date("Y-m-d H:i:s") ||
+                !($user = User::find($token->user))) return null;
 
             return $user;
         });

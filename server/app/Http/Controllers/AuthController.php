@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Token;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -18,24 +19,45 @@ class AuthController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $header = base64_encode(json_encode([
-            "encryption" => "sha256",
-        ]));
-        $payload = base64_encode(json_encode([
-            "user" => $user->id,
-        ]));
-        $secret = hash("sha256", $header.$payload.$user->salt);
+        $tokenLen = 255;
+        do {
+            $token = $this->randomString(255);
+        } while(Token::find($token));
 
-        return ["data" => ["token" => "$header.$payload.$secret"]];
+        $expire = date_create(date("Y-m-d H:i:s"));
+        date_add($expire, date_interval_create_from_date_string("7 days"));
+
+        $tokenModel = new Token();
+        $tokenModel->token = $token;
+        $tokenModel->user = $user->id;
+        $tokenModel->expire = date_format($expire, "Y-m-d H:i:s");
+        $tokenModel->save();
+
+        $this->deleteOldTokens();
+
+        return ["data" => ["token" => $token]];
     }
 
     public function me(Request $request)
     {
-        [,$payload,] = explode(".", substr($request->header("Authorization"), 7));
-        return ["data" => json_decode(base64_decode($payload))];
+        return ["data" => $request->user()];
     }
 
     public function unauthorizedResponse() {
         return response(["errors" => [["title" => "Invalid credentials."]]]);
+    }
+
+    public function randomString($len) {
+        $characters = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+        $ret = "";
+        for($i=0; $i < $len; $i++) {
+            $index = rand(0, strlen($characters)-1);
+            $ret .= substr($characters, $index, 1);
+        }
+        return $ret;
+    }
+
+    public function deleteOldTokens() {
+        Token::where("expire", "<", date("Y-m-d H:i:s"))->delete();
     }
 }
