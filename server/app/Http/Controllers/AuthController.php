@@ -44,7 +44,7 @@ class AuthController extends Controller
     }
 
     public function unauthorizedResponse() {
-        return response(["errors" => [["title" => "Invalid credentials."]]]);
+        return response(["errors" => [["title" => "Invalid credentials."]]], 401);
     }
 
     public function randomString($len) {

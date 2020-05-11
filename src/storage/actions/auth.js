@@ -4,10 +4,31 @@ import { getToken, setToken, deleteToken } from "../session";
 
 export function login(user, pswd) {
   const creator = async function(dispatch) {
-    const config = {
-      headers: { "Authorization": `Basic ${user}:${pswd}` }
+    try {
+      const { REACT_APP_BACKEND } = process.env;
+      const config = {
+        headers: { "Authorization": `Basic ${user}:${pswd}` }
+      }
+      const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
+      const { errors } = response.data;
+
+      if(!errors) {
+        const token = response.data.data.token;
+        setToken(token);
+        dispatch({ type: "SET_AUTH", token });
+      }
+      else {
+        dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
+      }
     }
-    await attemptLogin(dispatch, config);
+    catch(e) {
+      let error = e.message;
+      if(e.response) {
+        const { status } = e.response;
+        error = status;
+      }
+      dispatch({ type: "ERROR", store: "auth", error });
+    }
   }
 
   return makeAction(creator, "auth", "SET_AUTH_CREDENTIALS");
@@ -15,11 +36,31 @@ export function login(user, pswd) {
 
 export function tokenAuth() {
   const creator = async function(dispatch) {
-    const token = getToken();
-    const config = {
-      headers: { "Authorization": `Bearer ${token}` },
-    };
-    await attemptLogin(dispatch, config);
+    try {
+      const { REACT_APP_BACKEND } = process.env;
+      const token = getToken();
+      const config = {
+        headers: { "Authorization": `Bearer ${token}` },
+      };
+      const response = await axios.get(`${REACT_APP_BACKEND}/auth/me`, config);
+      const { errors } = response.data;
+
+      if(!errors) {
+        setToken(token);
+        dispatch({ type: "SET_AUTH", token });
+      }
+      else {
+        dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
+      }
+    }
+    catch(e) {
+      let error = e.message;
+      if(e.response) {
+        const { status } = e.response;
+        error = status;
+      }
+      dispatch({ type: "ERROR", store: "auth", error });
+    }
   }
 
   if(!getToken()) {
@@ -28,14 +69,14 @@ export function tokenAuth() {
   return protectFunction(makeAction(creator, "auth", "SET_AUTH_INIT"));
 }
 
-async function attemptLogin(dispatch, config) {
+async function attemptLogin(dispatch, config, usingToken=false) {
   try {
     const { REACT_APP_BACKEND } = process.env;
-    const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
+    const response = await axios.get(`${REACT_APP_BACKEND}/auth${usingToken ? "/me" : ""}`, config);
     const { errors } = response.data;
 
     if(!errors) {
-      const token = response.data.data.token
+      const token = response.data.data.token;
       setToken(token);
       dispatch({ type: "SET_AUTH", token });
     }
