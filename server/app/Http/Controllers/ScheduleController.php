@@ -21,11 +21,15 @@ class ScheduleController extends Controller
 
         $schedule = null;
         if($account !== null) {
-            $schedule = Schedule::where("account", "=", $account)->get();
+            $schedule = Schedule::where("account", "=", $account);
         }
         else {
             $schedule = Schedule::all();
         }
+        if($request->query("onlyScheduled")) {
+            $schedule = $schedule->where("date", ">", date("Y-m-d H:i:s"));
+        }
+        $schedule = $schedule->get();
 
         foreach ($schedule as $s) {
             $s["post"] = Post::find($s["post"]);
@@ -60,7 +64,7 @@ class ScheduleController extends Controller
         $schedule->date = request("date");
         $schedule->save();
 
-        return response(["data" => $post], 201)->header("Location", "/schedule/{$schedule->id}");
+        return response(["data" => $schedule], 201)->header("Location", "/schedule/{$schedule->id}");
     }
 
     /**
