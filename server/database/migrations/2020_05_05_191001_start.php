@@ -89,6 +89,16 @@ class Start extends Migration
             $table->primary("token");
             $table->foreign("user")->references("id")->on("users");
         });
+
+        Schema::create("ignored", function(Blueprint $table)) {
+            $table->unsignedBigInteger("user");
+            $table->string("level");
+            $table->integer("ignored");
+
+            $table->primary(["user", "level"]);
+            $table->foreign("user")->references("id")->on("users");
+            $table->foreign("level")->references("level")->on("levels");
+        }
     }
 
     /**

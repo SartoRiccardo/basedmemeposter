@@ -16,4 +16,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
         "salt",
     ];
+
+    public function ignored()
+    {
+        return $this->hasMany("App\Ignored", "user");
+    }
 }

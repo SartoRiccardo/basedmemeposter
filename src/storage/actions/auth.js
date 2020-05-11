@@ -48,6 +48,9 @@ export function tokenAuth() {
       if(!errors) {
         setToken(token);
         dispatch({ type: "SET_AUTH", token });
+        for(const ignored of response.data.data.ignored) {
+          dispatch({ type: "IGNORE_LOGS", level: ignored.level, amount: ignored.ignored });
+        }
       }
       else {
         dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
@@ -67,31 +70,6 @@ export function tokenAuth() {
     return { type: "SET_AUTH", anonymous: true };
   }
   return protectFunction(makeAction(creator, "auth", "SET_AUTH_INIT"));
-}
-
-async function attemptLogin(dispatch, config, usingToken=false) {
-  try {
-    const { REACT_APP_BACKEND } = process.env;
-    const response = await axios.get(`${REACT_APP_BACKEND}/auth${usingToken ? "/me" : ""}`, config);
-    const { errors } = response.data;
-
-    if(!errors) {
-      const token = response.data.data.token;
-      setToken(token);
-      dispatch({ type: "SET_AUTH", token });
-    }
-    else {
-      dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
-    }
-  }
-  catch(e) {
-    let error = e.message;
-    if(e.response) {
-      const { status } = e.response;
-      error = status;
-    }
-    dispatch({ type: "ERROR", store: "auth", error });
-  }
 }
 
 export function logout() {

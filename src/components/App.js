@@ -3,7 +3,7 @@ import { Route, BrowserRouter, Switch } from "react-router-dom";
 import { getToken } from "../storage/session";
 // HOCs and actions
 import { connect } from "react-redux";
-import { fetchLogs, initIgnoredLogs } from "../storage/actions/log";
+import { fetchLogs } from "../storage/actions/log";
 import { fetchAccounts } from "../storage/actions/account";
 import { tokenAuth } from "../storage/actions/auth";
 // Custom components
@@ -68,10 +68,9 @@ class App extends React.Component {
   }
 
   loadNecessary = () => {
-    const { initLogs, initAccounts, initIgnoredLogs } = this.props;
+    const { initLogs, initAccounts } = this.props;
     initLogs();
     initAccounts();
-    initIgnoredLogs();
   }
 
   areNecessaryLoaded = () => {
@@ -154,7 +153,6 @@ function mapDispatchToProps(dispatch) {
   return {
     initLogs: () => dispatch(fetchLogs()),
     initAccounts: () => dispatch(fetchAccounts()),
-    initIgnoredLogs: () => dispatch(initIgnoredLogs()),
     initAuth: () => dispatch(tokenAuth()),
   };
 }

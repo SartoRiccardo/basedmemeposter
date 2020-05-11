@@ -35,12 +35,16 @@ class AuthController extends Controller
 
         $this->deleteOldTokens();
 
-        return ["data" => ["token" => $token]];
+        $user->token = $token;
+        $user->ignored;
+        return ["data" => $user];
     }
 
     public function me(Request $request)
     {
-        return ["data" => $request->user()];
+        $user = $request->user();
+        $user->ignored;
+        return ["data" => $user];
     }
 
     public function unauthorizedResponse() {
