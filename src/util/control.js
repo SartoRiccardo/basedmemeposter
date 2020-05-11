@@ -12,24 +12,6 @@ export function callIfSuccessful(response, callback, onFail=null) {
   }
 }
 
-export function carryOrFail(callback, store) {
-  return async function() {
-    try {
-      await callback.apply(this, arguments);
-    }
-    catch(e) {
-      const [ dispatch ] = arguments;
-      const { response, message } = e;
-      if(response && response.data.errors) {
-        dispatch({ type: "ERROR", store, error: response.data.errors[0].title });
-      }
-      else {
-        dispatch({ type: "ERROR", store, error: message });
-      }
-    }
-  }
-}
-
 export function protectFunction(callback) {
   return function() {
     if(!getToken()) {
@@ -53,8 +35,22 @@ export function makeAction(callback, store, futureAction, extraParams=null) {
     for(let i = 1; i < arguments.length; i++) {
       newArguments.push(arguments[i])
     }
-    await callback.apply(this, newArguments);
-    dispatch({ type:"END_ACTION", store, id });
+
+    try {
+      await callback.apply(this, newArguments);
+    }
+    catch(e) {
+      const { response, message } = e;
+      if(response && response.data.errors) {
+        dispatch({ type: "ERROR", store, error: response.data.errors[0].title, id });
+      }
+      else {
+        dispatch({ type: "ERROR", store, error: message, id });
+      }
+    }
+    finally {
+      dispatch({ type:"END_ACTION", store, id });
+    }
   }
 }
 

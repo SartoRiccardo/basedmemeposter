@@ -17,12 +17,7 @@ export function fetchAccounts() {
     }
   }
 
-  return protectFunction(
-    carryOrFail(
-      makeAction(creator, "account", "SET_ACCOUNTS"),
-      "account"
-      )
-    );
+  return protectFunction(makeAction(creator, "account", "SET_ACCOUNTS"), "account");
 }
 
 export function fetchAccountAvatar(id, username) {
@@ -55,12 +50,7 @@ export function addAccount(account) {
     fetchAccountAvatar(newAccountId, account.username)(dispatch);
   }
 
-  return protectFunction(
-    carryOrFail(
-      makeAction(creator, "account", "ADD_ACCOUNT"),
-      "account"
-    )
-  );
+  return protectFunction(makeAction(creator, "account", "ADD_ACCOUNT"), "account");
 }
 
 export function updateAccount(accountId, account, passwordHasChanged) {
@@ -86,10 +76,5 @@ export function updateAccount(accountId, account, passwordHasChanged) {
       fetchAccountAvatar(account.id, account.username)(dispatch);
   }
 
-  return protectFunction(
-    carryOrFail(
-      makeAction(creator, "account", "UPDATE_ACCOUNT"),
-      "account"
-    )
-  );
+  return protectFunction(makeAction(creator, "account", "UPDATE_ACCOUNT"), "account");
 }
