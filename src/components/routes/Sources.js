@@ -41,11 +41,12 @@ class Sources extends React.Component {
   }
 
   render() {
-    const { sources, status } = this.props;
+    let { sources, status } = this.props;
 
     let sourceUi = [];
     if(status.initialized) {
       let sourcesByPlatform = {};
+      sources = sources.sort((a, b) => b.platform.localeCompare(a.platform));
       for(const source of sources) {
         if(sourcesByPlatform[source.platform]) {
           sourcesByPlatform[source.platform] = [

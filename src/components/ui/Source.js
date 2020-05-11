@@ -55,7 +55,7 @@ class Source extends React.Component {
 
   changeName = evt => {
     if(evt.target.value.includes(" ")) return;
-    this.setState({ newName: evt.target.value.toUpperCase() });
+    this.setState({ newName: evt.target.value });
   }
 
   submit = evt => {

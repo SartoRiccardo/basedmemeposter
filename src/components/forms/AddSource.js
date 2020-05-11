@@ -25,7 +25,7 @@ class AddSource extends React.Component {
 
   changeName = evt => {
     if(evt.target.value.includes(" ")) return;
-    this.setState({ name: evt.target.value.toUpperCase() });
+    this.setState({ name: evt.target.value });
   }
 
   render() {

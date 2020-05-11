@@ -33,7 +33,7 @@ class SourceController extends Controller
                 "platform" => "required|exists:platforms,name",
             ]);
         }
-        catch(ValidatorException $exception) {
+        catch(ValidationException $exception) {
             return $this->validationErrorResponse($exception);
         }
 
@@ -77,7 +77,7 @@ class SourceController extends Controller
                 "platform" => "required|exists:platforms,name",
             ]);
         }
-        catch(ValidatorException $exception) {
+        catch(ValidationException $exception) {
             return $this->validationErrorResponse($exception);
         }
 

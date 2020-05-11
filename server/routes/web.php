@@ -29,8 +29,8 @@ $router->group(["middleware" => "auth"], function() use ($router) {
     Resource($router, "posts", "PostController");
     $router->get("/posts/{platform}/{post}", "PostController@showByOtherId");
     Resource($router, "schedule", "ScheduleController", true);
-    Resource($router, "logs", "LogController");
     $router->put("/logs/ignore", "LogController@ignore");
+    Resource($router, "logs", "LogController");
     Resource($router, "captions", "CaptionController");
     Resource($router, "sources", "SourceController");
     $router->get("/auth/me", "AuthController@me");
