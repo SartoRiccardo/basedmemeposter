@@ -32,6 +32,7 @@ class LogController extends Controller
                         $query->orWhere("level", "=", $level);
                     }
                 })
+                ->orderBy("date", "DESC")
                 ->paginate(100);
 
         $levels = ["debug", "info", "warning", "error", "critical"];
