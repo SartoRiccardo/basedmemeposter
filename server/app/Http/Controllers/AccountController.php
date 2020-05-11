@@ -86,7 +86,6 @@ class AccountController extends Controller
           $usernameUnique = $usernameUnchanged ? "" : "unique:accounts|";
           $this->validate($request, [
             "username" => "required|{$usernameUnique}max:30",
-            "password" => "required",
             "startTime" => "required|date_format:H:i:s",
             "endTime" => "required|date_format:H:i:s",
           ]);
@@ -96,7 +95,9 @@ class AccountController extends Controller
         }
 
         $account->username = request("username");
-        $account->password = request("password");
+        if(request("password")) {
+            $account->password = request("password");
+        }
         $account->startTime = request("startTime");
         $account->endTime = request("endTime");
         $account = $account->makeVisible(["password"]);
