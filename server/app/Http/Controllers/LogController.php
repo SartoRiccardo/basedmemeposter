@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Log;
 use App\Account;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LogController extends Controller
 {

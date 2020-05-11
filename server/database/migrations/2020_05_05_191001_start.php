@@ -18,7 +18,7 @@ class Start extends Migration
             $table->string("username", 30)->unique();
             $table->text("password");
             $table->time("startTime");
-            $table->time("finishTime");
+            $table->time("endTime");
         });
 
         Schema::create("platforms", function(Blueprint $table) {

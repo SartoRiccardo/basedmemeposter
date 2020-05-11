@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Caption;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class CaptionController extends Controller
 {
@@ -14,7 +15,7 @@ class CaptionController extends Controller
      */
     public function index()
     {
-        return Caption::paginate(60);
+        return ["data" => Caption::paginate(60)];
     }
 
     /**
