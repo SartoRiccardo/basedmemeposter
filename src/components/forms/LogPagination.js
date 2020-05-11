@@ -24,8 +24,9 @@ class LogPagination extends React.Component {
 
   render() {
     const { page, log, status, className } = this.props;
-    const logsPerPage = 5;
-    const totalPages = Math.floor(log.filtered/logsPerPage);
+    const totalPages = log.filtered && Math.floor(log.filtered/log.perPage);
+
+    if(totalPages <= 1) return null;
 
     let isSearching = false;
     for(const action of status.log.actions) {
@@ -56,7 +57,7 @@ class LogPagination extends React.Component {
     }
 
     const pages = [];
-    for(let i = 0; i*logsPerPage < log.filtered; i++) {
+    for(let i = 0; i*log.perPage < log.filtered; i++) {
       const pageNum = i+1;
 
       let visibleClass = "";

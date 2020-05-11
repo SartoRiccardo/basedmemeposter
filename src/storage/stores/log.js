@@ -24,6 +24,7 @@ const init = {
   lastLoad: null,
   filtered: 0,
   logs: [],
+  perPage: 1,
 };
 
 function logReducer(state=init, action) {
@@ -35,6 +36,7 @@ function logReducer(state=init, action) {
         count: action.count,
         filtered: action.filtered,
         logs: action.logs,
+        perPage: action.perPage,
       };
 
     case "RESET_LOGS":

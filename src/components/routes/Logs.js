@@ -19,6 +19,11 @@ class Logs extends React.Component {
     document.title = `Logs - ${process.env.REACT_APP_TITLE}`;
   }
 
+  componentDidMount() {
+    const { fetchLogs } = this.props;
+    fetchLogs(this.parseQueryParams(this.state.urlParams));
+  }
+
   componentDidUpdate() {
     const { history, fetchLogs } = this.props;
     const { urlParams } = this.state;

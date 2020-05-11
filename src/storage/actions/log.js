@@ -20,8 +20,9 @@ export function fetchLogs(params=null) {
       dispatch({
         type: "SET_LOGS",
         count: data.data.level_count,
-        filtered: 100,
+        filtered: data.data.total,
         logs: data.data.data,
+        perPage: data.data.per_page,
       });
     }
   }
