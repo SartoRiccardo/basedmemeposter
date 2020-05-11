@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getToken } from "../session";
-import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
+import { protectFunction, makeAction } from "../../util/control";
 
 export function loadScheduleFor(account) {
   const creator = async function(dispatch) {
@@ -27,7 +27,7 @@ export function cancelScheduledPost(id) {
     const config = {
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.delete(`${REACT_APP_BACKEND}/schedule/${id}`, config);
+    await axios.delete(`${REACT_APP_BACKEND}/schedule/${id}`, config);
 
     dispatch({ type: "DELETE_SCHEDULED_POST", postId: id });
   }

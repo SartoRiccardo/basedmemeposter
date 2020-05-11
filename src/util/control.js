@@ -1,16 +1,4 @@
-// eslint-disable-next-line
 import { getToken } from "../storage/session";
-
-export function callIfSuccessful(response, callback, onFail=null) {
-  const { status, data } = response;
-
-  if(200 <= status && status < 300) {
-    callback();
-  }
-  else if(onFail) {
-    onFail(data.errors || null);
-  }
-}
 
 export function protectFunction(callback) {
   return function() {

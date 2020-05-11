@@ -1,8 +1,6 @@
 import axios from "axios";
 import { getToken } from "../session";
-import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
-
-const dummySources = [{name:"lordcoola", platform:"instagram"},{name:"salad.snake", platform:"instagram"},{name:"nightmarepetrol", platform:"twitter"},{name:"apandahVEVO", platform:"twitter"},{name:"lilshpee", platform:"twitter"},{name:"pewdiepiesubmissions", platform:"reddit"},{name:"chonkers", platform:"reddit"},].map((obj, id)=>({id,...obj}));
+import { protectFunction, makeAction } from "../../util/control";
 
 export function fetchSources() {
   const creator = async function(dispatch) {
@@ -24,7 +22,7 @@ export function deleteSource(id) {
     const config = {
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.delete(`${REACT_APP_BACKEND}/sources/${id}`, config);
+    await axios.delete(`${REACT_APP_BACKEND}/sources/${id}`, config);
 
     dispatch({ type: "DELETE_SOURCE", source: id });
   }
@@ -39,7 +37,7 @@ export function updateSource(source) {
     const config = {
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.put(`${REACT_APP_BACKEND}/sources/${source.id}`, source, config);
+    await axios.put(`${REACT_APP_BACKEND}/sources/${source.id}`, source, config);
 
     dispatch({ type: "UPDATE_SOURCE", source });
   }

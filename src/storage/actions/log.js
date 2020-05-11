@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getToken } from "../session";
-import { callIfSuccessful, protectFunction, makeAction } from "../../util/control";
+import { protectFunction, makeAction } from "../../util/control";
 
 /**
  * Requests logs with the specific parameter.
@@ -37,7 +37,7 @@ export function ignoreLogs(level, amount) {
       params: { level, amount },
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.put(`${REACT_APP_BACKEND}/logs/ignore`, null, config);
+    await axios.put(`${REACT_APP_BACKEND}/logs/ignore`, null, config);
 
     dispatch({ type: "IGNORE_LOGS", level, amount });
   }

@@ -30,7 +30,7 @@ export function deleteCaption(id) {
     const config = {
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.delete(`${REACT_APP_BACKEND}/captions/${id}`, config);
+    await axios.delete(`${REACT_APP_BACKEND}/captions/${id}`, config);
     dispatch({ type: "DELETE_CAPTION", caption: id });
   }
 
@@ -44,7 +44,7 @@ export function changeCaption(caption) {
     const config = {
       headers: { "Authorization": `Bearer ${getToken()}` },
     };
-    const response = await axios.put(`${REACT_APP_BACKEND}/captions/${caption.id}`, caption, config);
+    await axios.put(`${REACT_APP_BACKEND}/captions/${caption.id}`, caption, config);
 
     dispatch({ type: "CHANGE_CAPTION", caption });
   }

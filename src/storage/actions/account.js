@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getToken } from "../session";
-import { carryOrFail, protectFunction, makeAction } from "../../util/control";
+import { protectFunction, makeAction } from "../../util/control";
 import { getUserAvatar } from "../../util/instagram";
 import JSEncrypt from "jsencrypt";
 
@@ -66,7 +66,7 @@ export function updateAccount(accountId, account, passwordHasChanged) {
       }
 
       const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
-      const response = await axios.put(`${REACT_APP_BACKEND}/accounts/${accountId}`, account, config);
+      await axios.put(`${REACT_APP_BACKEND}/accounts/${accountId}`, account, config);
 
       if(account.password) {
         delete account.password;
