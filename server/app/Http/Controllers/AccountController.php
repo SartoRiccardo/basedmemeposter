@@ -32,7 +32,7 @@ class AccountController extends Controller
             "username" => "required|unique:accounts|max:30",
             "password" => "required",
             "startTime" => "required|date_format:H:i:s",
-            "finishTime" => "required|date_format:H:i:s",
+            "endTime" => "required|date_format:H:i:s",
           ]);
         }
         catch(ValidationException $exception) {
@@ -43,7 +43,7 @@ class AccountController extends Controller
         $account->username = request("username");
         $account->password = request("password");
         $account->startTime = request("startTime");
-        $account->finishTime = request("finishTime");
+        $account->endTime = request("endTime");
         $account = $account->makeVisible(["password"]);
         $account->save();
 
@@ -88,7 +88,7 @@ class AccountController extends Controller
             "username" => "required|{$usernameUnique}max:30",
             "password" => "required",
             "startTime" => "required|date_format:H:i:s",
-            "finishTime" => "required|date_format:H:i:s",
+            "endTime" => "required|date_format:H:i:s",
           ]);
         }
         catch(ValidationException $exception) {
@@ -98,7 +98,7 @@ class AccountController extends Controller
         $account->username = request("username");
         $account->password = request("password");
         $account->startTime = request("startTime");
-        $account->finishTime = request("finishTime");
+        $account->endTime = request("endTime");
         $account = $account->makeVisible(["password"]);
         $account->save();
 
