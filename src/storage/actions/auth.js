@@ -2,8 +2,6 @@ import axios from "axios";
 import { protectFunction, makeAction } from "../../util/control";
 import { getToken, setToken, deleteToken } from "../session";
 
-const dummyToken = "AEOFHAEOHFOAEFOGFAEGU";
-
 export function login(user, pswd) {
   const creator = async function(dispatch) {
     const config = {
@@ -32,19 +30,17 @@ export function tokenAuth() {
 
 async function attemptLogin(dispatch, config) {
   try {
-    // const { REACT_APP_BACKEND } = process.env;
-    // const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
+    const { REACT_APP_BACKEND } = process.env;
+    const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
+    const { errors } = response.data;
 
-    // Simulate a request
-    const response = await axios.get("http://localhost:3000");
-    const { error } = response.data;
-
-    if(!error) {
-      setToken(dummyToken);
-      dispatch({ type: "SET_AUTH", token: dummyToken });
+    if(!errors) {
+      const token = response.data.data.token
+      setToken(token);
+      dispatch({ type: "SET_AUTH", token });
     }
     else {
-      dispatch({ type: "ERROR", store: "auth", error: error.title });
+      dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
     }
   }
   catch(e) {
