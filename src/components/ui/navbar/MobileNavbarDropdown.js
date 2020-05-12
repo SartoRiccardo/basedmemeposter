@@ -35,7 +35,7 @@ class MobileNavbarDropdown extends React.Component {
     return (
       <div>
         <div className="mobile-navbar navbar-collapse-header" onClick={this.toggleCollapse}>
-          <a href="#">
+          <a href="# ">
             {title}
             <span className="float-right mr-4">
               <MDBIcon icon={this.state.open ? "caret-up" : "caret-down"} />
