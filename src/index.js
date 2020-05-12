@@ -11,7 +11,8 @@ import { Provider } from "react-redux";
 import rootReducer from "./storage/stores/root";
 import thunk from "redux-thunk";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = (process.env.NODE_ENV === "development" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
+    || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render((
@@ -20,4 +21,4 @@ ReactDOM.render((
     </Provider>
   ),
   document.getElementById("root"));
-serviceWorker.unregister();
+serviceWorker.register();

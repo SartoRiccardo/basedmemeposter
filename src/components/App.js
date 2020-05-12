@@ -134,7 +134,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.REACT_APP_HOME}>
         {this.generateBody()}
       </BrowserRouter>
     );
