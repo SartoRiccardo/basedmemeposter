@@ -22,7 +22,7 @@ class Captions extends React.Component {
     this.reloadTimeout = null;
     this.reloadTime = 5;
     this.state = {
-      timesReloaded: 0,
+      // timesReloaded: 0,
       newCaption: "",
     }
   }
@@ -42,15 +42,15 @@ class Captions extends React.Component {
       this.reloadTimeout = setTimeout(
         () => {
           fetchCaptions(currentPage);
-          this.setState(state => ({ timesReloaded: state.timesReloaded+1 }));
+          // this.setState(state => ({ timesReloaded: state.timesReloaded+1 }));
         },
-        this.reloadTime * this.state.timesReloaded * 1000
+        this.reloadTime * 1000
       );
     }
 
-    if(!isLoading && page === currentPage && status.initialized && this.state.timesReloaded > 0) {
-      this.setState({ timesReloaded: 0 });
-    }
+    // if(!isLoading && page === currentPage && status.initialized && this.state.timesReloaded > 0) {
+    //   this.setState({ timesReloaded: 0 });
+    // }
 
     if(location.search !== prevProps.location.search) {
       document.title = this.titleTemplate.replace(":pageNumber", currentPage);
