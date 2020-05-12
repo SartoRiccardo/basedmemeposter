@@ -3,6 +3,9 @@ import { withRouter, Link } from "react-router-dom";
 import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
     MDBNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
     MDBDropdownItem, MDBNavLink, MDBCollapse, MDBNavbarToggler } from "mdbreact";
+import MobileNavbar from "./navbar/MobileNavbar";
+import MobileNavbarLink from "./navbar/MobileNavbarLink";
+import MobileNavbarTitle from "./navbar/MobileNavbarTitle";
 // HOCs and actions
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -32,7 +35,6 @@ class Navbar extends React.Component {
   }
 
   render() {
-
     const { accounts } = this.props.account;
     const { open } = this.state;
 
@@ -53,7 +55,7 @@ class Navbar extends React.Component {
 
         <MDBNavbarToggler onClick={this.toggleCollapse} />
 
-        <MDBCollapse isOpen={open} navbar>
+        <MDBCollapse navbar>
           <MDBNavbarNav left>
             <MDBNavItem>
               <MDBNavLink to="/">Dashboard</MDBNavLink>
@@ -96,6 +98,17 @@ class Navbar extends React.Component {
             </MDBNavItem>
           </MDBNavbarNav>
         </MDBCollapse>
+
+        <MobileNavbar open={open} onClose={this.toggleCollapse}>
+          <MobileNavbarTitle>
+            <MDBIcon className="mr-2" fab icon="instagram" />
+            {process.env.REACT_APP_TITLE}
+          </MobileNavbarTitle>
+
+          <MobileNavbarLink to="/">Dashboard</MobileNavbarLink>
+          <MobileNavbarLink to="/captions">Captions</MobileNavbarLink>
+          <MobileNavbarLink to="/sources">Sources</MobileNavbarLink>
+        </MobileNavbar>
       </MDBNavbar>
     );
   }

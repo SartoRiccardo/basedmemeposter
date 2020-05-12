@@ -1,0 +1,70 @@
+.mobile-navbar.navbar-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 33%;
+  z-index: 9999;
+  transform: translateX(-110%);
+  transition: transform 500ms;
+}
+
+.mobile-navbar.backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 500ms;
+  display: none;
+}
+
+.mobile-navbar a {
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+  font-size: 1.7rem;
+  padding: 0 0.5rem 0 1.5rem;
+}
+
+.mobile-navbar a.active {
+  color: white;
+}
+
+.mobile-navbar.navbar-title a {
+  color: white;
+  display: block;
+  font-size: 2rem;
+  padding: 1rem 0.5rem 0 0.5rem;
+}
+
+.mobile-navbar.navbar-link::after, .mobile-navbar.navbar-title::after {
+  content: "";
+  padding-top: 1px;
+  background-color: white;
+  opacity: 0.8;
+  width: 100%;
+  display: block;
+  margin: 0.5rem auto 0.5rem auto;
+  width: 95%;
+}
+
+.mobile-navbar.navbar-title::after {
+  margin: 0.75rem auto 2rem auto;
+}
+
+.mobile-navbar.navbar-container.active {
+  transform: none;
+  transition: transform 500ms;
+}
+
+.mobile-navbar.backdrop.active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.mobile-navbar.backdrop.navbar-visible {
+  display: block;
+}
