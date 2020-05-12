@@ -8,11 +8,10 @@ class AddSource extends React.Component {
   constructor(props) {
     super(props);
 
-    this.initialState = {
+    this.state = {
       platform: Object.keys(platformData)[0],
       name: "",
-    }
-    this.state = { ...this.initialState };
+    };
   }
 
   submit = evt => {
@@ -20,7 +19,7 @@ class AddSource extends React.Component {
     const { addSource } = this.props;
 
     addSource({ ...this.state });
-    this.setState({ ...this.initialState })
+    this.setState({ name: "" })
   }
 
   changeName = evt => {
@@ -38,10 +37,11 @@ class AddSource extends React.Component {
     const buttons = Object.entries(platformData).map(([ platform ]) => {
       const label = <p className="lead mt-2">{platformData[platform].icon}</p>;
       return platform !== "default" && (
-        <MDBInput className="no-glow" gap type="radio" containerClass="px-4"
-            label={label} checked={this.state.platform === platform}
-            onClick={() => this.setState({ platform })}
-            key={platform} disabled={isDisabled} />
+        <div className="d-inline-block mx-3">
+          <input className="no-glow mr-2" type="radio" checked={this.state.platform === platform}
+              key={platform} disabled={isDisabled} onChange={() => this.setState({ platform })}/>
+          <div className="d-inline-block">{label}</div>
+        </div>
       );
     })
 
