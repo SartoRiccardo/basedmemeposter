@@ -16,6 +16,9 @@ export function login(user, pswd) {
         const token = response.data.data.token;
         setToken(token);
         dispatch({ type: "SET_AUTH", token });
+        for(const ignored of response.data.data.ignored) {
+          dispatch({ type: "IGNORE_LOGS", level: ignored.level, amount: ignored.ignored });
+        }
       }
       else {
         dispatch({ type: "ERROR", store: "auth", error: errors[0].title });
