@@ -6,6 +6,7 @@ import { MDBIcon, MDBNavbar, MDBNavbarBrand, MDBNavbarNav,
 import MobileNavbar from "./navbar/MobileNavbar";
 import MobileNavbarLink from "./navbar/MobileNavbarLink";
 import MobileNavbarTitle from "./navbar/MobileNavbarTitle";
+import MobileNavbarDropdown from "./navbar/MobileNavbarDropdown";
 // HOCs and actions
 import { compose } from "redux";
 import { connect } from "react-redux";
@@ -100,7 +101,7 @@ class Navbar extends React.Component {
         </MDBCollapse>
 
         <MobileNavbar open={open} onClose={this.toggleCollapse}>
-          <MobileNavbarTitle>
+          <MobileNavbarTitle to="/">
             <MDBIcon className="mr-2" fab icon="instagram" />
             {process.env.REACT_APP_TITLE}
           </MobileNavbarTitle>
@@ -108,6 +109,17 @@ class Navbar extends React.Component {
           <MobileNavbarLink to="/">Dashboard</MobileNavbarLink>
           <MobileNavbarLink to="/captions">Captions</MobileNavbarLink>
           <MobileNavbarLink to="/sources">Sources</MobileNavbarLink>
+          <MobileNavbarDropdown>
+            <MobileNavbarTitle>Accounts</MobileNavbarTitle>
+            {
+              accounts.map(({ id, username }) =>
+                <MobileNavbarLink to={`/accounts/${id}`} key={id}>
+                  {username}
+                </MobileNavbarLink>
+              )
+            }
+          </MobileNavbarDropdown>
+          <MobileNavbarLink to="#" onClick={this.performLogout}>Logout</MobileNavbarLink>
         </MobileNavbar>
       </MDBNavbar>
     );

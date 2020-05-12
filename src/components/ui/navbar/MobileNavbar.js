@@ -1,5 +1,4 @@
 import React from "react";
-import MobileNavbarLink from "./MobileNavbarLink";
 import "../../../styles/MobileNavbar.css";
 
 class MobileNavbar extends React.Component {
@@ -11,7 +10,6 @@ class MobileNavbar extends React.Component {
       visible: false,
       displayed: false,
     };
-    console.log(props.children);
   }
 
   onClose = () => {
@@ -46,10 +44,7 @@ class MobileNavbar extends React.Component {
     const { children, open } = this.props;
 
     let newChildren = children.map((child, i) => {
-      if(child.type === MobileNavbarLink) {
-        return React.cloneElement(child, { onClose: this.onClose, key: i });
-      }
-      return child;
+      return React.cloneElement(child, { onClose: this.onClose, key: i });
     });
 
     let backdropClass = "";
@@ -63,7 +58,7 @@ class MobileNavbar extends React.Component {
     return (
       <React.Fragment>
         <div className={`mobile-navbar backdrop ${backdropClass}`} onClick={this.onClose} />
-        <div className={`mobile-navbar navbar-container purple darken-1 ${open ? "active" : ""}`}>
+        <div className={`mobile-navbar navbar-container purple darken-2 ${open ? "active" : ""}`}>
           {newChildren}
         </div>
       </React.Fragment>

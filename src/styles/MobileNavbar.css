@@ -40,12 +40,12 @@
   padding: 1rem 0.5rem 0 0.5rem;
 }
 
-.mobile-navbar.navbar-link::after, .mobile-navbar.navbar-title::after {
+.mobile-navbar.navbar-link::after, .mobile-navbar.navbar-title::after,
+.mobile-navbar.navbar-collapse-header::after {
   content: "";
   padding-top: 1px;
   background-color: white;
   opacity: 0.8;
-  width: 100%;
   display: block;
   margin: 0.5rem auto 0.5rem auto;
   width: 95%;
@@ -67,4 +67,8 @@
 
 .mobile-navbar.backdrop.navbar-visible {
   display: block;
+}
+
+.mobile-navbar.collapse-link::after {
+margin: 0.25rem auto;
 }
