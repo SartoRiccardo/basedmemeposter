@@ -21,7 +21,14 @@ class MobileNavbarDropdown extends React.Component {
 
     const links = React.Children.toArray(children)
         .filter(child => child.type === MobileNavbarLink)
-        .map(link => React.cloneElement(link, { className: (link.props.className || "") + " collapse-link" }));
+        .map(link => {
+          const className = (link.props.className || "") + " collapse-link";
+          const newClickEvent = evt => {
+            if(link.props.onClick) link.props.onClick(evt);
+            if(onClose) onClose();
+          }
+          return React.cloneElement(link, { className, onClick: newClickEvent });
+        });
 
     const titles = React.Children.toArray(children).filter(child => child.type === MobileNavbarTitle);
     const title = (titles && titles[0].props.children) || null;

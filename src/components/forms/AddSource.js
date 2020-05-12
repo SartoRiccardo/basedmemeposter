@@ -37,13 +37,13 @@ class AddSource extends React.Component {
     const buttons = Object.entries(platformData).map(([ platform ]) => {
       const label = <p className="lead mt-2">{platformData[platform].icon}</p>;
       return platform !== "default" && (
-        <div className="d-inline-block mx-3">
+        <div className="d-inline-block mx-3" key={platform}>
           <input className="no-glow mr-2" type="radio" checked={this.state.platform === platform}
-              key={platform} disabled={isDisabled} onChange={() => this.setState({ platform })}/>
+              disabled={isDisabled} onChange={() => this.setState({ platform })}/>
           <div className="d-inline-block">{label}</div>
         </div>
       );
-    })
+    });
 
     return (
       <form onSubmit={this.submit}>
