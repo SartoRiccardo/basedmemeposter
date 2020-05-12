@@ -49,6 +49,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        $response = [
+          "errors" => [[
+            "title" => "Internal Server Error.",
+            "detail" => "Looks like something is wrong on our end. Please contact an administrator.",
+          ]],
+        ];
+        return response($response, 500);
+        // return parent::render($request, $exception);
     }
 }
