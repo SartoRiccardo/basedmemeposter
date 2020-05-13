@@ -7,7 +7,7 @@ function run() {
 
     /* Global workbox */
     if(!workbox) return;
-    workbox.setConfig({ debug: process.env.NODE_ENV === "development" });
+    workbox.setConfig({ debug: false });
 
     /* Injection point for manifest files. */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
