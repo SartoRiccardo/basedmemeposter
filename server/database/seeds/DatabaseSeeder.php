@@ -12,6 +12,5 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call("PlatformSeeder");
-        @$this->call("DefaultSeeder");
     }
 }

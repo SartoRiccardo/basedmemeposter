@@ -44,7 +44,15 @@ function accountReducer(state=init, action) {
           stateAccount => stateAccount.id === action.account.id
               ? action.account : stateAccount
         ),
-      }
+      };
+
+    case "DELETE_ACCOUNT":
+      return {
+        ...state,
+        accounts: state.accounts.filter(
+          ({ id }) => id !== action.accountId
+        ),
+      };
 
     default:
       return state;

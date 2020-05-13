@@ -17,15 +17,19 @@ function SingleLog(props) {
 
   const dateText = moment(date).fromNow();
 
+  const username = account ? (
+    <Link to={`/accounts/${account.id}`} className="black-text">
+      <u>{account.username}</u>
+    </Link>
+  ) : "<DELETED>";
+
   return (
     <div className={`${background} rounded-lg mt-1 px-3 py-1 clearfix`}>
       <div className="d-block d-md-inline-block text-left">
         <MDBIcon icon={icon} className={`mr-2 ${color}-text`} fixed />
 
         <span className="text-uppercase mr-3">
-          <Link to={`/accounts/${account.id}`} className="black-text">
-            <u>{account.username}</u>
-          </Link>
+          {username}
         </span>
 
         <span className="d-inline-block d-md-none float-right">

@@ -1,8 +1,10 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn,
+    MDBModalHeader, MDBModal, MDBModalBody } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 import { loadScheduleFor } from "../../storage/actions/schedule";
+import { deleteAccount } from "../../storage/actions/account";
 // Custom components
 import Avatar from "../ui/account/Avatar";
 import AvatarPlaceholder from "../ui/placeholders/AvatarPlaceholder";
@@ -10,11 +12,15 @@ import AccountTimeOnline from "../ui/account/AccountTimeOnline";
 import ScheduledPost from "../ui/account/ScheduledPost";
 import AccountSchedulePlaceholder from "../ui/placeholders/AccountSchedulePlaceholder";
 import AccountTimePlaceholder from "../ui/placeholders/AccountTimePlaceholder";
+import InfiniteLoadingBar from "../ui/InfiniteLoadingBar";
 
 class AccountDetails extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      deleting: false,
+    }
     this.titleTemplate = `:accountName - ${process.env.REACT_APP_TITLE}`;
     this.setDocumentTitle();
   }
@@ -24,8 +30,15 @@ class AccountDetails extends React.Component {
   }
 
   componentDidUpdate() {
+    const { match } = this.props;
+    const { account } = this.props.schedule;
+
     this.reloadScheduleIfNecessary();
     this.setDocumentTitle();
+
+    if(this.state.deleting && account !== parseInt(match.params.id)) {
+      this.setState({ deleting: false });
+    }
   }
 
   setDocumentTitle = () => {
@@ -61,6 +74,14 @@ class AccountDetails extends React.Component {
     }
   }
 
+  openDeleteModal = () => {
+    this.setState({ deleting: true });
+  }
+
+  closeDeleteModal = () => {
+    this.setState({ deleting: false });
+  }
+
   render() {
     const { history, match, status } = this.props;
     const { accounts } = this.props.account;
@@ -94,7 +115,7 @@ class AccountDetails extends React.Component {
     });
 
     const breakpoint = "sm";
-    let accountHeader, accountActivity;
+    let accountHeader, accountActivity, deleteModal;
     if(matchingAccount) {
       const { id, username, avatar, startTime, endTime } = matchingAccount;
       const logsLink = `/logs?accounts=${id}`;
@@ -150,12 +171,45 @@ class AccountDetails extends React.Component {
               >
                 Edit
               </MDBBtn>
+
+              <MDBBtn
+                outline
+                color="red darken-2"
+                size="sm"
+                className="z-depth-1"
+                onClick={this.openDeleteModal}
+              >
+                Delete
+              </MDBBtn>
             </MDBCol>
           </MDBRow>
         </React.Fragment>
       );
+
       accountActivity = (
         <AccountTimeOnline startTime={startTime} endTime={endTime} />
+      );
+
+      deleteModal = (
+        <MDBModal isOpen={this.state.deleting} toggle={this.closeDeleteModal} centered size="md">
+          <MDBModalHeader className="d-flex justify-content-center">
+            Do you want to delete the account <b>{username}</b>?
+          </MDBModalHeader>
+          <MDBModalBody>
+            {
+              status.account.actions.some(({ type }) => type === "DELETE_ACCOUNT")
+              && <InfiniteLoadingBar color="red" className="mb-2" />
+            }
+            <MDBBtn className="float-left" outline color="blue-grey"
+                onClick={this.closeDeleteModal}>
+              Cancel
+            </MDBBtn>
+            <MDBBtn className="float-right" color="red"
+                onClick={() => this.props.deleteAccount(id)}>
+              Delete
+            </MDBBtn>
+          </MDBModalBody>
+        </MDBModal>
       );
     }
     else {
@@ -206,6 +260,8 @@ class AccountDetails extends React.Component {
             <AccountSchedulePlaceholder display={6} />
           }
         </MDBRow>
+
+        {deleteModal}
       </MDBContainer>
     );
   }
@@ -223,6 +279,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadScheduleFor: (user) => dispatch(loadScheduleFor(user)),
     resetSchedule: () => dispatch({ type: "RESET_SCHEDULES" }),
+    deleteAccount: id => dispatch(deleteAccount(id)),
   };
 }
 

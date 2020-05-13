@@ -94,7 +94,7 @@ class ScheduledPost extends React.Component {
     const deleteModal = (
       <MDBModal isOpen={deleting} toggle={this.closeDeleteModal} centered size="sm">
         <MDBModalHeader className="d-flex justify-content-center">
-          Eliminare il post?
+          Delete post?
         </MDBModalHeader>
         <MDBModalBody>
           {
@@ -104,11 +104,11 @@ class ScheduledPost extends React.Component {
           }
           <MDBBtn className="float-left" outline color="blue-grey"
               onClick={this.closeDeleteModal}>
-            Annulla
+            Cancel
           </MDBBtn>
           <MDBBtn className="float-right" color="red"
               onClick={this.confirmDeletion}>
-            Elimina
+            Delete
           </MDBBtn>
         </MDBModalBody>
       </MDBModal>

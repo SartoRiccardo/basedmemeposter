@@ -17,7 +17,7 @@ export function fetchAccounts() {
     }
   }
 
-  return protectFunction(makeAction(creator, "account", "SET_ACCOUNTS"), "account");
+  return protectFunction(makeAction(creator, "account", "SET_ACCOUNTS"));
 }
 
 export function fetchAccountAvatar(id, username) {
@@ -50,7 +50,7 @@ export function addAccount(account) {
     fetchAccountAvatar(newAccountId, account.username)(dispatch);
   }
 
-  return protectFunction(makeAction(creator, "account", "ADD_ACCOUNT"), "account");
+  return protectFunction(makeAction(creator, "account", "ADD_ACCOUNT"));
 }
 
 export function updateAccount(accountId, account, passwordHasChanged) {
@@ -76,5 +76,19 @@ export function updateAccount(accountId, account, passwordHasChanged) {
       fetchAccountAvatar(account.id, account.username)(dispatch);
   }
 
-  return protectFunction(makeAction(creator, "account", "UPDATE_ACCOUNT"), "account");
+  return protectFunction(makeAction(creator, "account", "UPDATE_ACCOUNT"));
+}
+
+export function deleteAccount(accountId) {
+  const creator = async dispatch => {
+      const { REACT_APP_BACKEND } = process.env;
+
+      const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
+      await axios.delete(`${REACT_APP_BACKEND}/accounts/${accountId}`, config);
+
+      dispatch({ type: "DELETE_ACCOUNT", accountId });
+  }
+
+  const extraParams = { accountId };
+  return protectFunction(makeAction(creator, "account", "DELETE_ACCOUNT", extraParams));
 }

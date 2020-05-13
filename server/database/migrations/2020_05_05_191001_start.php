@@ -36,7 +36,7 @@ class Start extends Migration
             $table->text("thumbnail");
 
             $table->unique(["platform", "originalId"]);
-            $table->foreign("platform")->references("name")->on("platforms");
+            $table->foreign("platform")->references("name")->on("platforms")->onDelete("cascade");
         });
 
         Schema::create("schedule", function(Blueprint $table) {
@@ -46,8 +46,8 @@ class Start extends Migration
             $table->unsignedBigInteger("post");
 
             $table->unique(["account", "post"]);
-            $table->foreign("account")->references("id")->on("accounts");
-            $table->foreign("post")->references("id")->on("posts");
+            $table->foreign("account")->references("id")->on("accounts")->onDelete("cascade");
+            $table->foreign("post")->references("id")->on("posts")->onDelete("cascade");
         });
 
         Schema::create("captions", function(Blueprint $table) {
@@ -61,17 +61,17 @@ class Start extends Migration
             $table->string("platform", 16);
 
             $table->unique(["name", "platform"]);
-            $table->foreign("platform")->references("name")->on("platforms");
+            $table->foreign("platform")->references("name")->on("platforms")->onDelete("cascade");
         });
 
         Schema::create("logs", function(Blueprint $table) {
             $table->id();
             $table->dateTime("date")->default(date("Y-m-d H:i:s"));
             $table->string("level", 16);
-            $table->unsignedBigInteger("account");
+            $table->unsignedBigInteger("account")->nullable();
             $table->text("message");
 
-            $table->foreign("account")->references("id")->on("accounts");
+            $table->foreign("account")->references("id")->on("accounts")->onDelete("set null");
         });
 
         Schema::create("users", function(Blueprint $table) {
@@ -87,18 +87,17 @@ class Start extends Migration
             $table->dateTime("expire");
 
             $table->primary("token");
-            $table->foreign("user")->references("id")->on("users");
+            $table->foreign("user")->references("id")->on("users")->onDelete("cascade");
         });
 
-        Schema::create("ignored", function(Blueprint $table)) {
+        Schema::create("ignored", function(Blueprint $table) {
             $table->unsignedBigInteger("user");
             $table->string("level");
             $table->integer("ignored");
 
             $table->primary(["user", "level"]);
-            $table->foreign("user")->references("id")->on("users");
-            $table->foreign("level")->references("level")->on("levels");
-        }
+            $table->foreign("user")->references("id")->on("accounts")->onDelete("cascade");
+        });
     }
 
     /**
