@@ -1,6 +1,6 @@
 # Project Charter
 
-+ **Project Title:** Based Meme Poster
++ **Project Title:** Mastermemed
 + **Project Manager:** Riccardo Sartori
 + **Project Start:** 08 Mar 2020
 
@@ -20,13 +20,13 @@ The each account will post a meme after a certain amount of time for approximate
 
 ## Schedule Information
 
-| Date        | Deliverable        | Completed         |
-| ----------- | ------------------ | ----------------- |
-| Mar 08 2020 | Project Start      | Mar 08 2020       |
-| Mar 10 2020 | Database Structure | Mar 09 2020 (-1d) |
-| Mar 13 2020 | Backend            | Mar 20 2020 (+7d) |
-| Mar 20 2020 | Frontend           |                   |
-| Mar 26 2020 | Bot                |                   |
+| End Date    | Deliverable        | Completed          |
+| ----------- | ------------------ | ------------------ |
+| Mar 08 2020 | Project Start      | Mar 08 2020        |
+| Mar 10 2020 | Database Structure | Mar 09 2020 (-1d)  |
+| Mar 13 2020 | Backend            | May 11 2020 (+59d) |
+| Mar 20 2020 | Frontend           | May 13 2020 (+54d) |
+| Mar 26 2020 | Bot                |                    |
 
 ## Risks
 
@@ -36,4 +36,4 @@ Any other API necessary being unaccessible could pose a problem for this project
 
 ## Budget
 
-A €4/mo budget will be invested in this project to purchase hosting for the application.
+A €4/mo budget will be invested in this project to purchase hosting for the application. Additionally, a subfolder on my private website will be reserved for this application.
