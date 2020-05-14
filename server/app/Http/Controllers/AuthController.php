@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function index(Request $request)
     {
-        $auth = substr($request->header("Authorization"), 6);
+        $auth = substr($request->header("X-Authorization"), 6);
         if(substr_count($auth, ":") < 1) return $this->unauthorizedResponse();
         [$username, $password] = explode(":", $auth);
 

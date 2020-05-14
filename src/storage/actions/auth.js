@@ -7,7 +7,7 @@ export function login(user, pswd) {
     try {
       const { REACT_APP_BACKEND } = process.env;
       const config = {
-        headers: { "Authorization": `Basic ${user}:${pswd}` }
+        headers: { "X-Authorization": `Basic ${user}:${pswd}` }
       }
       const response = await axios.get(`${REACT_APP_BACKEND}/auth`, config);
       const { errors } = response.data;
@@ -43,7 +43,7 @@ export function tokenAuth() {
       const { REACT_APP_BACKEND } = process.env;
       const token = getToken();
       const config = {
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: { "X-Authorization": `Bearer ${token}` },
       };
       const response = await axios.get(`${REACT_APP_BACKEND}/auth/me`, config);
       const { errors } = response.data;

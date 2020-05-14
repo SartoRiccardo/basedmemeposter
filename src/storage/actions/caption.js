@@ -7,7 +7,7 @@ export function fetchCaptions(page) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
       params: { page },
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     const { data } = await axios.get(`${REACT_APP_BACKEND}/captions`, config);
 
@@ -28,7 +28,7 @@ export function deleteCaption(id) {
   const creator = async dispatch => {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.delete(`${REACT_APP_BACKEND}/captions/${id}`, config);
     dispatch({ type: "DELETE_CAPTION", caption: id });
@@ -42,7 +42,7 @@ export function changeCaption(caption) {
   const creator = async dispatch => {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.put(`${REACT_APP_BACKEND}/captions/${caption.id}`, caption, config);
 
@@ -57,7 +57,7 @@ export function addCaption(caption) {
   const creator = async dispatch => {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     const response = await axios.post(`${REACT_APP_BACKEND}/captions`, caption, config);
 

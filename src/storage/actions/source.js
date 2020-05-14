@@ -6,7 +6,7 @@ export function fetchSources() {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     const response = await axios.get(`${REACT_APP_BACKEND}/sources`, config);
 
@@ -20,7 +20,7 @@ export function deleteSource(id) {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.delete(`${REACT_APP_BACKEND}/sources/${id}`, config);
 
@@ -35,7 +35,7 @@ export function updateSource(source) {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.put(`${REACT_APP_BACKEND}/sources/${source.id}`, source, config);
 
@@ -50,7 +50,7 @@ export function addSource(source) {
   const creator = async dispatch => {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     const response = await axios.post(`${REACT_APP_BACKEND}/sources`, source, config);
 

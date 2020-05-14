@@ -11,7 +11,7 @@ export function fetchLogs(params=null) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
       params: params || {},
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
 
     const { data } = await axios.get(`${REACT_APP_BACKEND}/logs`, config);
@@ -35,7 +35,7 @@ export function ignoreLogs(level, amount) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
       params: { level, amount },
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.put(`${REACT_APP_BACKEND}/logs/ignore`, null, config);
 

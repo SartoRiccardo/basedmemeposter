@@ -7,7 +7,7 @@ import JSEncrypt from "jsencrypt";
 export function fetchAccounts() {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND } = process.env;
-    const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
+    const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };
     const response = await axios.get(`${REACT_APP_BACKEND}/accounts`, config);
 
     const accounts = response.data.data;
@@ -40,7 +40,7 @@ export function addAccount(account) {
     encryptor.setPublicKey(REACT_APP_PUBLIC_KEY);
     account.password = encryptor.encrypt(account.password);
 
-    const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
+    const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };
     const response = await axios.post(`${REACT_APP_BACKEND}/accounts`, account, config);
 
     const newAccountId = response.data.data.id;
@@ -65,7 +65,7 @@ export function updateAccount(accountId, account, passwordHasChanged) {
         account.password = encryptor.encrypt(account.password);
       }
 
-      const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
+      const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };
       await axios.put(`${REACT_APP_BACKEND}/accounts/${accountId}`, account, config);
 
       if(account.password) {
@@ -83,7 +83,7 @@ export function deleteAccount(accountId) {
   const creator = async dispatch => {
       const { REACT_APP_BACKEND } = process.env;
 
-      const config = { headers: { "Authorization": `Bearer ${getToken()}` } };
+      const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };
       await axios.delete(`${REACT_APP_BACKEND}/accounts/${accountId}`, config);
 
       dispatch({ type: "DELETE_ACCOUNT", accountId });

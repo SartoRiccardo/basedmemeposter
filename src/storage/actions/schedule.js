@@ -7,7 +7,7 @@ export function loadScheduleFor(account) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
       params: { account, onlyScheduled: true },
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     const response = await axios.get(`${REACT_APP_BACKEND}/schedule`, config);
 
@@ -25,7 +25,7 @@ export function cancelScheduledPost(id) {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND } = process.env;
     const config = {
-      headers: { "Authorization": `Bearer ${getToken()}` },
+      headers: { "X-Authorization": `Bearer ${getToken()}` },
     };
     await axios.delete(`${REACT_APP_BACKEND}/schedule/${id}`, config);
 
