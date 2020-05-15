@@ -1,4 +1,6 @@
 import React from "react";
+import Logo from "../../img/Logo";
+import "../../styles/BrandLogo.css";
 
 class BrandLogo extends React.Component {
   constructor(props) {
@@ -24,13 +26,17 @@ class BrandLogo extends React.Component {
   render() {
     const { lowConnection } = this.state;
 
-    const lowConnectionMessage = lowConnection ? (
-      <p className="white-text">Could not retrieve data</p>
-    ) : null;
-
     return (
       <div className="h-100 purple darken-4">
-        {lowConnectionMessage}
+        <div className="vertical-center horizontal-center">
+          <Logo className={`w-75 h-75 ${lowConnection ? "faded" : ""}`} />
+
+          <h2 className={`low-connection-msg ${lowConnection ? "active" : ""}`}>
+            <span className="text-uppercase">Slow internet?</span>
+            <br />
+            Communicating with the server...
+          </h2>
+        </div>
       </div>
     );
   }

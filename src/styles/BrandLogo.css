@@ -1,0 +1,26 @@
+
+.logo {
+  width: 100%;
+  height: 100%;
+}
+
+.faded {
+  opacity: 0.25;
+  transition: opacity 500ms;
+}
+
+.low-connection-msg {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  color: white;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+.low-connection-msg.active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
