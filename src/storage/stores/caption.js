@@ -25,6 +25,7 @@ function captionReducer(state=init, action) {
     case "DELETE_CAPTION":
       return {
         ...state,
+        count: state.count - 1,
         captions: state.captions.filter(
           caption => caption.id !== action.caption
         ),
@@ -33,7 +34,9 @@ function captionReducer(state=init, action) {
     case "ADD_CAPTION":
       return {
         ...state,
-        captions: [ ...state.captions, action.caption ],
+        count: state.count + 1,
+        captions: state.captions.length >= state.perPage ?
+            [ ...state.captions, action.caption ] : state.captions,
       };
 
     case "CHANGE_CAPTION":
