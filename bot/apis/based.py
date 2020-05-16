@@ -6,7 +6,7 @@ import json
 
 
 class BasedClient:
-    BASED_URL = config("based", "url")
+    BASED_URL = config("mastermemed", "url")
 
     def __init__(self, client_id):
         """
@@ -22,7 +22,7 @@ class BasedClient:
             "GET", url,
             fields=params,
             headers={
-                "Authorization": f"Bearer {self.client_id}"
+                "X-Authorization": f"Bearer {self.client_id}"
             }
         )
 
@@ -31,7 +31,7 @@ class BasedClient:
             "POST", f"{BasedClient.BASED_URL}{endpoint}",
             body=data,
             headers={
-                "Authorization": f"Bearer {self.client_id}",
+                "X-Authorization": f"Bearer {self.client_id}",
                 "Content-Type": "application/json",
             },
         )
