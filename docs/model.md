@@ -1,18 +1,42 @@
+## Account
 
-# Post
++ **id:** `int`
++ **username:** `string`
++ **password:** `string` The password is encoded with an RSA Public Key
++ **startTime:** `time`
++ **endTime:** `time`
 
-| Field | Description |
-| ----- | ----------- |
-| id | The post's ID |
-| original_id | The post's ID in its original platform |
-| platform | The post's original platform |
-| date_added | The date the post was added to the Database |
+## Captions
 
-# Schedule
++ **id:** `int`
++ **text:** `string`
 
-| Field | Description |
-| ----- | ----------- |
-| id | The schedule's ID |
-| user | The user's ID |
-| post | The post's ID |
-| post_date | The time the post will be posted |
+## Ignored
+
++ **user:** `User(id)`
++ **level:** `string`
++ **ignored:** `int`
+
+## Logs
+
++ **id:** `int`
++ **date:** `datetime`
++ **level:** `string`
++ **account:** `Account(id)`
++ **message:** `text`
+
+## Posts
+
++ **id:** `int`
++ **platform:** `string`
++ **originalId:** `string`
++ **dateAdded:** `date`
++ **originalLink:** `string` The direct link to the image/video
++ **thumbnail:** `string` A link to an image representing the post
+
+## Schedule
+
++ **id:** `int`
++ **date:** `datetime`
++ **account:** `Account(id)`
++ **post:** `Post(id)`
