@@ -59,7 +59,7 @@ class LogController extends Controller
         try {
             $this->validate($request, [
                 "level" => "required|in:debug,info,log,warning,error,critical",
-                "account" => "integer|required|exists:accounts,id",
+                "account" => "integer|exists:accounts,id",
                 "message" => "string|required",
             ]);
         }
@@ -69,7 +69,7 @@ class LogController extends Controller
 
         $log = new Log();
         $log->level = request("level");
-        $log->account = request("account");
+        if(request("account")) $log->account = request("account");
         $log->message = request("message");
         $log->save();
 

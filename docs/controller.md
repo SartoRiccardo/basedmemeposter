@@ -126,7 +126,7 @@ The `id` param must be a valid [`Log`](./model.md) ID.
 
 ### Request
 
-A valid [`Log`](./model.md) JSON object in the request body, except for the date.
+A valid [`Log`](./model.md) JSON object in the request body, except for the date. The **user** key is also optional.
 
 ### Responses
 
