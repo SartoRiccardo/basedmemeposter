@@ -84,16 +84,6 @@ def upload_posts(posts):
         uploader.join()
 
 
-def waitfor(seconds):
-    thread = threads.Waiter(datetime.datetime.now() + datetime.timedelta(seconds=seconds))
-    thread.start()
-    thread.join()
-
-
-def start_posting(accounts, stop_at):
-    pass
-
-
 def main():
     global mastermemed_client
 
@@ -101,20 +91,24 @@ def main():
 
     while True:
         posts = gather_posts()
-        for p in posts:
-            mastermemed_client.addPost(p)
+        upload_posts(posts)
 
         account_data = mastermemed_client.accounts()
         accounts = []
         for acct in account_data:
             accounts.append(
-                account.Account(acct.username, acct.password)
+                account.Account(
+                    acct.username,
+                    acct.password,
+                    acct.start_time,
+                    acct.end_time
+                )
             )
 
         for acct in accounts:
             acct.start()
 
-        # waitfor(60 * 60 * 24)
+        # threads.waitfor(60 * 60 * 24)
 
         for acct in accounts:
             acct.stopPosting()
@@ -125,9 +119,6 @@ def othermain():
     global mastermemed_client
 
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
-
-    posts = gather_posts()
-    upload_posts(posts)
 
 
 if __name__ == '__main__':

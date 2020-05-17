@@ -26,3 +26,9 @@ class PostUploader(Thread):
         for p in self.posts:
             print(f"[{self.name}] Uploading a post")
             self.mastermemed_client.addPost(p)
+
+
+def waitfor(seconds):
+    thread = Waiter(datetime.datetime.now() + datetime.timedelta(seconds=seconds))
+    thread.start()
+    thread.join()
