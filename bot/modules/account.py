@@ -37,3 +37,6 @@ class Account(Thread):
         response.release_conn()
 
         return random_file_name
+
+    def stopPosting(self):
+        pass

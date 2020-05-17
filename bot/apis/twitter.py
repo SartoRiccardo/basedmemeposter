@@ -1,5 +1,5 @@
 from config import config
-import apis.based
+import apis.mastermemed
 
 import twitter
 
@@ -8,7 +8,7 @@ def userImageStatuses(user):
     """
     Gets all image non-reply elegible tweets from an user.
     :param user: str: A Twitter username
-    :return: BasedPost[]: A list of elegible posts
+    :return: mastermemed.Post[]: A list of elegible posts
     """
     api = twitter.Api(
         consumer_key=config("twitter", "consumer-key"),
@@ -36,7 +36,7 @@ def userImageStatuses(user):
                     ratio = photo.sizes[size]["w"] / photo.sizes[size]["h"]
 
             if ratio and min_ratio < ratio < max_ratio:
-                ret.append(apis.based.BasedPost(
-                    "twitter", s.id_str, original_url, photo.media_url_https
+                ret.append(apis.mastermemed.Post(
+                    "twitter", s.id_str, original_url, photo.media_url_https, photo.media_url_https
                 ))
     return ret

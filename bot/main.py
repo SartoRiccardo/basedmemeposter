@@ -1,31 +1,50 @@
 import urllib3
 import datetime
+from twitter.error import TwitterError
 # Own modules
 from modules import account, waiter
-from apis import based, imgur, reddit, twitter, instagram
+from apis import mastermemed, imgur, reddit, twitter, instagram
 from config import config
 import time
-# Cryptography
-from base64 import b64decode
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_v1_5
-from Crypto import Random
 # Debug
 import pprint
 
 
-PRIVATE_KEY = config("mastermemed", "private-key")
-
-
-def decrypt(encrypted):
-    key = RSA.importKey(PRIVATE_KEY)
-    sentinel = Random.new().read(256)
-    cipher = PKCS1_v1_5.new(key)
-    return cipher.decrypt(b64decode(encrypted), sentinel).decode("utf-8")
+mastermemed_client = None
 
 
 def gather_posts():
-    return []
+    all_sources = mastermemed_client.sources()
+    sources = {}
+    for source in all_sources:
+        if source.platform in sources:
+            sources[source.platform].append(source.name)
+        else:
+            sources[source.platform] = [source.name]
+
+    posts = []
+
+    posts += imgur.topGalleries()
+
+    print("Gathering reddit sources...")
+    if "reddit" in sources:
+        for subreddit in sources["reddit"]:
+            posts += reddit.topSubImagePosts(subreddit)
+
+    print("Gathering twitter sources...")
+    if "twitter" in sources:
+        for user in sources["twitter"]:
+            try:
+                posts += twitter.userImageStatuses(user)
+            except TwitterError:
+                print(f"There was a problem gathering {user}'s posts.")
+
+    print("Gathering instagram sources...")
+    if "instagram" in sources:
+        for user in sources["instagram"]:
+            posts += instagram.getPostsFromUser(user)
+
+    return posts
 
 
 def waitfor(seconds):
@@ -39,17 +58,21 @@ def start_posting(accounts, stop_at):
 
 
 def main():
-    pool = urllib3.PoolManager()
+    global mastermemed_client
 
-    account_credentials = config("instagram", "accounts")
-    accounts = [account.Account(
-        cred["username"], cred["password"], pool
-    ) for cred in account_credentials]
+    mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
 
     while True:
         posts = gather_posts()
         for p in posts:
-            pass  # send_posts(posts)
+            mastermemed_client.addPost(p)
+
+        account_data = mastermemed_client.accounts()
+        accounts = []
+        for acct in account_data:
+            accounts.append(
+                account.Account(acct.username, acct.password)
+            )
 
         for acct in accounts:
             acct.start()
@@ -57,14 +80,17 @@ def main():
         # waitfor(60 * 60 * 24)
 
         for acct in accounts:
-            acct.stop_posting()
+            acct.stopPosting()
             acct.join()
 
 
 def othermain():
-    pswd = "loRkQqnEPQRb3ScqNHCjacopsgm7ZG8Q1qvHKKVCxBhY9qOM0rN2nom18+2Bf1ACdnoPEDNHezJyXCdINrZFneW5JgvpUDjW5Kodan+sWVeGn3GpINVBrIOO6zZyRVWiTiuBE8cgkCKXLUfXUxpV6XUUexnCJGo+30+paRbN/HE="
+    global mastermemed_client
 
-    assert decrypt(pswd) == "changed1234"
+    mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
+
+    posts = gather_posts()
+    [mastermemed_client.addPost(p) for p in posts]
 
 
 if __name__ == '__main__':

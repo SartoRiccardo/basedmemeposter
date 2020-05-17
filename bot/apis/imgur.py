@@ -1,5 +1,5 @@
 from config import config
-import apis.based
+import apis.mastermemed
 import urllib3
 import json
 
@@ -136,7 +136,7 @@ client = ImgurClient(config("imgur", "client-id"))
 def topGalleries():
     """
     Fetches the top Instagram-postable Imgur galleries.
-    :return: BasedPost[]: A list of elegible posts.
+    :return: mastermemed.Post[]: A list of elegible posts.
     """
     response = client.get("/gallery/top")
     galleries = json.loads(response.data)["data"]
@@ -154,14 +154,14 @@ def topGalleries():
         if gallery.is_album and gallery.images_count == 1:
             img = gallery.images[0]
             if img.type in allowed_formats and min_ratio <= img.width/img.height <= max_ratio:
-                post = apis.based.BasedPost(
-                    "imgur", gallery.id, gallery.link, img.link
+                post = apis.mastermemed.Post(
+                    "imgur", gallery.id, gallery.link, img.link, img.link
                 )
 
         elif not gallery.is_album and min_ratio <= gallery.width / gallery.height <= max_ratio and \
                 gallery.type in allowed_formats:
-            post = apis.based.BasedPost(
-                "imgur", gallery.id, f"https://imgur.com/gallery/{gallery.id}", gallery.link
+            post = apis.mastermemed.Post(
+                "imgur", gallery.id, f"https://imgur.com/gallery/{gallery.id}", gallery.link, gallery.link
             )
 
         if post:

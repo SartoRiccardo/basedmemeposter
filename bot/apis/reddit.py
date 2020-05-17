@@ -1,5 +1,5 @@
 from config import config
-import apis.based
+import apis.mastermemed
 
 import praw
 
@@ -8,7 +8,7 @@ def topSubImagePosts(sub):
     """
     Fetches a subreddit's top Instagram-postable submissions.
     :param sub: str: The name of the subreddit.
-    :return: BasedPost[]: A list of elegible posts.
+    :return: mastermemed.Post[]: A list of elegible posts.
     """
     reddit = praw.Reddit(
         client_id=config("reddit", "client-id"),
@@ -26,8 +26,8 @@ def topSubImagePosts(sub):
                 not s.over_18:
             source = s.preview["images"][0]["source"]
             if min_ratio <= source["width"]/source["height"] <= max_ratio:
-                post = apis.based.BasedPost(
-                    "reddit", s.id, f"https://reddit.com{s.permalink}", s.url
+                post = apis.mastermemed.Post(
+                    "reddit", s.id, f"https://reddit.com{s.permalink}", s.url, s.url
                 )
                 ret.append(post)
     return ret

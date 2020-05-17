@@ -1,4 +1,4 @@
-import apis.based
+import apis.mastermemed
 
 import urllib3
 import json
@@ -8,7 +8,7 @@ def getPostsFromUser(user):
     """
     Gets an account's post using Instagram's public API.
     :param user: str: An Instagram username.
-    :return: BasedPost[]: A list of elegible posts.
+    :return: mastermemed.Post[]: A list of elegible posts.
     """
     url = f"https://www.instagram.com/{user}/?__a=1"
 
@@ -24,8 +24,12 @@ def getPostsFromUser(user):
     ret = []
     for p in posts:
         if p["__typename"] == "GraphImage":
-            ret.append(apis.based.BasedPost(
-                "instagram", p["id"], f"https://instagram.com/p/{p['shortcode']}", p["display_url"]
+            ret.append(apis.mastermemed.Post(
+                "instagram",
+                p["id"],
+                f"https://instagram.com/p/{p['shortcode']}",
+                p["display_url"],
+                p["display_url"],
             ))
 
     return ret

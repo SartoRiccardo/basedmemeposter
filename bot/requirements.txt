@@ -1,3 +1,4 @@
 praw==6.5.1
 python-twitter==3.5
 urllib3==1.25.8
+pycrypto==2.6.1
