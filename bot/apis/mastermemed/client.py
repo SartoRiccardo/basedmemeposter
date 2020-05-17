@@ -6,6 +6,7 @@ from config import config
 import apis.mastermemed.account
 import apis.mastermemed.post
 import apis.mastermemed.source
+import apis.mastermemed.caption
 
 
 class Client:
@@ -207,3 +208,22 @@ class Client:
         :param account: mastermemed.Account: The account this log references.
         """
         self.addLog("critical", message, account)
+
+    def captionData(self):
+        response = self.__get("/captions")
+        if response.status == 200:
+            return json.loads(response.data.decode())["data"]
+
+    def captions(self, page=1):
+        response = self.__get("/captions", {"page": page})
+        if response.status != 200:
+            return None
+
+        raw_captions = json.loads(response.data.decode())["data"]["data"]
+        captions = []
+        for raw_caption in raw_captions:
+            captions.append(apis.mastermemed.caption.Caption(
+                raw_caption["text"],
+                id=raw_caption["id"],
+            ))
+        return captions

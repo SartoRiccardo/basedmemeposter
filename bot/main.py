@@ -2,6 +2,7 @@ import urllib3
 import datetime
 from twitter.error import TwitterError
 import time
+from random import randint
 import math
 # Own modules
 from modules import account, threads
@@ -84,10 +85,21 @@ def upload_posts(posts):
         uploader.join()
 
 
+def getRandomCaption():
+    data = mastermemed_client.captionData()
+    caption_count, captions_per_page = data["total"], data["per_page"]
+    caption_i = randint(0, caption_count-1)
+    caption_page = math.floor(caption_i/captions_per_page)
+    caption_i -= caption_page*captions_per_page
+
+    return mastermemed_client.captions(page=caption_page)[caption_i].text
+
+
 def main():
     global mastermemed_client
 
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
+    pool = urllib3.PoolManager()
 
     while True:
         posts = gather_posts()
@@ -101,7 +113,9 @@ def main():
                     acct.username,
                     acct.password,
                     acct.start_time,
-                    acct.end_time
+                    acct.end_time,
+                    pool=pool,
+                    getCaptionCallback=getRandomCaption
                 )
             )
 
@@ -119,6 +133,7 @@ def othermain():
     global mastermemed_client
 
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
+    print(getRandomCaption())
 
 
 if __name__ == '__main__':
