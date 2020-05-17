@@ -164,6 +164,16 @@ The `id` param must be a valid [`Post`](./model.md) ID.
 1. The matching post. Status code **200**.
 2. An error saying the post was not found. Status code **404**.
 
+## <span style="color:green">GET</span> /posts/{platform}/{originalId}
+
+The `platform` param must be the platform where the post is from (twitter, instagram, ...).
+The `originalId` is the ID it had in that platform.
+
+### Reponses
+
+1. The matching post. Status code **200**.
+2. An error saying the post was not found. Status code **404**.
+
 ## <span style="color: orange">POST</span> /posts
 
 ### Request

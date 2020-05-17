@@ -45,6 +45,7 @@ class PostController extends Controller
               "platform" => "required|exists:platforms,name",
               "originalId" => "required|max:32",
               "originalLink" => "required|url",
+              "contentUrl" => "required|url",
               "thumbnail" => "required|url",
             ]);
         }
@@ -56,6 +57,7 @@ class PostController extends Controller
         $post->platform = request("platform");
         $post->originalId = request("originalId");
         $post->originalLink = request("originalLink");
+        $post->contentUrl = request("contentUrl");
         $post->thumbnail = request("thumbnail");
         $post->save();
 
@@ -107,6 +109,7 @@ class PostController extends Controller
               "platform" => "required|exists:platforms,name",
               "originalId" => "required|max:32",
               "originalLink" => "required|url",
+              "contentUrl" => "required|url",
               "thumbnail" => "required|url",
             ]);
         }
@@ -117,6 +120,7 @@ class PostController extends Controller
         $post->platform = request("platform");
         $post->originalId = request("originalId");
         $post->originalLink = request("originalLink");
+        $post->contentUrl = request("contentUrl");
         $post->thumbnail = request("thumbnail");
         $post->save();
 
