@@ -1,0 +1,14 @@
+site_name: 'PCTOkay!'
+site_description: 'A bot to automate posting memes on Instagram'
+site_author: 'Riccardo Sartori'
+copyright: '2020 Riccardo Sartori'
+repo_url: 'https://github.com/SartoRiccardo/basedmemeposter'
+
+nav:
+    - 'Project Information': 'project_charter.md'
+    - Documentation:
+        - Model: 'model.md'
+        - Mastermemed API: 'controller.md'
+
+theme:
+    name: readthedocs
