@@ -1,11 +1,12 @@
 import urllib3
 import datetime
 from twitter.error import TwitterError
+import time
+import math
 # Own modules
-from modules import account, waiter
+from modules import account, threads
 from apis import mastermemed, imgur, reddit, twitter, instagram
 from config import config
-import time
 # Debug
 import pprint
 
@@ -24,31 +25,67 @@ def gather_posts():
 
     posts = []
 
-    posts += imgur.topGalleries()
+    mastermemed_client.info(f"Gathering posts from Imgur")
+    try:
+        posts += imgur.topGalleries()
+    except Exception as exc:
+        mastermemed_client.warn(
+            f"Error while gathering posts from Imgur: f{exc}"
+        )
 
-    print("Gathering reddit sources...")
     if "reddit" in sources:
         for subreddit in sources["reddit"]:
-            posts += reddit.topSubImagePosts(subreddit)
+            mastermemed_client.info(f"Gathering posts from \"r/{subreddit}\"")
+            try:
+                posts += reddit.topSubImagePosts(subreddit)
+            except Exception as exc:
+                mastermemed_client.warn(
+                    f"Error while gathering \"r/{subreddit}\": f{exc}"
+                )
 
-    print("Gathering twitter sources...")
     if "twitter" in sources:
         for user in sources["twitter"]:
+            mastermemed_client.info(f"Gathering posts from \"{user}\" (twitter)")
             try:
                 posts += twitter.userImageStatuses(user)
-            except TwitterError:
-                print(f"There was a problem gathering {user}'s posts.")
+            except TwitterError as exc:
+                mastermemed_client.warn(
+                    f"Error while gathering \"{user}\" (twitter): f{exc}"
+                )
 
-    print("Gathering instagram sources...")
     if "instagram" in sources:
         for user in sources["instagram"]:
-            posts += instagram.getPostsFromUser(user)
+            mastermemed_client.info(f"Gathering posts from {user} (instagram)")
+            try:
+                posts += instagram.getPostsFromUser(user)
+            except Exception as exc:
+                mastermemed_client.warn(
+                    f"Error while gathering \"{user}\" (instagram): f{exc}"
+                )
 
     return posts
 
 
+def upload_posts(posts):
+    uploaders_count = 10
+    uploaders = [threads.PostUploader(mastermemed_client) for _ in range(uploaders_count)]
+
+    i = 0
+    requests_per_uploader = math.ceil(len(posts)/uploaders_count)
+    for uploader in uploaders:
+        for _ in range(requests_per_uploader):
+            if i >= len(posts):
+                break
+            uploader.addPost(posts[i])
+            i += 1
+        uploader.start()
+
+    for uploader in uploaders:
+        uploader.join()
+
+
 def waitfor(seconds):
-    thread = waiter.Waiter(datetime.datetime.now() + datetime.timedelta(seconds=seconds))
+    thread = threads.Waiter(datetime.datetime.now() + datetime.timedelta(seconds=seconds))
     thread.start()
     thread.join()
 
@@ -90,7 +127,7 @@ def othermain():
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
 
     posts = gather_posts()
-    [mastermemed_client.addPost(p) for p in posts]
+    upload_posts(posts)
 
 
 if __name__ == '__main__':

@@ -1,19 +1,8 @@
 from apis.instagram import scheduler
-import logging
 import platform
 import threading
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-
-
-logger = logging.Logger(__name__)
-
-file_handler = logging.FileHandler("./logs/instagram.log")
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(
-    logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s")
-)
-logger.addHandler(file_handler)
 
 
 class Scraper(threading.Thread):

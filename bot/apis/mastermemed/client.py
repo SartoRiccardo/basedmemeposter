@@ -140,8 +140,6 @@ class Client:
             del data[key]
 
         response = self.__post("/posts", json.dumps(data))
-        if response.status != 201:
-            print(response.data.decode("utf-8"))
         return response.status == 201
 
     def sources(self):
@@ -159,3 +157,53 @@ class Client:
             )
             sources.append(s)
         return sources
+
+    def addLog(self, level, message, account=None):
+        data = {
+            "level": level,
+            "message": message,
+        }
+        if account:
+            data["account"] = account.id
+        response = self.__post("/logs", json.dumps(data))
+        return response == 201
+
+    def debug(self, message, account=None):
+        """
+        Shortcut for addLog("warning", *args, **kwargs)
+        :param message: str: The message to log.
+        :param account: mastermemed.Account: The account this log references.
+        """
+        self.addLog("debug", message, account)
+
+    def info(self, message, account=None):
+        """
+        Shortcut for addLog("info", *args, **kwargs)
+        :param message: str: The message to log.
+        :param account: mastermemed.Account: The account this log references.
+        """
+        self.addLog("info", message, account)
+
+    def warn(self, message, account=None):
+        """
+        Shortcut for addLog("warning", *args, **kwargs)
+        :param message: str: The message to log.
+        :param account: mastermemed.Account: The account this log references.
+        """
+        self.addLog("warning", message, account)
+
+    def error(self, message, account=None):
+        """
+        Shortcut for addLog("error", *args, **kwargs)
+        :param message: str: The message to log.
+        :param account: mastermemed.Account: The account this log references.
+        """
+        self.addLog("error", message, account)
+
+    def critical(self, message, account=None):
+        """
+        Shortcut for addLog("critical", *args, **kwargs)
+        :param message: str: The message to log.
+        :param account: mastermemed.Account: The account this log references.
+        """
+        self.addLog("critical", message, account)
