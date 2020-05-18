@@ -1,7 +1,7 @@
 import urllib3
 import time
 from threading import Thread
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from urllib.parse import urlencode
 # Own modules
@@ -287,7 +287,7 @@ class Client:
                     time.mktime(
                         time.strptime(raw_schedule["date"], "%Y-%m-%d %H:%M:%S")
                     )
-                ),
+                ).replace(tzinfo=timezone.utc),
                 apis.mastermemed.account.Account(
                     account["username"], None,
                     account["startTime"],

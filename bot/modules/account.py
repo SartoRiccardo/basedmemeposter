@@ -1,4 +1,5 @@
 from threading import Thread
+import traceback
 import modules.threads
 import apis.instagram
 from datetime import datetime, timezone
@@ -30,8 +31,10 @@ class Account(Thread):
                 self.checkForPosts()
                 modules.threads.waitfor(randint(60, 120))
             except Exception as exc:
+                error = traceback.format_exc()
                 if self.logger:
-                    self.logger.error(f"While checking for posts: {exc}")
+                    self.logger.error(error)
+                return
 
     def checkForPosts(self):
         now = datetime.now(timezone.utc)
@@ -43,12 +46,11 @@ class Account(Thread):
 
         ids_to_post = [post.id for post in to_post]
         for post in to_post:
-            hashtags = ["#meme", "#memes", "#dankmeme", "#dankmemes"]
             while len(hashtags) < Account.HASHTAG_AMOUNT:
                 i = randint(0, len(Account.HASHTAGS)-1)
                 if i not in hashtags:
                     hashtags.append(i)
-            hashtags = [Account.HASHTAGS[i] for i in hashtags]
+            hashtags = [Account.HASHTAGS[i] for i in hashtags] + ["#meme", "#memes", "#dankmeme", "#dankmemes"]
             caption = self.getCaptionCallback() if self.getCaptionCallback else ""
             caption = caption + Account.CAPTION_END + " ".join(hashtags)
 

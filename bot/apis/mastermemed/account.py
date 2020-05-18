@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 from base64 import b64decode
 from Crypto.PublicKey import RSA
@@ -27,13 +27,13 @@ class Account:
                 time.mktime(
                     time.strptime(start_time, "%H:%M:%S")
                 )
-            )
+            ).replace(tzinfo=timezone.utc)
         self.end_time = end_time if not isinstance(end_time, str) else \
             datetime.fromtimestamp(
                 time.mktime(
                     time.strptime(end_time, "%H:%M:%S")
                 )
-            )
+            ).replace(tzinfo=timezone.utc)
 
     def timeOnline(self):
         if self.start_time > self.end_time:

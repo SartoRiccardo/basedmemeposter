@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from twitter.error import TwitterError
 from random import randint
 import math
+import os
 # Own modules
 from modules import account, threads
 from apis import mastermemed, imgur, reddit, twitter, instagram
@@ -15,6 +16,7 @@ mastermemed_client = None
 
 
 def gatherPosts():
+    mastermemed_client.info("Started gathering posts")
     all_sources = mastermemed_client.sources()
     sources = {}
     for source in all_sources:
@@ -25,7 +27,7 @@ def gatherPosts():
 
     posts = []
 
-    mastermemed_client.debug(f"Gathering posts from Imgur")
+    mastermemed_client.debug("Gathering posts from Imgur")
     try:
         posts += imgur.topGalleries()
     except Exception as exc:
@@ -63,10 +65,12 @@ def gatherPosts():
                     f"Error while gathering \"{user}\" (instagram): f{exc}"
                 )
 
+    mastermemed_client.info("Finished gathering posts")
     return posts
 
 
 def uploadPosts(posts):
+    mastermemed_client.info("Started uploading posts")
     uploaders_count = 10
     uploaders = [threads.PostUploader(mastermemed_client) for _ in range(uploaders_count)]
 
@@ -82,6 +86,8 @@ def uploadPosts(posts):
 
     for uploader in uploaders:
         uploader.join()
+
+    mastermemed_client.info("Finished uploading posts")
 
 
 def getRandomCaption():
@@ -104,6 +110,7 @@ POST_EVERY_NOISE = 0.3
 
 
 def scheduleRandomPosts():
+    mastermemed_client.info("Scheduling posts for the day")
     accounts = mastermemed_client.accounts()
 
     scheduled_posts = {}
@@ -119,7 +126,7 @@ def scheduleRandomPosts():
     per_page, total = post_data.per_page, post_data.total
 
     unused_posts = []
-    current_date = datetime.now(timezone.utc)
+    current_date = datetime.now(timezone.utc) + timedelta(minutes=20)
     for acct in accounts:
         end_timedelta = timedelta(days=1)
         posting_time = copy(current_date)
@@ -153,6 +160,8 @@ def scheduleRandomPosts():
                 )
             )
 
+    mastermemed_client.info("Posts scheduled")
+
 
 def main():
     global mastermemed_client
@@ -161,9 +170,9 @@ def main():
     pool = urllib3.PoolManager()
 
     while True:
-        posts = gatherPosts()
-        uploadPosts(posts)
-        scheduleRandomPosts()
+        # posts = gatherPosts()
+        # uploadPosts(posts)
+        # scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
@@ -191,21 +200,16 @@ def main():
             acct.join()
 
 
-def othermain():
-    global mastermemed_client
-
-    mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
-
-    scheduleRandomPosts()
-
-
 if __name__ == '__main__':
     try:
-        # main()
-        othermain()
+        main()
     except Exception:
         error = traceback.format_exc()
-        log = open("logs/errors.log", "wa")
+
+        if not os.path.exists("logs"):
+            os.mkdir("logs")
+        log = open("logs/errors.log", "a")
         log.write(error)
         log.close()
+
         mastermemed_client.critical(error)
