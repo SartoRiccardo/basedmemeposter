@@ -33,7 +33,7 @@ class Scraper(threading.Thread):
         },
     }
 
-    def __init__(self, user, pswd, image, caption, lang):
+    def __init__(self, user, pswd, image, caption, lang="eng"):
         super().__init__()
 
         self.lang = lang
@@ -51,6 +51,11 @@ class Scraper(threading.Thread):
             executable_path=chromedriver,
             options=mobile
         )
+
+        self.logger = None
+
+    def setLogger(self, logger):
+        self.logger = logger
 
     def run(self):
         actions = [
@@ -78,7 +83,11 @@ class Scraper(threading.Thread):
             login_button = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             login_button.click()
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could find the Log In button")
+            if self.logger:
+                self.logger.error("Could find the Log In button")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def login(self):
         try:
@@ -86,74 +95,118 @@ class Scraper(threading.Thread):
             password_input = self.driver.find_element_by_xpath("//input[@name='password']")
             password_input.send_keys(self.pswd)
             password_input.submit()
-            logger.info(f"[{self.user}] Logged in")
+            if self.logger:
+                self.logger.debug("Logged in")
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could not log in")
+            if self.logger:
+                self.logger.error("Could not log in")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def close_reactivated(self):
         try:
             text = Scraper.BUTTON_TEXT["not_now"][self.lang]
             not_now_btn = self.driver.find_element_by_xpath(f"//a[contains(text(),'{text}')]")
             not_now_btn.click()
-            logger.info(f"[{self.user}] Closed Reactivate popup")
+            if self.logger:
+                self.logger.debug("Closed Reactivate popup")
         except NoSuchElementException:
-            logger.warning(f"[{self.user}] Did not cancel Reactivate popup")
+            if self.logger:
+                self.logger.warning("Did not cancel Reactivate popup")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def close_notification(self):
         try:
             text = Scraper.BUTTON_TEXT["not_now"][self.lang]
             not_now_btn = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             not_now_btn.click()
-            logger.info(f"[{self.user}] Closed Allow Notifications popup")
+            if self.logger:
+                self.logger.debug("Closed Allow Notifications popup")
         except NoSuchElementException:
-            logger.warning(f"[{self.user}] Did not cancel Allow Notifications popup")
+            if self.logger:
+                self.logger.warning("Did not cancel Allow Notifications popup")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def close_add_to_home(self):
         try:
             text = Scraper.BUTTON_TEXT["cancel"][self.lang]
             cancel_btn = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             cancel_btn.click()
-            logger.info(f"[{self.user}] Closed Add to Home popup")
+            if self.logger:
+                self.logger.debug("Closed Add to Home popup")
         except NoSuchElementException:
-            logger.warning(f"[{self.user}] Did not cancel Add to Home popup")
+            if self.logger:
+                self.logger.warning("Did not cancel Add to Home popup")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def open_file_menu(self):
         try:
             self.driver.find_element_by_xpath("//div[@role='menuitem']").click()
-            logger.info(f"[{self.user}] Opened the file menu")
+            if self.logger:
+                self.logger.debug("Opened the file menu")
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could not open the file menu")
+            if self.logger:
+                self.logger.error("Could not open the file menu")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def send_file(self):
         try:
             input_field = self.driver.find_element_by_xpath(f"//input[@type=\"file\"]")
             input_field.send_keys(self.image)
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could not find file input")
+            if self.logger:
+                self.logger.error("Could not find file input")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def next_step(self):
         try:
             text = Scraper.BUTTON_TEXT["next"][self.lang]
             next_btn = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             next_btn.click()
-            logger.info(f"[{self.user}] Submitted image")
+            if self.logger:
+                self.logger.debug("Submitted image")
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could not submit image")
+            if self.logger:
+                self.logger.error("Could not submit image")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def write_caption(self):
         try:
             text = Scraper.BUTTON_TEXT["caption_aria"][self.lang]
             caption_field = self.driver.find_element_by_xpath(f"//textarea[@aria-label='{text}']")
             caption_field.send_keys(self.caption)
-            logger.info(f"[{self.user}] Wrote caption")
+            if self.logger:
+                self.logger.debug("Wrote caption")
         except NoSuchElementException:
-            logger.warning(f"[{self.user}] Could write a caption")
+            if self.logger:
+                self.logger.warning("Could write a caption")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
 
     def share(self):
         try:
             text = Scraper.BUTTON_TEXT["share"][self.lang]
             share_btn = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             share_btn.click()
-            logger.info(f"[{self.user}] Shared image")
+            if self.logger:
+                self.logger.info("Shared image")
         except NoSuchElementException:
-            logger.error(f"[{self.user}] Could not share image")
+            if self.logger:
+                self.logger.error("Could not share image")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)

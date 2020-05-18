@@ -30,7 +30,7 @@ def gatherPosts():
     try:
         posts += imgur.topGalleries()
     except Exception as exc:
-        mastermemed_client.warn(
+        mastermemed_client.warning(
             f"Error while gathering posts from Imgur: f{exc}"
         )
 
@@ -40,7 +40,7 @@ def gatherPosts():
             try:
                 posts += reddit.topSubImagePosts(subreddit)
             except Exception as exc:
-                mastermemed_client.warn(
+                mastermemed_client.warning(
                     f"Error while gathering \"r/{subreddit}\": f{exc}"
                 )
 
@@ -50,7 +50,7 @@ def gatherPosts():
             try:
                 posts += twitter.userImageStatuses(user)
             except TwitterError as exc:
-                mastermemed_client.warn(
+                mastermemed_client.warning(
                     f"Error while gathering \"{user}\" (twitter): f{exc}"
                 )
 
@@ -60,7 +60,7 @@ def gatherPosts():
             try:
                 posts += instagram.getPostsFromUser(user)
             except Exception as exc:
-                mastermemed_client.warn(
+                mastermemed_client.warning(
                     f"Error while gathering \"{user}\" (instagram): f{exc}"
                 )
 
@@ -170,23 +170,25 @@ def main():
     pool = urllib3.PoolManager()
 
     while True:
-        posts = gatherPosts()
-        uploadPosts(posts)
-        scheduleRandomPosts()
+        # posts = gatherPosts()
+        # uploadPosts(posts)
+        # scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
         for acct in account_data:
             schedule = mastermemed_client.schedules(account=acct, only_scheduled=True)
-            accounts.append(
-                account.Account(
-                    acct.username,
-                    acct.password,
-                    schedule,
-                    pool=pool,
-                    getCaptionCallback=getRandomCaption
-                )
+            account_poster = account.Account(
+                acct.id,
+                acct.username,
+                acct.password,
+                schedule,
+                pool=pool,
+                getCaptionCallback=getRandomCaption
             )
+            account_poster.setName(acct.username)
+            account_poster.setLogger(mastermemed_client)
+            accounts.append(account_poster)
 
         for acct in accounts:
             acct.start()

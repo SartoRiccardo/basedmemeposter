@@ -1,5 +1,7 @@
 import urllib3
 import time
+from threading import Thread
+from datetime import datetime
 import json
 from urllib.parse import urlencode
 # Own modules
@@ -193,14 +195,16 @@ class Client:
         return sources
 
     def addLog(self, level, message, account=None):
-        data = {
-            "level": level,
-            "message": message,
-        }
-        if account:
-            data["account"] = account.id
-        response = self.__post("/logs", json.dumps(data))
-        return response == 201
+        def async_log():
+            data = {
+                "level": level,
+                "message": message,
+            }
+            if account:
+                data["account"] = account if isinstance(account, int) else account.id
+            self.__post("/logs", json.dumps(data))
+
+        Thread(target=async_log()).start()
 
     def debug(self, message, account=None):
         """
@@ -218,7 +222,7 @@ class Client:
         """
         self.addLog("info", message, account)
 
-    def warn(self, message, account=None):
+    def warning(self, message, account=None):
         """
         Shortcut for addLog("warning", *args, **kwargs)
         :param message: str: The message to log.
@@ -279,12 +283,17 @@ class Client:
             post = raw_schedule["post"]
             account = raw_schedule["account"]
             schedules.append(apis.mastermemed.schedule.Schedule(
-                time.strptime(raw_schedule["date"], ""),
+                datetime.fromtimestamp(
+                    time.mktime(
+                        time.strptime(raw_schedule["date"], "%Y-%m-%d %H:%M:%S")
+                    )
+                ),
                 apis.mastermemed.account.Account(
                     account["username"], None,
                     account["startTime"],
                     account["endTime"],
-                    id=account["id"],
+                    id=int(account["id"]),
+                    password_is_encrypted=False
                 ),
                 apis.mastermemed.post.Post(
                     post["platform"],
