@@ -177,7 +177,7 @@ def main():
         account_data = mastermemed_client.accounts()
         accounts = []
         for acct in account_data:
-            schedule = mastermemed_client.schedules(account=acct)
+            schedule = mastermemed_client.schedules(account=acct, only_scheduled=True)
             accounts.append(
                 account.Account(
                     acct.username,
