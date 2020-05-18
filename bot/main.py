@@ -201,15 +201,12 @@ def main():
 
 
 def othermain():
-    global mastermemed_client
-
-    mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
-
-    scheduleRandomPosts()
+    pass
 
 
 if __name__ == '__main__':
     try:
         main()
+        # othermain()
     except Exception as ex:
         raise ex

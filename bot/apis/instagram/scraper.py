@@ -23,6 +23,10 @@ class Scraper(threading.Thread):
             "it": "Avanti",
             "eng": "Next",
         },
+        "expand": {
+            "it": "Espandi",
+            "eng": "Expand",
+        },
         "caption_aria": {
             "it": "Scrivi una didascalia…",
             "eng": "Write a caption…",
@@ -66,7 +70,8 @@ class Scraper(threading.Thread):
             {"action": self.close_notification, "wait": 10},
             {"action": self.close_add_to_home, "wait": 10},
             {"action": self.open_file_menu, "wait": 5},
-            {"action": self.send_file, "wait": 10},
+            {"action": self.send_file, "wait": 7},
+            {"action": self.expand_image, "wait": 10},
             {"action": self.next_step, "wait": 7},
             {"action": self.write_caption, "wait": 10},
             {"action": self.share, "wait": 10},
@@ -207,6 +212,20 @@ class Scraper(threading.Thread):
         except NoSuchElementException:
             if self.logger:
                 self.logger.error("Could not share image")
+        except Exception as exc:
+            if self.logger:
+                self.logger.error(exc)
+
+    def expand_image(self):
+        try:
+            text = Scraper.BUTTON_TEXT["expand"][self.lang]
+            expand_btn = self.driver.find_element_by_xpath(f"//span[contains(text(),'{text}')]")
+            expand_btn.click()
+            if self.logger:
+                self.logger.debug("Image resized")
+        except NoSuchElementException:
+            if self.logger:
+                self.logger.debug("Image could not be resized")
         except Exception as exc:
             if self.logger:
                 self.logger.error(exc)

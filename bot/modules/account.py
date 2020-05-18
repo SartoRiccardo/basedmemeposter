@@ -44,7 +44,6 @@ class Account(Thread):
                 hashtags = [Account.HASHTAGS[i] for i in hashtags]
                 caption = self.getCaptionCallback() if self.getCaptionCallback else ""
                 caption = caption + Account.CAPTION_END + " ".join(hashtags)
-                print(f"[{self.name}] posting {post.content_url} with caption {caption}\n")
 
                 self.schedule = [
                     s for s in self.schedule
@@ -57,12 +56,15 @@ class Account(Thread):
 
     def post(self, url, caption):
         post_file = self.retrieve(url)
+        if not post_file:
+            self.logger.error(f"Image could not be found ({url})")
+            return
 
         scraper = apis.instagram.Scraper(
             self.username, self.password, post_file, caption
         )
         if self.logger:
-            scraper.setLogger(AccountLogger(self.id, self.logger))
+            scraper.setLogger(self.logger)
         scraper.start()
         scraper.join()
 
@@ -88,13 +90,13 @@ class Account(Thread):
             stdout.write(chunk)
         response.release_conn()
 
-        return os.path.abspath(random_file_name)
+        return None if response.status == 404 else os.path.abspath(random_file_name)
 
     def stopPosting(self):
         self.active = False
 
     def setLogger(self, logger):
-        self.logger = logger
+        self.logger = AccountLogger(self.id, logger)
 
 
 class AccountLogger:
