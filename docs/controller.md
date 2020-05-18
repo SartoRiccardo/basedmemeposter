@@ -215,6 +215,8 @@ The `id` param must be a valid [`Post`](./model.md) ID.
 ### Request
 
 + **account:** An account ID. Only that account's scheduled posts will be shown. If omitted, all schedules will be returned.
++ **onlyScheduled:** Boolean, if `true` it will not return scheduled posts past the current date.
++ **after:** A date. If set, it will not return scheduled posts past the given date.
 
 ### Reponses
 

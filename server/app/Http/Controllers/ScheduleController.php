@@ -18,18 +18,24 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $account = $request->query("account");
+        $after = $request->query("after");
 
         $schedule = null;
+        $getAll = false;
         if($account !== null) {
             $schedule = Schedule::where("account", "=", $account);
         }
         else {
+            $getAll = true;
             $schedule = Schedule::all();
         }
         if($request->query("onlyScheduled")) {
             $schedule = $schedule->where("date", ">", date("Y-m-d H:i:s"));
         }
-        $schedule = $schedule->get();
+        if($after) {
+            $schedule = $schedule->where("date", ">", $after);
+        }
+        if(!$getAll) $schedule = $schedule->get();
 
         foreach ($schedule as $s) {
             $s["post"] = Post::find($s["post"]);
