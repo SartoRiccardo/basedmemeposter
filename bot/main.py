@@ -170,9 +170,9 @@ def main():
     pool = urllib3.PoolManager()
 
     while True:
-        # posts = gatherPosts()
-        # uploadPosts(posts)
-        # scheduleRandomPosts()
+        posts = gatherPosts()
+        uploadPosts(posts)
+        scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
