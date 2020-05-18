@@ -46,6 +46,7 @@ class Account(Thread):
 
         ids_to_post = [post.id for post in to_post]
         for post in to_post:
+            hashtags = []
             while len(hashtags) < Account.HASHTAG_AMOUNT:
                 i = randint(0, len(Account.HASHTAGS)-1)
                 if i not in hashtags:
