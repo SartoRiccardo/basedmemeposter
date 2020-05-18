@@ -1,7 +1,7 @@
 from threading import Thread
 import modules.threads
 import apis.instagram
-from datetime import datetime
+from datetime import datetime, timezone
 from random import randint
 import os
 
@@ -34,7 +34,7 @@ class Account(Thread):
                     self.logger.error(f"While checking for posts: {exc}")
 
     def checkForPosts(self):
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
         to_post = []
         for schedule in self.schedule:
             date = schedule.date

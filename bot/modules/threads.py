@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone, timedelta
 import time
 from threading import Thread
 
@@ -9,7 +9,7 @@ class Waiter(Thread):
         self.until = until
 
     def run(self):
-        while self.until > datetime.datetime.now():
+        while self.until > datetime.now(timezone.utc):
             time.sleep(10)
 
 
@@ -28,6 +28,6 @@ class PostUploader(Thread):
 
 
 def waitfor(seconds):
-    thread = Waiter(datetime.datetime.now() + datetime.timedelta(seconds=seconds))
+    thread = Waiter(datetime.now(timezone.utc) + timedelta(seconds=seconds))
     thread.start()
     thread.join()

@@ -1,7 +1,7 @@
 import urllib3
 import traceback
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from twitter.error import TwitterError
 from random import randint
 import math
@@ -110,16 +110,16 @@ def scheduleRandomPosts():
     for acct in accounts:
         schedules = mastermemed_client.schedules(
             account=acct.id,
-            after=datetime.now().strftime("%Y-%m-%d"),
+            after=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         )
         scheduled_posts[acct.id] = [s.post.id for s in schedules]
 
-    five_days_ago = (datetime.now() - timedelta(days=5)).strftime("%Y-%m-%d")
+    five_days_ago = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
     post_data = mastermemed_client.posts(after=five_days_ago)
     per_page, total = post_data.per_page, post_data.total
 
     unused_posts = []
-    current_date = datetime.now()
+    current_date = datetime.now(timezone.utc)
     for acct in accounts:
         end_timedelta = timedelta(days=1)
         posting_time = copy(current_date)
