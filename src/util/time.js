@@ -8,7 +8,7 @@
  */
 export function isInRangeHours(time, start, finish) {
   if(typeof time === "string") {
-    time = strToTime(time);
+    time = strToTime(time, false);
   }
   if(typeof start === "string") {
     start = strToTime(start);
@@ -52,17 +52,17 @@ export function compareTimes(a, b) {
 }
 
 /**
- * Turns a string into a Time object.
+ * Turns a string into a Time object in UTC.
  * @param  {string} time  The string to transform.
  * @return {Object}
  */
-export function strToTime(time) {
+export function strToTime(time, utc=true) {
   try {
-    const [ hours, minutes, seconds ] = time.split(":");
+    const date = utc ? new Date(`5 ${time} GMT`) : new Date(`5 ${time}`);
     return {
-      hours: parseInt(hours),
-      minutes: parseInt(minutes),
-      seconds: parseInt(seconds)
+      hours: date.getHours(),
+      minutes: date.getMinutes(),
+      seconds: date.getSeconds(),
     };
   }
   catch(e) {

@@ -30,7 +30,7 @@ class ScheduleController extends Controller
             $schedule = Schedule::all();
         }
         if($request->query("onlyScheduled")) {
-            $schedule = $schedule->where("date", ">", date("Y-m-d H:i:s"));
+            $schedule = $schedule->where("date", ">", gmdate("Y-m-d H:i:s"));
         }
         if($after) {
             $schedule = $schedule->where("date", ">", $after);
