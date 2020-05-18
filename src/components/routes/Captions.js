@@ -89,7 +89,7 @@ class Captions extends React.Component {
     let captionBlocks;
     if(!status.initialized || isLoading) {
       captionBlocks = [];
-      for(let i = 0; i < perPage; i++) {
+      for(let i = 0; i < 60; i++) {
         captionBlocks.push(
           <MDBCol className="px-1 h-100" xs="12" md="6" lg="4" key={i}>
             <CaptionPlaceholder />
