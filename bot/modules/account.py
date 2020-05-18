@@ -2,7 +2,7 @@ from threading import Thread
 import modules.threads
 import apis.instagram
 import time
-import datetime
+from datetime import datetime
 from random import random, randint
 import os
 
@@ -25,31 +25,33 @@ class Account(Thread):
 
     def run(self):
         while self.active:
-            if self.canPost():
-                self.post("https://i.imgur.com/Cl96z64.mp4")
+            now = datetime.now()
+            to_post = []
+            for schedule in self.schedule:
+                date = datetime.fromtimestamp(
+                    time.mktime(
+                        time.strptime(schedule.date, "%Y-%m-%d %H:%M:%S")
+                    )
+                )
+                if now > date:
+                    to_post.append(schedule.post)
 
-            modules.threads.waitfor(60)
+            for post in to_post:
+                hashtags = []
+                while len(hashtags) < Account.HASHTAG_AMOUNT:
+                    i = randint(0, len(hashtags)-1)
+                    if i not in hashtags:
+                        hashtags.append(i)
+                hashtags = [Account.HASHTAGS[i] for i in hashtags]
+                caption = self.getCaptionCallback() if self.getCaptionCallback else ""
+                caption = caption + Account.CAPTION_END + " ".join(hashtags)
 
-    def canPost(self):
-        now = datetime.datetime.now()
-        current_time = time.strptime(
-            f"{now.hour:02d}:{now.minute:02d}:{now.second:02d}"
-            "%H:%M:%S"
-        )
+                self.post(post.content_url, caption)
 
-        return True
+            modules.threads.waitfor(randint(60, 120))
 
-    def post(self, url):
+    def post(self, url, caption):
         post_file = self.retrieve(url)
-
-        hashtags = []
-        while len(hashtags) < Account.HASHTAG_AMOUNT:
-            i = randint(0, len(hashtags)-1)
-            if i not in hashtags:
-                hashtags.append(i)
-        hashtags = [Account.HASHTAGS[i] for i in hashtags]
-        caption = self.getCaptionCallback() if self.getCaptionCallback else ""
-        caption = caption + Account.CAPTION_END + " ".join(hashtags)
 
         scraper = apis.instagram.Scraper(
             self.username, self.password, post_file, caption, "EN"

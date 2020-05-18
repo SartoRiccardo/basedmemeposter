@@ -191,7 +191,7 @@ def main():
         for acct in accounts:
             acct.start()
 
-        # threads.waitfor(60 * 60 * 24)
+        threads.waitfor(60 * 60 * 24)
 
         for acct in accounts:
             acct.stopPosting()
@@ -208,7 +208,6 @@ def othermain():
 
 if __name__ == '__main__':
     try:
-        othermain()
-        # main()
+        main()
     except Exception as ex:
         raise ex
