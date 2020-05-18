@@ -1,5 +1,5 @@
 import urllib3
-from copy import copy
+import traceback
 from datetime import datetime, timedelta
 from twitter.error import TwitterError
 from random import randint
@@ -8,8 +8,6 @@ import math
 from modules import account, threads
 from apis import mastermemed, imgur, reddit, twitter, instagram
 from config import config
-# Debug
-import pprint
 
 
 mastermemed_client = None
@@ -26,7 +24,7 @@ def gatherPosts():
 
     posts = []
 
-    mastermemed_client.info(f"Gathering posts from Imgur")
+    mastermemed_client.debug(f"Gathering posts from Imgur")
     try:
         posts += imgur.topGalleries()
     except Exception as exc:
@@ -36,7 +34,7 @@ def gatherPosts():
 
     if "reddit" in sources:
         for subreddit in sources["reddit"]:
-            mastermemed_client.info(f"Gathering posts from \"r/{subreddit}\"")
+            mastermemed_client.debug(f"Gathering posts from \"r/{subreddit}\"")
             try:
                 posts += reddit.topSubImagePosts(subreddit)
             except Exception as exc:
@@ -46,7 +44,7 @@ def gatherPosts():
 
     if "twitter" in sources:
         for user in sources["twitter"]:
-            mastermemed_client.info(f"Gathering posts from \"{user}\" (twitter)")
+            mastermemed_client.debug(f"Gathering posts from \"{user}\" (twitter)")
             try:
                 posts += twitter.userImageStatuses(user)
             except TwitterError as exc:
@@ -56,7 +54,7 @@ def gatherPosts():
 
     if "instagram" in sources:
         for user in sources["instagram"]:
-            mastermemed_client.info(f"Gathering posts from {user} (instagram)")
+            mastermemed_client.debug(f"Gathering posts from {user} (instagram)")
             try:
                 posts += instagram.getPostsFromUser(user)
             except Exception as exc:
@@ -86,13 +84,16 @@ def uploadPosts(posts):
 
 
 def getRandomCaption():
-    data = mastermemed_client.captionData()
-    caption_count, captions_per_page = data["total"], data["per_page"]
-    caption_i = randint(0, caption_count-1)
-    caption_page = math.floor(caption_i/captions_per_page)
-    caption_i -= caption_page*captions_per_page
+    try:
+        data = mastermemed_client.captionData()
+        caption_count, captions_per_page = data["total"], data["per_page"]
+        caption_i = randint(0, caption_count-1)
+        caption_page = math.floor(caption_i/captions_per_page)
+        caption_i -= caption_page*captions_per_page
 
-    return mastermemed_client.captions(page=caption_page)[caption_i].text
+        return mastermemed_client.captions(page=caption_page)[caption_i].text
+    except Exception as exc:
+        return ""
 
 
 MISSING_POST_CHANCE = 1/15
@@ -207,6 +208,9 @@ def othermain():
 if __name__ == '__main__':
     try:
         main()
-        # othermain()
-    except Exception as ex:
-        raise ex
+    except Exception:
+        error = traceback.format_exc()
+        log = open("logs/errors.log", "a")
+        log.write(error)
+        log.close()
+        mastermemed_client.critical(error)
