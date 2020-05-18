@@ -24,7 +24,6 @@ class PostUploader(Thread):
 
     def run(self):
         for p in self.posts:
-            print(f"[{self.name}] Uploading a post")
             self.mastermemed_client.addPost(p)
 
 

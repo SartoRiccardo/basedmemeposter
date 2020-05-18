@@ -1,7 +1,7 @@
 import urllib3
-import datetime
+from copy import copy
+from datetime import datetime, timedelta
 from twitter.error import TwitterError
-import time
 from random import randint
 import math
 # Own modules
@@ -15,7 +15,7 @@ import pprint
 mastermemed_client = None
 
 
-def gather_posts():
+def gatherPosts():
     all_sources = mastermemed_client.sources()
     sources = {}
     for source in all_sources:
@@ -67,7 +67,7 @@ def gather_posts():
     return posts
 
 
-def upload_posts(posts):
+def uploadPosts(posts):
     uploaders_count = 10
     uploaders = [threads.PostUploader(mastermemed_client) for _ in range(uploaders_count)]
 
@@ -95,6 +95,74 @@ def getRandomCaption():
     return mastermemed_client.captions(page=caption_page)[caption_i].text
 
 
+MISSING_POST_CHANCE = 1/15
+MAX_TRIES = 50
+POST_EVERY = 45 * 60
+POST_EVERY_NOISE = 0.3
+
+
+def scheduleRandomPosts():
+    accounts = mastermemed_client.accounts()
+
+    scheduled_posts = {}
+    for acct in accounts:
+        schedules = mastermemed_client.schedules(
+            account=acct.id,
+            after=datetime.now().strftime("%Y-%m-%d"),
+        )
+        scheduled_posts[acct.id] = [s.post.id for s in schedules]
+
+    five_days_ago = (datetime.now() - timedelta(days=5)).strftime("%Y-%m-%d")
+    post_data = mastermemed_client.posts(after=five_days_ago)
+    per_page, total = post_data.per_page, post_data.total
+
+    unused_posts = []
+    current_date = datetime.now()
+    for acct in accounts:
+        end_timedelta = acct.timeOnline()
+        posting_start = current_date.replace(
+            hour=acct.start_time.hour,
+            minute=acct.start_time.minute,
+            second=acct.start_time.second,
+        )
+        posting_time = posting_start \
+            - timedelta(seconds=POST_EVERY/2) \
+            + timedelta(
+                seconds=randint(
+                    int(POST_EVERY * (1-POST_EVERY_NOISE)),
+                    int(POST_EVERY * (1+POST_EVERY_NOISE)),
+                )
+            )
+
+        current_tries = 0
+        unused_posts_i = len(unused_posts) - 1
+        while posting_time < posting_start + end_timedelta and current_tries < MAX_TRIES:
+            from_cache = False
+            if unused_posts_i >= 0:
+                from_cache = True
+                post = unused_posts[unused_posts_i]
+                unused_posts_i -= 1
+            else:
+                random_post_i = randint(0, total-1)
+                page = math.floor(random_post_i/per_page)
+                random_post_i -= page * per_page
+                post = mastermemed_client.posts(after=five_days_ago, page=page) \
+                    .posts[random_post_i]
+
+            if post.id not in scheduled_posts[acct.id]:
+                mastermemed_client.addSchedule(acct, post, posting_time)
+            if not from_cache and post.id not in [p.id for p in unused_posts]:
+                unused_posts.append(post)
+                current_tries += 1
+
+            posting_time += timedelta(
+                seconds=randint(
+                    int(POST_EVERY * (1-POST_EVERY_NOISE)),
+                    int(POST_EVERY * (1+POST_EVERY_NOISE)),
+                )
+            )
+
+
 def main():
     global mastermemed_client
 
@@ -102,18 +170,19 @@ def main():
     pool = urllib3.PoolManager()
 
     while True:
-        posts = gather_posts()
-        upload_posts(posts)
+        posts = gatherPosts()
+        uploadPosts(posts)
+        scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
         for acct in account_data:
+            schedule = mastermemed_client.schedules(account=acct)
             accounts.append(
                 account.Account(
                     acct.username,
                     acct.password,
-                    acct.start_time,
-                    acct.end_time,
+                    schedule,
                     pool=pool,
                     getCaptionCallback=getRandomCaption
                 )
@@ -133,7 +202,8 @@ def othermain():
     global mastermemed_client
 
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
-    print(getRandomCaption())
+
+    scheduleRandomPosts()
 
 
 if __name__ == '__main__':

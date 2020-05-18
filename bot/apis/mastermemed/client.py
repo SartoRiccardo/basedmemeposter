@@ -1,12 +1,14 @@
 import urllib3
-import datetime
+import time
 import json
+from urllib.parse import urlencode
 # Own modules
 from config import config
 import apis.mastermemed.account
 import apis.mastermemed.post
 import apis.mastermemed.source
 import apis.mastermemed.caption
+import apis.mastermemed.schedule
 
 
 class Client:
@@ -102,6 +104,37 @@ class Client:
             accounts.append(new_account)
         return accounts
 
+    def posts(self, after=None, platforms=None, page=None):
+        url_querystrings = []
+        if after:
+            url_querystrings.append(urlencode({"after": after}))
+        if platforms:
+            url_querystrings += [
+                urlencode({"platforms[]": platform})
+                for platform in platforms
+            ]
+        if page:
+            url_querystrings.append(urlencode({"page": page}))
+        response = self.__get("/posts?" + "&".join(url_querystrings))
+        if response.status != 200:
+            return None
+
+        raw_posts = json.loads(response.data.decode())["data"]
+        posts = []
+        for raw_post in raw_posts["data"]:
+            posts.append(apis.mastermemed.post.Post(
+                raw_post["platform"],
+                raw_post["originalId"],
+                raw_post["originalLink"],
+                raw_post["contentUrl"],
+                raw_post["thumbnail"],
+                id=raw_post["id"],
+            ))
+
+        return apis.mastermemed.post.PostCollection(
+            posts, raw_posts["per_page"], raw_posts["total"]
+        )
+
     def post(self, id):
         """
         Fetches a given account.
@@ -116,9 +149,9 @@ class Client:
         raw_post = json.loads(response.data.decode("utf-8"))["data"]
         post = apis.mastermemed.post.Post(
             raw_post["platform"],
-            raw_post["original_id"],
-            raw_post["original_link"],
-            raw_post["image_url"],
+            raw_post["originalId"],
+            raw_post["originalLink"],
+            raw_post["contentUrl"],
             raw_post["thumbnail"],
             id=raw_post["id"],
         )
@@ -227,3 +260,49 @@ class Client:
                 id=raw_caption["id"],
             ))
         return captions
+
+    def schedules(self, account=None, only_scheduled=False, after=None):
+        params = {}
+        if account:
+            params["account"] = account if isinstance(account, int) else account.id
+        if only_scheduled:
+            params["onlyScheduled"] = True
+        if after:
+            params["after"] = after
+        response = self.__get("/schedule", params)
+        if response.status != 200:
+            return None
+
+        raw_schedules = json.loads(response.data.decode())["data"]
+        schedules = []
+        for raw_schedule in raw_schedules:
+            post = raw_schedule["post"]
+            account = raw_schedule["account"]
+            schedules.append(apis.mastermemed.schedule.Schedule(
+                time.strptime(raw_schedule["date"], ""),
+                apis.mastermemed.account.Account(
+                    account["username"], None,
+                    account["startTime"],
+                    account["endTime"],
+                    id=account["id"],
+                ),
+                apis.mastermemed.post.Post(
+                    post["platform"],
+                    post["originalId"],
+                    post["originalLink"],
+                    post["contentUrl"],
+                    post["thumbnail"],
+                    id=post["id"],
+                ),
+            ))
+
+        return schedules
+
+    def addSchedule(self, account, post, date):
+        data = {
+            "account": account if isinstance(account, int) else account.id,
+            "post": post if isinstance(post, int) else post.id,
+            "date": date if isinstance(date, str) else date.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        response = self.__post("/schedule", json.dumps(data))
+        return response.status == 201
