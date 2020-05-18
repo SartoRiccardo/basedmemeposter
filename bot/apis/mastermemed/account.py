@@ -48,11 +48,19 @@ class Account:
                 datetime.timestamp(self.end_time) - datetime.timestamp(self.start_time)
         ))
 
-    def isInTimeRange(self, time):
-        if self.start_time > self.end_time:
-            return self.start_time < time or time < self.end_time
+    def inTimeRange(self, time: datetime):
+        """
+        Checks if the given time is in range
+        :param time: datetime.datetime: The time to check. The date does not matter.
+        :return: boolean
+        """
+        no_date_time = time.replace(year=2000, month=1, day=1)
+        start = self.start_time.replace(year=2000, month=1, day=1)
+        end = self.end_time.replace(year=2000, month=1, day=1)
+        if self.end_time < self.start_time:
+            return start < no_date_time or no_date_time < end
 
-        return self.start_time < time < self.end_time
+        return start <= no_date_time < end
 
     def toJson(self):
         return vars(self)

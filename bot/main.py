@@ -1,5 +1,6 @@
 import urllib3
 import traceback
+from copy import copy
 from datetime import datetime, timedelta
 from twitter.error import TwitterError
 from random import randint
@@ -120,41 +121,30 @@ def scheduleRandomPosts():
     unused_posts = []
     current_date = datetime.now()
     for acct in accounts:
-        end_timedelta = acct.timeOnline()
-        posting_start = current_date.replace(
-            hour=acct.start_time.hour,
-            minute=acct.start_time.minute,
-            second=acct.start_time.second,
-        )
-        posting_time = posting_start \
-            - timedelta(seconds=POST_EVERY/2) \
-            + timedelta(
-                seconds=randint(
-                    int(POST_EVERY * (1-POST_EVERY_NOISE)),
-                    int(POST_EVERY * (1+POST_EVERY_NOISE)),
-                )
-            )
+        end_timedelta = timedelta(days=1)
+        posting_time = copy(current_date)
 
         current_tries = 0
         unused_posts_i = len(unused_posts) - 1
-        while posting_time < posting_start + end_timedelta and current_tries < MAX_TRIES:
-            from_cache = False
-            if unused_posts_i >= 0:
-                from_cache = True
-                post = unused_posts[unused_posts_i]
-                unused_posts_i -= 1
-            else:
-                random_post_i = randint(0, total-1)
-                page = math.floor(random_post_i/per_page)
-                random_post_i -= page * per_page
-                post = mastermemed_client.posts(after=five_days_ago, page=page) \
-                    .posts[random_post_i]
+        while posting_time < current_date + end_timedelta and current_tries < MAX_TRIES:
+            if acct.inTimeRange(posting_time):
+                from_cache = False
+                if unused_posts_i >= 0:
+                    from_cache = True
+                    post = unused_posts[unused_posts_i]
+                    unused_posts_i -= 1
+                else:
+                    random_post_i = randint(0, total-1)
+                    page = math.floor(random_post_i/per_page)
+                    random_post_i -= page * per_page
+                    post = mastermemed_client.posts(after=five_days_ago, page=page) \
+                        .posts[random_post_i]
 
-            if post.id not in scheduled_posts[acct.id]:
-                mastermemed_client.addSchedule(acct, post, posting_time)
-            if not from_cache and post.id not in [p.id for p in unused_posts]:
-                unused_posts.append(post)
-                current_tries += 1
+                if post.id not in scheduled_posts[acct.id]:
+                    mastermemed_client.addSchedule(acct, post, posting_time)
+                if not from_cache and post.id not in [p.id for p in unused_posts]:
+                    unused_posts.append(post)
+                    current_tries += 1
 
             posting_time += timedelta(
                 seconds=randint(
@@ -171,9 +161,9 @@ def main():
     pool = urllib3.PoolManager()
 
     while True:
-        # posts = gatherPosts()
-        # uploadPosts(posts)
-        # scheduleRandomPosts()
+        posts = gatherPosts()
+        uploadPosts(posts)
+        scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
@@ -202,15 +192,20 @@ def main():
 
 
 def othermain():
-    pass
+    global mastermemed_client
+
+    mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
+
+    scheduleRandomPosts()
 
 
 if __name__ == '__main__':
     try:
-        main()
+        # main()
+        othermain()
     except Exception:
         error = traceback.format_exc()
-        log = open("logs/errors.log", "a")
+        log = open("logs/errors.log", "wa")
         log.write(error)
         log.close()
         mastermemed_client.critical(error)
