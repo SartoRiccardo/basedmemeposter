@@ -72,7 +72,7 @@ export function strToTime(time, utc=true) {
 
 export function toUtcTime(timestr) {
   const date = new Date(`5 ${timestr} GMT`);
-  return date.getHours().toString().padStart(0, "2") + ":" +
-      date.getMinutes().toString().padStart(0, "2") + ":" +
-      date.getSeconds().toString().padStart(0, "2")
+  return date.getHours().toString().padStart(2, "0") + ":" +
+      date.getMinutes().toString().padStart(2, "0") + ":" +
+      date.getSeconds().toString().padStart(2, "0")
 }
