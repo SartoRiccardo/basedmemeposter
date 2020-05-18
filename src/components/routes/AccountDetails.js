@@ -108,11 +108,12 @@ class AccountDetails extends React.Component {
       }
     }
 
-    const accountSchedule = schedule.map((s) => {
-      return (
-        <ScheduledPost key={s.id} schedule={s} />
-      );
-    });
+    const accountSchedule = schedule.sort((a, b) => Date.parse(a.date) > Date.parse(b.date))
+        .map((s) => {
+          return (
+            <ScheduledPost key={s.id} schedule={s} />
+          );
+        });
 
     const breakpoint = "sm";
     let accountHeader, accountActivity, deleteModal;

@@ -17,11 +17,11 @@ function SingleLog(props) {
 
   const dateText = moment(date).fromNow();
 
-  const username = account ? (
+  const username = account && (
     <Link to={`/accounts/${account.id}`} className="black-text">
       <u>{account.username}</u>
     </Link>
-  ) : "<DELETED>";
+  );
 
   return (
     <div className={`${background} rounded-lg mt-1 px-3 py-1 clearfix`}>
