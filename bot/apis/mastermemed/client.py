@@ -194,11 +194,12 @@ class Client:
             sources.append(s)
         return sources
 
-    def addLog(self, level, message, account=None):
+    def __addLog(self, level, message, account=None):
         def async_log():
             data = {
                 "level": level,
                 "message": message,
+                "date": datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
             }
             if account:
                 data["account"] = account if isinstance(account, int) else account.id
@@ -212,7 +213,7 @@ class Client:
         :param message: str: The message to log.
         :param account: mastermemed.Account: The account this log references.
         """
-        self.addLog("debug", message, account)
+        self.__addLog("debug", message, account)
 
     def info(self, message, account=None):
         """
@@ -220,7 +221,7 @@ class Client:
         :param message: str: The message to log.
         :param account: mastermemed.Account: The account this log references.
         """
-        self.addLog("info", message, account)
+        self.__addLog("info", message, account)
 
     def warning(self, message, account=None):
         """
@@ -228,7 +229,7 @@ class Client:
         :param message: str: The message to log.
         :param account: mastermemed.Account: The account this log references.
         """
-        self.addLog("warning", message, account)
+        self.__addLog("warning", message, account)
 
     def error(self, message, account=None):
         """
@@ -236,7 +237,7 @@ class Client:
         :param message: str: The message to log.
         :param account: mastermemed.Account: The account this log references.
         """
-        self.addLog("error", message, account)
+        self.__addLog("error", message, account)
 
     def critical(self, message, account=None):
         """
@@ -244,7 +245,7 @@ class Client:
         :param message: str: The message to log.
         :param account: mastermemed.Account: The account this log references.
         """
-        self.addLog("critical", message, account)
+        self.__addLog("critical", message, account)
 
     def captionData(self):
         response = self.__get("/captions")
