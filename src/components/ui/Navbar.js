@@ -63,6 +63,10 @@ class Navbar extends React.Component {
             </MDBNavItem>
 
             <MDBNavItem>
+              <MDBNavLink to="/logs">Logs</MDBNavLink>
+            </MDBNavItem>
+
+            <MDBNavItem>
               <MDBNavLink to="/captions">Captions</MDBNavLink>
             </MDBNavItem>
 
@@ -107,6 +111,7 @@ class Navbar extends React.Component {
           </MobileNavbarTitle>
 
           <MobileNavbarLink to="/">Dashboard</MobileNavbarLink>
+          <MobileNavbarLink to="/logs">Logs</MobileNavbarLink>
           <MobileNavbarLink to="/captions">Captions</MobileNavbarLink>
           <MobileNavbarLink to="/sources">Sources</MobileNavbarLink>
           <MobileNavbarDropdown>
