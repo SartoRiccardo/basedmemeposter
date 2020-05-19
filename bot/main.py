@@ -27,9 +27,9 @@ def gatherPosts():
 
     posts = []
 
-    mastermemed_client.debug("Gathering posts from Imgur")
     try:
         posts += imgur.topGalleries()
+        mastermemed_client.debug(f"Gathered {len(posts)} posts from Imgur")
     except Exception as exc:
         mastermemed_client.warning(
             f"Error while gathering posts from Imgur: f{exc}"
@@ -37,32 +37,35 @@ def gatherPosts():
 
     if "reddit" in sources:
         for subreddit in sources["reddit"]:
-            mastermemed_client.debug(f"Gathering posts from \"r/{subreddit}\"")
             try:
-                posts += reddit.topSubImagePosts(subreddit)
+                new_posts = reddit.topSubImagePosts(subreddit)
+                posts += new_posts
+                mastermemed_client.debug(f"(Reddit) Gathered {len(new_posts)} posts from \"r/{subreddit}\"")
             except Exception as exc:
                 mastermemed_client.warning(
-                    f"Error while gathering \"r/{subreddit}\": f{exc}"
+                    f"(Reddit) Error while gathering \"r/{subreddit}\": f{exc}"
                 )
 
     if "twitter" in sources:
         for user in sources["twitter"]:
-            mastermemed_client.debug(f"Gathering posts from \"{user}\" (twitter)")
             try:
-                posts += twitter.userImageStatuses(user)
+                new_posts = twitter.userImageStatuses(user)
+                posts += new_posts
+                mastermemed_client.debug(f"(Twitter) Gathered {len(new_posts)} posts from \"{user}\"")
             except TwitterError as exc:
                 mastermemed_client.warning(
-                    f"Error while gathering \"{user}\" (twitter): f{exc}"
+                    f"(Twitter) Error while gathering \"{user}\": f{exc}"
                 )
 
     if "instagram" in sources:
         for user in sources["instagram"]:
-            mastermemed_client.debug(f"Gathering posts from {user} (instagram)")
             try:
-                posts += instagram.getPostsFromUser(user)
+                new_posts = instagram.getPostsFromUser(user)
+                posts += posts
+                mastermemed_client.debug(f"(Instagram) Gathered {len(new_posts)} posts from \"{user}\"")
             except Exception as exc:
                 mastermemed_client.warning(
-                    f"Error while gathering \"{user}\" (instagram): f{exc}"
+                    f"(Instagram) Error while gathering \"{user}\": f{exc}"
                 )
 
     mastermemed_client.info("Finished gathering posts")

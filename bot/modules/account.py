@@ -29,12 +29,12 @@ class Account(Thread):
         while self.active:
             try:
                 self.checkForPosts()
-                modules.threads.waitfor(randint(60, 120))
             except Exception as exc:
                 error = traceback.format_exc()
                 if self.logger:
-                    self.logger.error(error)
+                    self.logger.critical(error)
                 return
+            modules.threads.waitfor(randint(60, 120))
 
     def checkForPosts(self):
         now = datetime.now(timezone.utc)

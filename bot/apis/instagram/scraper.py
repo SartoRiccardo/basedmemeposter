@@ -5,6 +5,15 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 
+def checkActive(action):
+    def ret(self):
+        if self.abort:
+            return
+        action(self)
+
+    return ret
+
+
 class Scraper(threading.Thread):
     BUTTON_TEXT = {
         "not_now": {
@@ -57,11 +66,13 @@ class Scraper(threading.Thread):
         )
 
         self.logger = None
+        self.abort = False
 
     def setLogger(self, logger):
         self.logger = logger
 
     def run(self):
+        self.abort = True
         actions = [
             {"action": self.search_instagram, "wait": 3},
             {"action": self.click_login, "wait": 5},
@@ -77,23 +88,28 @@ class Scraper(threading.Thread):
             {"action": self.share, "wait": 10},
         ]
         schedule = scheduler.Scheduler(actions)
-        schedule.start()
+        schedule.start()  # Not actually a thread
 
+    @checkActive
     def search_instagram(self):
         self.driver.get("https://www.instagram.com")
 
+    @checkActive
     def click_login(self):
         try:
             text = Scraper.BUTTON_TEXT["login"][self.lang]
             login_button = self.driver.find_element_by_xpath(f"//button[contains(text(),'{text}')]")
             login_button.click()
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
                 self.logger.error("Could find the Log In button")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While clicking Login: {exc}")
 
+    @checkActive
     def login(self):
         try:
             self.driver.find_element_by_xpath("//input[@name='username']").send_keys(self.user)
@@ -103,12 +119,15 @@ class Scraper(threading.Thread):
             if self.logger:
                 self.logger.debug("Logged in")
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
-                self.logger.error("Could not log in")
+                self.logger.error("Could not insert credentials")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While logging in: {exc}")
 
+    @checkActive
     def close_reactivated(self):
         try:
             text = Scraper.BUTTON_TEXT["not_now"][self.lang]
@@ -118,11 +137,13 @@ class Scraper(threading.Thread):
                 self.logger.debug("Closed Reactivate popup")
         except NoSuchElementException:
             if self.logger:
-                self.logger.warning("Did not cancel Reactivate popup")
+                self.logger.debug("Did not cancel Reactivate popup")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While closing Reactivate: {exc}")
 
+    @checkActive
     def close_notification(self):
         try:
             text = Scraper.BUTTON_TEXT["not_now"][self.lang]
@@ -132,11 +153,13 @@ class Scraper(threading.Thread):
                 self.logger.debug("Closed Allow Notifications popup")
         except NoSuchElementException:
             if self.logger:
-                self.logger.warning("Did not cancel Allow Notifications popup")
+                self.logger.debug("Did not cancel Allow Notifications popup")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While closing Allow Notifications: {exc}")
 
+    @checkActive
     def close_add_to_home(self):
         try:
             text = Scraper.BUTTON_TEXT["cancel"][self.lang]
@@ -146,34 +169,42 @@ class Scraper(threading.Thread):
                 self.logger.debug("Closed Add to Home popup")
         except NoSuchElementException:
             if self.logger:
-                self.logger.warning("Did not cancel Add to Home popup")
+                self.logger.debug("Did not cancel Add to Home popup")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While closing Add to Home: {exc}")
 
+    @checkActive
     def open_file_menu(self):
         try:
             self.driver.find_element_by_xpath("//div[@role='menuitem']").click()
             if self.logger:
                 self.logger.debug("Opened the file menu")
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
                 self.logger.error("Could not open the file menu")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While opening the file menu: {exc}")
 
+    @checkActive
     def send_file(self):
         try:
             input_field = self.driver.find_element_by_xpath(f"//input[@type=\"file\"]")
             input_field.send_keys(self.image)
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
                 self.logger.error("Could not find file input")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While sending the file: {exc}")
 
+    @checkActive
     def next_step(self):
         try:
             text = Scraper.BUTTON_TEXT["next"][self.lang]
@@ -182,12 +213,15 @@ class Scraper(threading.Thread):
             if self.logger:
                 self.logger.debug("Submitted image")
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
                 self.logger.error("Could not submit image")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While submitting the image: {exc}")
 
+    @checkActive
     def write_caption(self):
         try:
             text = Scraper.BUTTON_TEXT["caption_aria"][self.lang]
@@ -197,11 +231,13 @@ class Scraper(threading.Thread):
                 self.logger.debug("Wrote caption")
         except NoSuchElementException:
             if self.logger:
-                self.logger.warning("Could write a caption")
+                self.logger.warning("Could not write a caption")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While writing the caption: {exc}")
 
+    @checkActive
     def share(self):
         try:
             text = Scraper.BUTTON_TEXT["share"][self.lang]
@@ -210,12 +246,15 @@ class Scraper(threading.Thread):
             if self.logger:
                 self.logger.info("Shared image")
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
                 self.logger.error("Could not share image")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While sharing: {exc}")
 
+    @checkActive
     def expand_image(self):
         try:
             text = Scraper.BUTTON_TEXT["expand"][self.lang]
@@ -224,8 +263,10 @@ class Scraper(threading.Thread):
             if self.logger:
                 self.logger.debug("Image resized")
         except NoSuchElementException:
+            self.abort = True
             if self.logger:
-                self.logger.debug("Image could not be resized")
+                self.logger.warning("Image could not be resized")
         except Exception as exc:
+            self.abort = True
             if self.logger:
-                self.logger.error(exc)
+                self.logger.error(f"While expanding the image: {exc}")
