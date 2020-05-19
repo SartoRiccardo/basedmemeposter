@@ -19,7 +19,7 @@ function SingleLog(props) {
 
   const username = account && (
     <Link to={`/accounts/${account.id}`} className="black-text text-uppercase">
-      <u>{account.username}</u>
+      <u><b>{account.username}</b></u>
     </Link>
   );
 
