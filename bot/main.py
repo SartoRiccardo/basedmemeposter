@@ -184,10 +184,12 @@ def main():
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
     pool = urllib3.PoolManager()
 
+    first_run = True
     while True:
-        posts = gatherPosts()
-        uploadPosts(posts)
-        scheduleRandomPosts()
+        if not first_run:
+            posts = gatherPosts()
+            uploadPosts(posts)
+            scheduleRandomPosts()
 
         account_data = mastermemed_client.accounts()
         accounts = []
@@ -205,6 +207,7 @@ def main():
             account_poster.setLogger(mastermemed_client)
             accounts.append(account_poster)
 
+        mastermemed_client.info("Starting accounts")
         for acct in accounts:
             acct.start()
 
@@ -215,6 +218,8 @@ def main():
             acct.stopPosting()
             acct.join()
         mastermemed_client.info("Accounts stopped")
+
+        first_run = False
 
 
 if __name__ == '__main__':
