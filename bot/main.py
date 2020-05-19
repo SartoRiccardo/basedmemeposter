@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import urllib3
 import traceback
 from copy import copy
