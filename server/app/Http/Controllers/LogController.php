@@ -35,11 +35,10 @@ class LogController extends Controller
                 ->orderBy("date", "DESC")
                 ->paginate(100);
 
-        $levels = ["debug", "info", "warning", "error", "critical"];
         $levelCount = [];
-        foreach ($levels as $level) {
-            $levelCount[$level] = Log::where("level", "=", $level)->count();
-        }
+        $levelCount["warning"] = Log::where("level", "=", "warning")->count();
+        $levelCount["error"] = Log::where("level", "=", "error")
+                                  ->orWhere("level", "=", "critical")->count();
         $levelCount = collect(["level_count" => $levelCount]);
 
         foreach ($logs as $log) {

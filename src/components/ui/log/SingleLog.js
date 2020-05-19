@@ -29,7 +29,7 @@ function SingleLog(props) {
         {message}
       </code>
     </div>
-  ) : ( <div>{message}</div> );
+  ) : ( username && <div>{message}</div> );
 
   const py = username ? 2 : 1;
 
@@ -39,7 +39,7 @@ function SingleLog(props) {
         <MDBIcon icon={icon} className={`mr-2 ${color}-text`} fixed />
 
         <span className="mr-3">
-          {username || message}
+          {username || (level !== "critical" && message)}
         </span>
 
         <span className="float-right">
@@ -47,7 +47,7 @@ function SingleLog(props) {
         </span>
       </div>
 
-      {username && messageSection}
+      {messageSection}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBRow, MDBCol, MDBCollapse } from "mdbreact";
+import { MDBRow, MDBCol, MDBCollapse, MDBBtn, MDBBtnGroup } from "mdbreact";
 // HOCs and actions
 import { connect } from "react-redux";
 // Custom components
@@ -58,52 +58,66 @@ class LogFilter extends React.Component {
     const { accounts } = this.props.account;
     const { open } = this.state;
 
-    const accountCheckboxes = accounts.map((a) => {
-      const checked = (value.accounts && value.accounts.includes(a.id)) ||
-          (value.accounts === undefined && this.state.accounts.includes(a.id));
-      return (
-        <MDBCol size="12" md="4" key={a.id}>
-          <CheckBox
-            label={a.username}
-            onChange={this.changeChecked("accounts", a.id)}
-            checked={checked}
-          />
-        </MDBCol>
+    // const accountCheckboxes = accounts.map((a) => {
+    //   const checked = (value.accounts && value.accounts.includes(a.id)) ||
+    //       (value.accounts === undefined && this.state.accounts.includes(a.id));
+    //   return (
+    //     <MDBCol size="12" md="4" key={a.id}>
+    //       <CheckBox
+    //         label={a.username}
+    //         onChange={this.changeChecked("accounts", a.id)}
+    //         checked={checked}
+    //       />
+    //     </MDBCol>
+    //   );
+    // });
+
+    const accountCheckboxes = accounts.map(acct => {
+        return (
+          <React.Fragment key={acct.id}>
+            <MDBCol className="d-flex px-1" size="12" sm="6" lg="4">
+              <MDBBtn className="w-100 my-0 my-sm-2"
+                  onClick={this.changeChecked("accounts", acct.id)}
+                  outline={!this.state.accounts.includes(acct.id)} color="purple">
+                {acct.username}
+              </MDBBtn>
+            </MDBCol>
+          </React.Fragment>
+        );
+    })
+
+    const logLevelButtons = levels.map((level, i) => {
+      const btn = (
+        <MDBBtn onClick={this.changeChecked("levels", level)}
+            className="w-100 my-0 my-sm-2"
+            outline={!this.state.levels.includes(level)} color="purple">
+          {level}
+        </MDBBtn>
       );
-    });
-    const logLevelCheckboxes = levels.map((l, i) => {
-      const checked = (value.levels && value.levels.includes(l)) ||
-          (value.levels === undefined && this.state.levels.includes(l));
       return (
-        <MDBCol key={i} size="6" md="4">
-          <CheckBox
-            label={l}
-            onChange={this.changeChecked("levels", l)}
-            checked={checked}
-          />
-        </MDBCol>
+        <React.Fragment key={level}>
+          <MDBCol className="d-flex d-md-none px-1" size="12"
+              sm={i <= levels.length-3 ? "4" : "6"}>
+            {btn}
+          </MDBCol>
+          <MDBCol className="d-none d-md-flex px-1">
+            {btn}
+          </MDBCol>
+        </React.Fragment>
       );
-    });
+    })
 
     return (
       <React.Fragment>
-        <CollapseHeader className="indigo lighten-3" onClick={this.clickedAccordion(0)}>
-          <h3 className="mb-0">Accounts</h3>
-        </CollapseHeader>
-        <MDBCollapse isOpen={open === 0}>
-          <MDBRow className="m-3 text-uppercase">
-            {accountCheckboxes}
-          </MDBRow>
-        </MDBCollapse>
+        <h3 className="text-center">Accounts</h3>
+        <MDBRow className="text-uppercase mb-3">
+          {accountCheckboxes}
+        </MDBRow>
 
-        <CollapseHeader className="indigo lighten-3" onClick={this.clickedAccordion(1)}>
-          <h3 className="mb-0">Levels</h3>
-        </CollapseHeader>
-        <MDBCollapse isOpen={open === 1}>
-          <MDBRow className="m-3 text-uppercase">
-            {logLevelCheckboxes}
-          </MDBRow>
-        </MDBCollapse>
+        <h3 className="text-center">Levels</h3>
+        <MDBRow>
+          {logLevelButtons}
+        </MDBRow>
       </React.Fragment>
     );
   }

@@ -54,7 +54,7 @@ function Dashboard(props) {
 
         <MDBCol size="6" className="px-1 my-3">
           <LogCard
-            onClick={() => history.push("/logs?levels=error")}
+            onClick={() => history.push("/logs?levels=error,critical")}
             className="c-pointer hover-darken"
             level="error"
             loading={!status.log.initialized || log.ignored.error === null}
@@ -87,8 +87,8 @@ function Dashboard(props) {
 function mapStateToProps(state) {
   const { account, log } = state.status;
   return {
-    account: { ...state.account },
-    log: { ...state.log },
+    account: state.account,
+    log: state.log,
     status: {
       account,
       log,

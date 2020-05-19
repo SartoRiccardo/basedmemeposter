@@ -73,7 +73,7 @@ function LogCard(props) {
 
 function mapStateToProps(state) {
   return {
-    ignored: { ...state.log.ignored },
+    ignored: state.log.ignored,
     status: state.status.log,
   };
 }

@@ -130,13 +130,6 @@ class Logs extends React.Component {
       <MDBContainer>
         <MDBRow className="mt-3">
           <MDBCol>
-            <h2 className="text-center">Filters</h2>
-            <hr className="mt-0 w-50" />
-          </MDBCol>
-        </MDBRow>
-
-        <MDBRow>
-          <MDBCol>
             <LogFilter value={params} onChange={this.updateUrl} />
           </MDBCol>
         </MDBRow>
