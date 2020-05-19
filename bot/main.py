@@ -166,8 +166,20 @@ def scheduleRandomPosts():
     mastermemed_client.info("Posts scheduled")
 
 
+now = datetime.now(tz=timezone.utc)
+
+
+def dayChanged():
+    global now
+    now_prev = now
+    now = datetime.now(tz=timezone.utc)
+    return now_prev.day != now.day
+
+
 def main():
     global mastermemed_client
+
+    threads.waituntil(dayChanged, 60)
 
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
     pool = urllib3.PoolManager()
@@ -196,11 +208,13 @@ def main():
         for acct in accounts:
             acct.start()
 
-        threads.waitfor(60 * 60 * 24)
+        threads.waituntil(dayChanged, 60)
 
+        mastermemed_client.info("Stopping accounts")
         for acct in accounts:
             acct.stopPosting()
             acct.join()
+        mastermemed_client.info("Accounts stopped")
 
 
 if __name__ == '__main__':

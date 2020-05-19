@@ -31,3 +31,10 @@ def waitfor(seconds):
     thread = Waiter(datetime.now(timezone.utc) + timedelta(seconds=seconds))
     thread.start()
     thread.join()
+
+
+def waituntil(condition, check_every):
+    while not condition():
+        thread = Waiter(datetime.now(timezone.utc) + timedelta(seconds=check_every))
+        thread.start()
+        thread.join()
