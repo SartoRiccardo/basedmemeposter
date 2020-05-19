@@ -2,6 +2,7 @@ import axios from "axios";
 import { getToken } from "../session";
 import { protectFunction, makeAction } from "../../util/control";
 import { getUserAvatar } from "../../util/instagram";
+import { toUtcTime } from "../../util/time";
 import JSEncrypt from "jsencrypt";
 
 export function fetchAccounts() {
@@ -32,13 +33,21 @@ export function fetchAccountAvatar(id, username) {
   return protectFunction(makeAction(creator, "account", "SET_ACCOUNT_IMAGE"));
 }
 
-export function addAccount(account) {
+export function addAccount(account, utc=false) {
   const creator = async function(dispatch) {
     const { REACT_APP_BACKEND, REACT_APP_PUBLIC_KEY } = process.env;
 
     const encryptor = new JSEncrypt();
     encryptor.setPublicKey(REACT_APP_PUBLIC_KEY);
     account.password = encryptor.encrypt(account.password);
+
+    if(!utc) {
+      account = {
+        ...account,
+        startTime: toUtcTime(account.startTime),
+        endTime: toUtcTime(account.endTime),
+      };
+    }
 
     const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };
     const response = await axios.post(`${REACT_APP_BACKEND}/accounts`, account, config);
@@ -53,7 +62,7 @@ export function addAccount(account) {
   return protectFunction(makeAction(creator, "account", "ADD_ACCOUNT"));
 }
 
-export function updateAccount(accountId, account, passwordHasChanged) {
+export function updateAccount(accountId, account, passwordHasChanged, utc=false) {
   const creator = async dispatch => {
       const { REACT_APP_BACKEND, REACT_APP_PUBLIC_KEY } = process.env;
       if(!passwordHasChanged) {
@@ -63,6 +72,15 @@ export function updateAccount(accountId, account, passwordHasChanged) {
         const encryptor = new JSEncrypt();
         encryptor.setPublicKey(REACT_APP_PUBLIC_KEY);
         account.password = encryptor.encrypt(account.password);
+      }
+
+      if(!utc) {
+        console.log(account.startTime, toUtcTime(account.startTime));
+        account = {
+          ...account,
+          startTime: toUtcTime(account.startTime),
+          endTime: toUtcTime(account.endTime),
+        };
       }
 
       const config = { headers: { "X-Authorization": `Bearer ${getToken()}` } };

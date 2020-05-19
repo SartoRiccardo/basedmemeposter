@@ -1,5 +1,5 @@
 import React from "react";
-import { isInRangeHours, toUtcTime } from "../../../util/time";
+import { isInRangeHours, fromUtcTime } from "../../../util/time";
 // Custom components
 import Avatar from "./Avatar";
 
@@ -15,8 +15,8 @@ function AccountSummary(props) {
         className={`border text-center hover-no-img-padding grey lighten-5 ${className}`}>
       <Avatar image={account.avatar} active={active} />
       <p className="my-2 mb-0">
-        {toUtcTime(account.startTime)}<br />
-        {toUtcTime(account.endTime)}
+        {fromUtcTime(account.startTime)}<br />
+        {fromUtcTime(account.endTime)}
       </p>
     </div>
   );

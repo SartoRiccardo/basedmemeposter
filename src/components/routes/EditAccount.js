@@ -82,8 +82,8 @@ class EditAccount extends React.Component {
       if(account.id === this.state.currentAccount) {
         matchingAccount = {
           ...account,
-          startTime: strToTime(account.startTime).hours,
-          endTime: strToTime(account.endTime).hours,
+          startTime: strToTime(account.startTime, true).hours,
+          endTime: strToTime(account.endTime, true).hours,
         };
         break;
       }

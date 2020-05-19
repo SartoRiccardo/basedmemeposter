@@ -72,9 +72,17 @@ export function strToTime(time, utc=true) {
   }
 }
 
-export function toUtcTime(timestr) {
+export function fromUtcTime(timestr) {
   const date = moment.utc(`5 ${timestr}`, "D HH:mm:ss").toDate();
   return date.getHours().toString().padStart(2, "0") + ":" +
       date.getMinutes().toString().padStart(2, "0") + ":" +
-      date.getSeconds().toString().padStart(2, "0")
+      date.getSeconds().toString().padStart(2, "0");
+}
+
+export function toUtcTime(timestr) {
+  const date = moment.unix(moment(`5 ${timestr}`, "D HH:mm:ss").unix()).utc();
+
+  return date.hours().toString().padStart(2, "0") + ":" +
+      date.minutes().toString().padStart(2, "0") + ":" +
+      date.seconds().toString().padStart(2, "0");
 }
