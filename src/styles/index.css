@@ -143,3 +143,18 @@ code {
 .no-form-margin .md-form {
   margin: 0 !important;
 }
+
+code {
+  white-space: pre;
+}
+
+.stack-trace code {
+  color: black;
+}
+
+.stack-trace {
+  background-color: rgba(0, 0, 0, 0.1);
+  overflow-x: scroll;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+}
