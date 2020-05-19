@@ -61,6 +61,7 @@ class LogController extends Controller
                 "level" => "required|in:debug,info,log,warning,error,critical",
                 "account" => "integer|exists:accounts,id",
                 "message" => "string|required",
+                "date" => "date_format:Y-m-d H:i:s",
             ]);
         }
         catch(ValidationException $exception) {
@@ -70,6 +71,7 @@ class LogController extends Controller
         $log = new Log();
         $log->level = request("level");
         if(request("account")) $log->account = request("account");
+        if(request("date")) $log->date = request("date");
         $log->message = request("message");
         $log->save();
 
