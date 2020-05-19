@@ -15,7 +15,7 @@ function SingleLog(props) {
   const { message, account, level, date } = props.log;
   const { background, color, icon } = levelStyling[level];
 
-  const dateText = moment(new Date(date + " GMT")).fromNow();
+  const dateText = moment.utc(date, "YYYY-MM-DD HH:mm:ss").fromNow();
 
   const username = account && (
     <Link to={`/accounts/${account.id}`} className="black-text">

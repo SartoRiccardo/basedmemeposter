@@ -51,8 +51,8 @@ class ScheduledPost extends React.Component {
     const { id, date, post } = schedule;
     const { deleting } = this.state;
 
-    const dateText = moment(new Date(date + " GMT")).fromNow();
-    const takenSince = moment(new Date(post.dateAdded + " GMT")).fromNow();
+    const dateText = moment.utc(date, "YYYY-MM-DD HH:mm:ss").fromNow();
+    const takenSince = moment.utc(post.dateAdded, "YYYY-MM-DD HH:mm:ss").fromNow();
 
     const cardText = (
       <React.Fragment>

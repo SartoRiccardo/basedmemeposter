@@ -1,6 +1,7 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn,
     MDBModalHeader, MDBModal, MDBModalBody } from "mdbreact";
+import moment from "moment";
 // HOCs and actions
 import { connect } from "react-redux";
 import { loadScheduleFor } from "../../storage/actions/schedule";
@@ -109,8 +110,8 @@ class AccountDetails extends React.Component {
     }
 
     const accountSchedule = schedule.sort((a, b) => {
-        a = Date.parse(a.date);
-        b = Date.parse(b.date);
+        a = moment(a.date, "YYYY-MM-DD HH:mm:ss").toDate();
+        b = moment(b.date, "YYYY-MM-DD HH:mm:ss").toDate();
         if(a === b) return 0;
         if(a > b) return 1;
         return -1;

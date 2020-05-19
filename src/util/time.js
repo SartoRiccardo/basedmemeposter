@@ -1,3 +1,4 @@
+import moment from "moment";
 
 /**
  * Checks if a certain time is included in an interval.
@@ -58,7 +59,8 @@ export function compareTimes(a, b) {
  */
 export function strToTime(time, utc=true) {
   try {
-    const date = utc ? new Date(`5 ${time} GMT`) : new Date(`5 ${time}`);
+    const date = utc ? moment.utc(`5 ${time} GMT`, "D HH:mm:ss").toDate()
+        : moment(`5 ${time}`, "D HH:mm:ss").toDate();
     return {
       hours: date.getHours(),
       minutes: date.getMinutes(),
@@ -71,7 +73,7 @@ export function strToTime(time, utc=true) {
 }
 
 export function toUtcTime(timestr) {
-  const date = new Date(`5 ${timestr} GMT`);
+  const date = moment.utc(`5 ${timestr}`, "D HH:mm:ss").toDate();
   return date.getHours().toString().padStart(2, "0") + ":" +
       date.getMinutes().toString().padStart(2, "0") + ":" +
       date.getSeconds().toString().padStart(2, "0")
