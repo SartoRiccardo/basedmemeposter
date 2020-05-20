@@ -180,8 +180,6 @@ def dayChanged():
 def main():
     global mastermemed_client
 
-    threads.waituntil(dayChanged, 60)
-
     mastermemed_client = mastermemed.Client(config("mastermemed", "client-id"))
     pool = urllib3.PoolManager()
 
