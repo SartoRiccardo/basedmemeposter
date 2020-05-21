@@ -61,10 +61,15 @@ class Account(Thread):
         updated_schedule = self.mastermemed_client.schedules(account=self.id, only_scheduled=True)
         updated_schedule_ids = [s.id for s in updated_schedule]
 
-        # TODO this only removes. Make sure it adds if new posts are scheduled
         self.schedule = [
             s for s in self.schedule
             if s.post.id not in ids_to_post or s.id not in updated_schedule_ids
+        ]
+
+        session_schedule_ids = [s.id for s in self.schedule]
+        self.schedule += [
+            s for s in updated_schedule
+            if s.id not in session_schedule_ids
         ]
 
     def post(self, url, caption):

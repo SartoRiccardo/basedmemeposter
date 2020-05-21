@@ -96,11 +96,11 @@ def uploadPosts(posts):
 
 MISSING_POST_CHANCE = 1/15
 MAX_TRIES = 50
-POST_EVERY = config("mastermemed", "post_every") * 60
 POST_EVERY_NOISE = 0.3
 
 
 def scheduleRandomPosts():
+    post_every = config("mastermemed", "post-every") * 60
     mastermemed_client.info("Scheduling posts for the day")
     accounts = mastermemed_client.accounts()
 
@@ -112,8 +112,9 @@ def scheduleRandomPosts():
         )
         scheduled_posts[acct.id] = [s.post.id for s in schedules]
 
-    five_days_ago = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
-    post_data = mastermemed_client.posts(after=five_days_ago)
+    days_ago = (datetime.now(timezone.utc) - timedelta(days=config("masermemed", "days-before-check"))) \
+        .strftime("%Y-%m-%d")
+    post_data = mastermemed_client.posts(after=days_ago)
     per_page, total = post_data.per_page, post_data.total
 
     unused_posts = []
@@ -135,7 +136,7 @@ def scheduleRandomPosts():
                     random_post_i = randint(0, total-1)
                     page = math.floor(random_post_i/per_page)
                     random_post_i -= page * per_page
-                    post = mastermemed_client.posts(after=five_days_ago, page=page) \
+                    post = mastermemed_client.posts(after=days_ago, page=page) \
                         .posts[random_post_i]
 
                 if post.id not in scheduled_posts[acct.id]:
@@ -146,8 +147,8 @@ def scheduleRandomPosts():
 
             posting_time += timedelta(
                 seconds=randint(
-                    int(POST_EVERY * (1-POST_EVERY_NOISE)),
-                    int(POST_EVERY * (1+POST_EVERY_NOISE)),
+                    int(post_every * (1-POST_EVERY_NOISE)),
+                    int(post_every * (1+POST_EVERY_NOISE)),
                 )
             )
 
