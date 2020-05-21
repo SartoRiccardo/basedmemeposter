@@ -68,7 +68,6 @@ class Account(Thread):
             self.logger.error(f"Image could not be found ({url})")
             return
 
-        self.logger.debug(f"Starting to post ({url}) in {post_file}")
         scraper = apis.instagram.Scraper(
             self.username, self.password, post_file, caption
         )

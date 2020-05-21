@@ -72,7 +72,7 @@ class Scraper(threading.Thread):
         self.logger = logger
 
     def run(self):
-        self.abort = True
+        self.abort = False
         actions = [
             {"action": self.search_instagram, "wait": 3},
             {"action": self.click_login, "wait": 5},
