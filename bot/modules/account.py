@@ -37,7 +37,7 @@ class Account(Thread):
             modules.threads.waitfor(randint(60, 120))
 
     def checkForPosts(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(tz=timezone.utc)
         to_post = []
         for schedule in self.schedule:
             date = schedule.date
@@ -68,6 +68,7 @@ class Account(Thread):
             self.logger.error(f"Image could not be found ({url})")
             return
 
+        self.logger.debug(f"Starting to post ({url}) in {post_file}")
         scraper = apis.instagram.Scraper(
             self.username, self.password, post_file, caption
         )
@@ -81,7 +82,7 @@ class Account(Thread):
 
     def retrieve(self, url):
         if self.pool is None:
-            return
+            return None
 
         chars = "asdfghjklqwertyuiopzxcvbnm"
         random_file_name = None
