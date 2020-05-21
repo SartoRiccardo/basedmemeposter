@@ -92,6 +92,9 @@ class Account(Thread):
                 [chars[randint(0, len(chars)-1)] for _ in range(10)]
             ) + url[-4:]
 
+        if not os.path.exists("tmp"):
+            os.mkdir("tmp")
+
         stdout = open(random_file_name, "wb")
         response = self.pool.request("GET", url, preload_content=False)
         for chunk in response.stream(1024):
