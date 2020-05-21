@@ -62,7 +62,7 @@ def gatherPosts():
         for user in sources["instagram"]:
             try:
                 new_posts = instagram.getPostsFromUser(user)
-                posts += posts
+                posts += new_posts
                 mastermemed_client.debug(f"(Instagram) Gathered {len(new_posts)} posts from \"{user}\"")
             except Exception as exc:
                 mastermemed_client.warning(
@@ -96,7 +96,7 @@ def uploadPosts(posts):
 
 MISSING_POST_CHANCE = 1/15
 MAX_TRIES = 50
-POST_EVERY = 45 * 60
+POST_EVERY = config("mastermemed", "post_every") * 60
 POST_EVERY_NOISE = 0.3
 
 
