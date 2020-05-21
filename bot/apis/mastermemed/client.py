@@ -304,6 +304,7 @@ class Client:
                     post["thumbnail"],
                     id=post["id"],
                 ),
+                id=raw_schedule["id"],
             ))
 
         return schedules
