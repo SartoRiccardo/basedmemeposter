@@ -94,19 +94,6 @@ def uploadPosts(posts):
     mastermemed_client.info("Finished uploading posts")
 
 
-def getRandomCaption():
-    try:
-        data = mastermemed_client.captionData()
-        caption_count, captions_per_page = data["total"], data["per_page"]
-        caption_i = randint(0, caption_count-1)
-        caption_page = math.floor(caption_i/captions_per_page)
-        caption_i -= caption_page*captions_per_page
-
-        return mastermemed_client.captions(page=caption_page)[caption_i].text
-    except Exception as exc:
-        return ""
-
-
 MISSING_POST_CHANCE = 1/15
 MAX_TRIES = 50
 POST_EVERY = 45 * 60
@@ -193,14 +180,10 @@ def main():
         account_data = mastermemed_client.accounts()
         accounts = []
         for acct in account_data:
-            schedule = mastermemed_client.schedules(account=acct, only_scheduled=True)
             account_poster = account.Account(
                 acct.id,
-                acct.username,
-                acct.password,
-                schedule,
+                mastermemed_client,
                 pool=pool,
-                getCaptionCallback=getRandomCaption
             )
             account_poster.setName(acct.username)
             account_poster.setLogger(mastermemed_client)
