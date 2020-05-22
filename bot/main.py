@@ -112,7 +112,7 @@ def scheduleRandomPosts():
         )
         scheduled_posts[acct.id] = [s.post.id for s in schedules]
 
-    days_ago = (datetime.now(timezone.utc) - timedelta(days=config("masermemed", "days-before-check"))) \
+    days_ago = (datetime.now(timezone.utc) - timedelta(days=config("mastermemed", "days-before-check"))) \
         .strftime("%Y-%m-%d")
     post_data = mastermemed_client.posts(after=days_ago)
     per_page, total = post_data.per_page, post_data.total
