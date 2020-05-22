@@ -63,7 +63,7 @@ class Account(Thread):
 
         self.schedule = [
             s for s in self.schedule
-            if s.post.id not in ids_to_post or s.id not in updated_schedule_ids
+            if s.post.id not in ids_to_post and s.id in updated_schedule_ids
         ]
 
         session_schedule_ids = [s.id for s in self.schedule]
