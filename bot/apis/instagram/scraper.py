@@ -110,6 +110,7 @@ class Scraper(threading.Thread):
             {"action": self.write_caption,      "wait": 10},
             {"action": self.share,              "wait": 20},
             {"action": self.like_some_posts,    "wait": 5},
+            {"action": self.quit,               "wait": 2},
         ]
         schedule = scheduler.Scheduler(actions)
         schedule.start()  # Not actually a thread
@@ -325,4 +326,7 @@ class Scraper(threading.Thread):
         except Exception as exc:
             if self.logger:
                 self.logger.error(f"Something happened while watching stories")
+
+    def close(self):
+        self.driver.quit()
 
