@@ -129,7 +129,7 @@ class Scraper(threading.Thread):
         except NoSuchElementException:
             self.skip_to_posting = True
             if self.logger:
-                self.logger.info("Assuming already logged in")
+                self.logger.debug("Already logged in")
         except Exception as exc:
             self.abort = True
             if self.logger:
@@ -314,7 +314,7 @@ class Scraper(threading.Thread):
                 time.sleep(3)
         except Exception as exc:
             if self.logger:
-                self.logger.error(f"While liking posts: {exc}")
+                self.logger.warning(f"While liking posts: {exc}")
 
     @checkActive
     def watch_some_stories(self):
@@ -326,7 +326,7 @@ class Scraper(threading.Thread):
             time.sleep(30)
         except Exception as exc:
             if self.logger:
-                self.logger.error(f"While watching stories: {exc}")
+                self.logger.warning(f"While watching stories: {exc}")
 
     def close(self):
         self.driver.quit()
