@@ -79,7 +79,8 @@ class Scraper(threading.Thread):
                 os.mkdir("account-data")
             if not os.path.exists(f"account-data/account_{account_id}"):
                 os.mkdir(f"account-data/account_{account_id}")
-            options.add_argument(f"user-data-dir=account-data/account_{account_id}")
+            user_dir = os.path.abspath(f"account-data/account_{account_id}")
+            options.add_argument(f"user-data-dir={user_dir}")
 
         chromedriver = f"./webdrivers/{platform.system()}"
         self.driver = webdriver.Chrome(
