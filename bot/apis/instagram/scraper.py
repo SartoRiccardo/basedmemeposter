@@ -111,7 +111,7 @@ class Scraper(threading.Thread):
             {"action": self.write_caption,      "wait": 10},
             {"action": self.share,              "wait": 20},
             {"action": self.like_some_posts,    "wait": 5},
-            {"action": self.quit,               "wait": 2},
+            {"action": self.close,              "wait": 2},
         ]
         schedule = scheduler.Scheduler(actions)
         schedule.start()  # Not actually a thread
