@@ -314,7 +314,7 @@ class Scraper(threading.Thread):
                 time.sleep(3)
         except Exception as exc:
             if self.logger:
-                self.logger.error(f"Something happened while liking posts")
+                self.logger.error(f"While liking posts: {exc}")
 
     @checkActive
     def watch_some_stories(self):
@@ -326,7 +326,7 @@ class Scraper(threading.Thread):
             time.sleep(30)
         except Exception as exc:
             if self.logger:
-                self.logger.error(f"Something happened while watching stories")
+                self.logger.error(f"While watching stories: {exc}")
 
     def close(self):
         self.driver.quit()
