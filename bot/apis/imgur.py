@@ -142,8 +142,8 @@ def topGalleries():
     galleries = json.loads(response.data)["data"]
     galleries = [Gallery(g) for g in galleries]
 
-    max_ratio = 16/9
-    min_ratio = 9/16
+    max_ratio = 5/4
+    min_ratio = 1/max_ratio
     elegible = []
     for gallery in galleries:
         post = None

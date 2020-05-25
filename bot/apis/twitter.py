@@ -23,8 +23,8 @@ def userImageStatuses(user):
         exclude_replies=True
     )
 
-    max_ratio = 16/9
-    min_ratio = 9/16
+    max_ratio = 5/4
+    min_ratio = 1/max_ratio
     ret = []
     for s in statuses:
         if s.media and len(s.media) == 1 and s.media[0].type == "photo":

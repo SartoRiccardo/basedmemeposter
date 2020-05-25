@@ -18,8 +18,8 @@ def topSubImagePosts(sub):
     reddit.read_only = True
     submissions = reddit.subreddit(sub).hot()
 
-    max_ratio = 16/9
-    min_ratio = 9/16
+    max_ratio = 5/4
+    min_ratio = 1/max_ratio
     ret = []
     for s in submissions:
         if hasattr(s, "post_hint") and s.post_hint == "image" and not s.stickied and \
