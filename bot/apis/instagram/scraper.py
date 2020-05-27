@@ -4,7 +4,7 @@ import threading
 import os
 import time
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 
 
 def checkActive(action):
@@ -312,6 +312,9 @@ class Scraper(threading.Thread):
                 time.sleep(0.1)
                 p.click()
                 time.sleep(3)
+        except ElementClickInterceptedException:
+            if self.logger:
+                self.logger.debug("Couldn't like posts, an element was in the way")
         except Exception as exc:
             if self.logger:
                 self.logger.warning(f"While liking posts: {exc}")

@@ -8,7 +8,7 @@ from random import randint
 import math
 import os
 # Own modules
-from modules import account, threads
+from modules import account, threads, counter
 from apis import mastermemed, imgur, reddit, twitter, instagram
 from config import config
 
@@ -76,7 +76,11 @@ def gatherPosts():
 def uploadPosts(posts):
     mastermemed_client.info("Started uploading posts")
     uploaders_count = 10
-    uploaders = [threads.PostUploader(mastermemed_client) for _ in range(uploaders_count)]
+    successes = counter.Counter()
+    uploaders = [
+        threads.PostUploader(mastermemed_client, successes)
+        for _ in range(uploaders_count)
+    ]
 
     i = 0
     requests_per_uploader = math.ceil(len(posts)/uploaders_count)
@@ -91,7 +95,7 @@ def uploadPosts(posts):
     for uploader in uploaders:
         uploader.join()
 
-    mastermemed_client.info("Finished uploading posts")
+    mastermemed_client.info(f"Finished uploading {successes.value()} posts")
 
 
 MISSING_POST_CHANCE = 1/15

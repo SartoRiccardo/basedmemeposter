@@ -14,17 +14,19 @@ class Waiter(Thread):
 
 
 class PostUploader(Thread):
-    def __init__(self, mastermemed_client):
+    def __init__(self, mastermemed_client, success_counter):
         super().__init__()
         self.posts = []
         self.mastermemed_client = mastermemed_client
+        self.success_counter = success_counter
 
     def addPost(self, post):
         self.posts.append(post)
 
     def run(self):
         for p in self.posts:
-            self.mastermemed_client.addPost(p)
+            if self.mastermemed_client.addPost(p):
+                self.success_counter.increment()
 
 
 def waitfor(seconds):

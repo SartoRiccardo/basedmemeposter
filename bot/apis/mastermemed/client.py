@@ -205,7 +205,7 @@ class Client:
                 data["account"] = account if isinstance(account, int) else account.id
             self.__post("/logs", json.dumps(data))
 
-        Thread(target=async_log()).start()
+        Thread(target=async_log).start()
 
     def debug(self, message, account=None):
         """
