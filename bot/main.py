@@ -176,6 +176,7 @@ def main():
     pool = urllib3.PoolManager()
 
     first_run = True
+    force_stop = False
     while True:
         if not first_run:
             posts = gatherPosts()
@@ -198,15 +199,27 @@ def main():
         for acct in accounts:
             acct.start()
 
-        threads.waituntil(dayChanged, 60)
+        threads.waituntil(lambda: dayChanged() or stopSignal(), 60)
+        if stopSignal():
+            force_stop = True
 
         mastermemed_client.info("Stopping accounts")
         for acct in accounts:
             acct.stopPosting()
+        for acct in accounts:
             acct.join()
         mastermemed_client.info("Accounts stopped")
 
+        if stopSignal():
+            os.remove("./STOP")
+        if force_stop:
+            return
+
         first_run = False
+
+
+def stopSignal():
+    return os.path.exists("./STOP")
 
 
 if __name__ == '__main__':
