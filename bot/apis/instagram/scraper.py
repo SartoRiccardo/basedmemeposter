@@ -103,6 +103,7 @@ class Scraper(threading.Thread):
             {"action": self.login,              "wait": 10},
             {"action": self.save_access_info,   "wait": 10},
             {"action": self.close_notification, "wait": 10},
+            {"action": self.ok_post_removed,  "wait": 10},
             {"action": self.close_add_to_home,  "wait": 10},
             {"action": self.open_file_menu,     "wait": 5},
             {"action": self.send_file,          "wait": 7},
@@ -326,7 +327,19 @@ class Scraper(threading.Thread):
             if len(stories) <= 1:
                 return
             stories[1].click()
-            time.sleep(30)
+            if self.logger:
+                self.logger.warning(f"A post was removed by community guidelines")
+        except NoSuchElementException:
+            pass
+        except Exception as exc:
+            if self.logger:
+                self.logger.warning(f"While watching stories: {exc}")
+
+    @checkActive
+    def ok_post_removed(self):
+        try:
+            ok = self.driver.find_element_by_xpath("//button[contains(text(),'OK')]")
+            ok.click()
         except Exception as exc:
             if self.logger:
                 self.logger.warning(f"While watching stories: {exc}")
