@@ -327,10 +327,6 @@ class Scraper(threading.Thread):
             if len(stories) <= 1:
                 return
             stories[1].click()
-            if self.logger:
-                self.logger.warning(f"A post was removed by community guidelines")
-        except NoSuchElementException:
-            pass
         except Exception as exc:
             if self.logger:
                 self.logger.warning(f"While watching stories: {exc}")
@@ -340,9 +336,10 @@ class Scraper(threading.Thread):
         try:
             ok = self.driver.find_element_by_xpath("//button[contains(text(),'OK')]")
             ok.click()
-        except Exception as exc:
             if self.logger:
-                self.logger.warning(f"While watching stories: {exc}")
+                self.logger.warning(f"A post was removed by community guidelines")
+        except NoSuchElementException:
+            pass
 
     def close(self):
         self.driver.quit()
